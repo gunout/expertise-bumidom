@@ -3,635 +3,1203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard BUMIDOM — Archives Assemblée Nationale</title>
-<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<title>Dashboard BUMIDOM — Interactif</title>
+<script src="plotly.min.js"></script>
 <style>
-  :root{
-    --bleu:#000091;
-    --bleu-clair:#1212ff;
-    --rouge:#E1000F;
-    --blanc:#ffffff;
-    --gris:#f5f5f7;
-    --texte:#1a1a2e;
+  :root{--bleu:#000091;--rouge:#E1000F;--gris:#f5f5f7;--vert:#1b7a2e}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--gris);color:#1a1a2e;line-height:1.5}
+  header{background:#fff;border-bottom:4px solid;
+    border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;
+    padding:16px 28px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06);
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{color:var(--bleu);font-size:1.3rem;display:flex;align-items:center;gap:10px}
+  header h1 .drapeau{display:inline-block;width:32px;height:22px;
+    background:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%);
+    border:1px solid #ccc;border-radius:3px}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .actions button{padding:8px 14px;border:none;border-radius:6px;cursor:pointer;
+    font-weight:600;font-size:.82rem;transition:.2s;background:#f0f0f5;color:#333}
+  .actions button:hover{background:var(--bleu);color:#fff}
+  .actions button.primary{background:var(--bleu);color:#fff}
+  .actions button.primary:hover{background:var(--rouge)}
+
+  /* Bandeau de filtres actifs */
+  .filtres-actifs{padding:12px 28px;background:#fff;border-bottom:1px solid #eee;
+    display:flex;gap:10px;flex-wrap:wrap;align-items:center;min-height:44px}
+  .filtres-actifs .chip{display:inline-flex;align-items:center;gap:6px;
+    background:var(--bleu);color:#fff;padding:5px 12px;border-radius:16px;font-size:.8rem;font-weight:500}
+  .filtres-actifs .chip .x{cursor:pointer;font-weight:700;opacity:.7;margin-left:4px}
+  .filtres-actifs .chip .x:hover{opacity:1}
+  .filtres-actifs .chip.rouge{background:var(--rouge)}
+  .filtres-actifs .vider{background:#eee;color:#666;border:none;padding:5px 12px;
+    border-radius:16px;font-size:.8rem;cursor:pointer;font-weight:600}
+  .filtres-actifs .vide{color:#999;font-size:.85rem;font-style:italic}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;padding:16px 28px 0}
+  .kpi{background:#fff;border-radius:10px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.06);
+    border-top:4px solid var(--bleu);cursor:pointer;transition:.2s}
+  .kpi:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,145,.15)}
+  .kpi.rouge{border-top-color:var(--rouge)}
+  .kpi.vert{border-top-color:var(--vert)}
+  .kpi .v{font-size:1.6rem;font-weight:700;color:var(--bleu)}
+  .kpi.rouge .v{color:var(--rouge)}
+  .kpi.vert .v{color:var(--vert)}
+  .kpi .l{font-size:.7rem;color:#666;text-transform:uppercase;letter-spacing:.5px}
+
+  .slider-zone{background:#fff;padding:16px 28px;border-bottom:1px solid #eee}
+  .slider-zone label{font-size:.75rem;font-weight:600;color:var(--bleu);text-transform:uppercase;
+    display:block;margin-bottom:6px;letter-spacing:.5px}
+  .slider-zone .rangée{display:flex;gap:12px;align-items:center;font-size:.85rem;color:#666}
+  .slider-zone input[type=range]{flex:1;accent-color:var(--bleu)}
+
+  main{padding:20px 28px;max-width:1700px;margin:0 auto}
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:20px}
+  .carte{background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);
+    margin-bottom:20px;transition:.2s}
+  .carte h2{color:var(--bleu);font-size:1rem;margin-bottom:12px;
+    border-bottom:2px solid var(--rouge);padding-bottom:8px;
+    display:flex;justify-content:space-between;align-items:center}
+  .carte h2 .compteur{font-size:.75rem;color:#888;font-weight:400;text-transform:none;letter-spacing:0}
+  .viz{height:380px;width:100%}
+  .viz.tall{height:600px}
+  .viz.reseau{height:650px}
+
+  table{width:100%;border-collapse:collapse;font-size:.83rem}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee}
+  th{background:var(--bleu);color:#fff;font-size:.7rem;text-transform:uppercase;
+    letter-spacing:.5px;cursor:pointer;user-select:none;position:sticky;top:0}
+  th:hover{background:var(--rouge)}
+  th::after{content:'';margin-left:4px;opacity:.4;font-size:.65rem}
+  th.tri-asc::after{content:'▲';opacity:1}
+  th.tri-desc::after{content:'▼';opacity:1}
+  tbody tr{cursor:pointer;transition:.15s}
+  tbody tr:hover{background:#f0f4ff}
+  tbody tr.selectionne{background:#e5e9ff}
+  .nb{text-align:right;font-weight:700;color:var(--rouge);font-variant-numeric:tabular-nums}
+  .ctx{font-size:.75rem;color:#666;font-style:italic;max-width:400px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .recherche-wrap{position:relative;margin-bottom:12px}
+  .recherche-wrap input{width:100%;padding:10px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:.9rem}
+  .recherche-wrap input:focus{outline:none;border-color:var(--bleu)}
+
+  /* Liste documents interactive */
+  .doc{background:#fff;border-radius:10px;margin-bottom:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:5px solid var(--bleu);
+    overflow:hidden;transition:.2s;cursor:pointer}
+  .doc:hover{box-shadow:0 4px 16px rgba(0,0,145,.15);transform:translateX(3px)}
+  .doc.selectionne{border-left-color:var(--rouge);background:#fff9f9}
+  .doc-header{padding:12px 16px;display:flex;align-items:center;gap:10px}
+  .doc-header .badge{font-size:.65rem;font-weight:700;text-transform:uppercase;padding:3px 8px;
+    border-radius:12px;letter-spacing:.5px;white-space:nowrap}
+  .badge-cri{background:#e5e9ff;color:var(--bleu)}
+  .badge-qst{background:#e8f5e9;color:var(--vert)}
+  .badge-jo{background:#fff3e0;color:#b26a00}
+  .badge-tab{background:#f3e5f5;color:#7b1fa2}
+  .badge-def{background:#eee;color:#555}
+  .doc-header .titre{flex:1;font-weight:600;font-size:.9rem}
+  .doc-header .mentions{font-size:.75rem;color:var(--rouge);font-weight:700;background:#ffe5e5;
+    padding:2px 9px;border-radius:12px;white-space:nowrap}
+  .doc-body{display:none;padding:12px 16px;border-top:1px solid #f0f0f0;background:#fafafa}
+  .doc-body.open{display:block}
+  .doc-body .extrait{background:#fff;border-left:3px solid var(--rouge);padding:9px 12px;
+    margin:7px 0;font-size:.85rem;border-radius:0 6px 6px 0}
+  .btn{display:inline-block;background:var(--bleu);color:#fff;text-decoration:none;
+    padding:7px 14px;border-radius:6px;font-weight:600;font-size:.8rem;
+    border:none;cursor:pointer;margin:4px 6px 0 0;transition:.2s}
+  .btn:hover{background:var(--rouge)}
+  .btn.gris{background:#888}
+  .tag{display:inline-block;background:var(--bleu);color:#fff;padding:2px 9px;border-radius:12px;
+    font-size:.7rem;margin:2px 3px 2px 0;cursor:pointer;transition:.2s}
+  .tag:hover{background:var(--rouge)}
+  .tag.rouge{background:var(--rouge)}
+  .tag.rouge:hover{background:var(--bleu)}
+
+  /* Panneau latéral */
+  .detail-panel{position:fixed;right:0;top:0;bottom:0;width:500px;background:#fff;
+    box-shadow:-4px 0 20px rgba(0,0,0,.15);z-index:200;overflow-y:auto;
+    transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column}
+  .detail-panel.ouvert{transform:translateX(0)}
+  .detail-panel .entete{background:var(--bleu);color:#fff;padding:16px 20px;
+    display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+  .detail-panel .entete h3{margin:0;font-size:1rem}
+  .detail-panel .entete .fermer{cursor:pointer;font-size:1.3rem;font-weight:300;opacity:.8}
+  .detail-panel .entete .fermer:hover{opacity:1}
+  .detail-panel .corps{padding:20px;flex:1}
+  .detail-panel .corps p{margin:8px 0;font-size:.9rem}
+  .detail-panel .corps strong{color:var(--bleu)}
+
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;
+    opacity:0;pointer-events:none;transition:opacity .3s}
+  .overlay.actif{opacity:1;pointer-events:auto}
+
+  .message{padding:14px 20px;border-radius:8px;margin:16px 28px;font-weight:500;
+    background:#e5e9ff;color:var(--bleu);border-left:4px solid var(--bleu)}
+  .message.err{background:#ffe5e5;color:#b8000c;border-left-color:var(--rouge)}
+
+  .tabs{display:flex;gap:4px;padding:0 28px;border-bottom:2px solid #ddd;margin-top:16px;
+    overflow-x:auto;background:#fff}
+  .tabs button{padding:11px 18px;border:none;background:transparent;font-size:.85rem;
+    font-weight:600;color:#666;cursor:pointer;border-bottom:3px solid transparent;
+    white-space:nowrap;transition:.2s}
+  .tabs button:hover{color:var(--bleu)}
+  .tabs button.actif{color:var(--bleu);border-bottom-color:var(--rouge)}
+
+  section.panneau{display:none}
+  section.panneau.actif{display:block;animation:fade .3s}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+
+  footer{text-align:center;padding:20px;font-size:.78rem;color:#999;margin-top:40px;
+    border-top:2px solid;
+    border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;
+    background:#fff}
+
+  .no-data{padding:40px;text-align:center;color:#999}
+  .no-data .ic{font-size:2.5rem;margin-bottom:8px}
+
+  kbd{background:#f0f0f5;padding:2px 6px;border-radius:4px;font-size:.75rem;
+    border:1px solid #ddd;font-family:monospace}
+
+  @media(max-width:768px){
+    .detail-panel{width:100%}
+    main{padding:16px}
   }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--gris);color:var(--texte);line-height:1.5;}
-
-  header{
-    background:var(--blanc);
-    border-bottom:4px solid;
-    border-image:linear-gradient(to right,var(--bleu) 33.33%,var(--blanc) 33.33%,var(--blanc) 66.66%,var(--rouge) 66.66%) 1;
-    padding:18px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,.06);position:sticky;top:0;z-index:100;
-  }
-  header h1{font-size:1.5rem;color:var(--bleu);display:flex;align-items:center;gap:10px;}
-  header h1 span.drapeau{display:inline-block;width:36px;height:24px;background:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%);border:1px solid #ccc;border-radius:3px;}
-  header .sous-titre{font-size:.85rem;color:#666;font-weight:400;}
-
-  .layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 80px);}
-  @media(max-width:900px){.layout{grid-template-columns:1fr;}}
-
-  aside{background:var(--bleu);color:var(--blanc);padding:22px 18px;overflow-y:auto;}
-  aside h2{font-size:1rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;border-bottom:2px solid var(--rouge);padding-bottom:8px;}
-  aside .stat{background:rgba(255,255,255,.1);border-left:3px solid var(--rouge);padding:10px 12px;margin-bottom:10px;border-radius:0 6px 6px 0;}
-  aside .stat .valeur{font-size:1.4rem;font-weight:700;}
-  aside .stat .label{font-size:.8rem;opacity:.85;}
-  aside button{width:100%;padding:11px;margin-bottom:8px;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:.9rem;transition:.2s;}
-  aside button.principal{background:var(--rouge);color:#fff;}
-  aside button.principal:hover{background:#b8000c;}
-  aside button.secondaire{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);}
-  aside button.secondaire:hover{background:rgba(255,255,255,.28);}
-
-  main{padding:26px 30px;overflow-x:hidden;}
-
-  .bandeau{background:linear-gradient(135deg,var(--bleu) 0%,var(--bleu-clair) 100%);color:#fff;padding:22px 26px;border-radius:10px;margin-bottom:22px;box-shadow:0 4px 14px rgba(0,0,145,.25);border-bottom:4px solid var(--rouge);}
-  .bandeau h2{font-size:1.35rem;margin-bottom:6px;}
-  .bandeau p{font-size:.9rem;opacity:.9;}
-
-  .cartes{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:26px;}
-  .carte{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 2px 10px rgba(0,0,0,.07);border-top:4px solid var(--bleu);transition:.2s;}
-  .carte:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.12);}
-  .carte .val{font-size:1.8rem;font-weight:700;color:var(--bleu);}
-  .carte .lbl{font-size:.8rem;color:#666;text-transform:uppercase;letter-spacing:.5px;}
-
-  .filtres{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:22px;box-shadow:0 2px 10px rgba(0,0,0,.06);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;align-items:end;}
-  .filtres label{display:block;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--bleu);margin-bottom:5px;}
-  .filtres select,.filtres input{width:100%;padding:9px 10px;border:2px solid #e0e0e0;border-radius:6px;font-size:.9rem;transition:.2s;}
-  .filtres select:focus,.filtres input:focus{outline:none;border-color:var(--bleu);}
-
-  .onglets{display:flex;gap:6px;margin-bottom:18px;border-bottom:2px solid #ddd;flex-wrap:wrap;}
-  .onglet{padding:10px 20px;border:none;background:transparent;font-size:.92rem;font-weight:600;color:#666;cursor:pointer;border-bottom:3px solid transparent;transition:.2s;}
-  .onglet:hover{color:var(--bleu);}
-  .onglet.actif{color:var(--bleu);border-bottom-color:var(--rouge);}
-  .panneau{display:none;}
-  .panneau.actif{display:block;animation:fade .3s;}
-  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
-
-  .doc{background:#fff;border-radius:10px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:5px solid var(--bleu);overflow:hidden;transition:.2s;}
-  .doc:hover{box-shadow:0 4px 16px rgba(0,0,145,.15);}
-  .doc-header{padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;}
-  .doc-header .type-badge{font-size:.68rem;font-weight:700;text-transform:uppercase;padding:3px 9px;border-radius:12px;white-space:nowrap;letter-spacing:.5px;}
-  .badge-pdf{background:#ffe5e5;color:var(--rouge);}
-  .badge-cri{background:#e5e9ff;color:var(--bleu);}
-  .badge-qst{background:#e8f5e9;color:#1b7a2e;}
-  .badge-jo{background:#fff3e0;color:#b26a00;}
-  .badge-defaut{background:#eee;color:#555;}
-  .doc-header .titre{flex:1;font-weight:600;font-size:.95rem;color:var(--texte);}
-  .doc-header .meta{font-size:.78rem;color:#888;white-space:nowrap;}
-  .doc-body{display:none;padding:0 18px 16px 18px;border-top:1px solid #f0f0f0;background:#fafafa;}
-  .doc-body.open{display:block;}
-  .doc-body .desc{font-size:.88rem;color:#444;margin:12px 0;padding:10px 12px;background:#fff;border-left:3px solid var(--rouge);border-radius:0 6px 6px 0;}
-  .doc-body .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0;}
-  .doc-body .grille div{font-size:.82rem;}
-  .doc-body .grille strong{color:var(--bleu);}
-  .btn-pdf{display:inline-block;background:var(--bleu);color:#fff;text-decoration:none;padding:9px 18px;border-radius:6px;font-weight:600;font-size:.85rem;margin-top:8px;transition:.2s;}
-  .btn-pdf:hover{background:var(--rouge);}
-
-  .viz{background:#fff;border-radius:10px;padding:16px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
-
-  .detail{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.07);}
-  .detail h3{color:var(--bleu);margin-bottom:8px;font-size:1.2rem;}
-  .detail .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:16px 0;}
-  .detail .meta-grid .item{background:var(--gris);padding:10px;border-radius:8px;border-left:3px solid var(--bleu);}
-  .detail .meta-grid .item .k{font-size:.72rem;text-transform:uppercase;color:#888;letter-spacing:.5px;}
-  .detail .meta-grid .item .v{font-weight:600;font-size:.95rem;color:var(--texte);word-break:break-word;}
-
-  .empty{text-align:center;padding:60px 20px;color:#999;}
-  .empty .icone{font-size:3rem;margin-bottom:12px;}
-
-  .zone-upload{background:#fff;border:3px dashed #ccc;border-radius:12px;padding:40px 30px;text-align:center;margin-bottom:24px;transition:.2s;}
-  .zone-upload.drag{border-color:var(--bleu);background:#f0f4ff;}
-  .zone-upload .icone{font-size:3rem;margin-bottom:12px;}
-  .zone-upload h3{color:var(--bleu);margin-bottom:8px;}
-  .zone-upload p{color:#666;font-size:.9rem;margin-bottom:16px;}
-  .zone-upload input[type=file]{display:none;}
-  .zone-upload .btn-choisir{background:var(--bleu);color:#fff;border:none;padding:11px 24px;border-radius:6px;font-weight:600;cursor:pointer;font-size:.9rem;}
-  .zone-upload .btn-choisir:hover{background:var(--rouge);}
-
-  .message{padding:12px 18px;border-radius:8px;margin-bottom:16px;font-size:.9rem;font-weight:500;}
-  .message.ok{background:#e8f5e9;color:#1b7a2e;border-left:4px solid #1b7a2e;}
-  .message.err{background:#ffe5e5;color:#b8000c;border-left:4px solid var(--rouge);}
-  .message.info{background:#e5e9ff;color:var(--bleu);border-left:4px solid var(--bleu);}
-
-  footer{text-align:center;padding:18px;font-size:.78rem;color:#999;border-top:2px solid;border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;background:#fff;margin-top:30px;}
-
-  ::-webkit-scrollbar{width:9px;height:9px;}
-  ::-webkit-scrollbar-track{background:#eee;}
-  ::-webkit-scrollbar-thumb{background:var(--bleu);border-radius:5px;}
-  ::-webkit-scrollbar-thumb:hover{background:var(--rouge);}
 </style>
 </head>
 <body>
 
 <header>
-  <h1><span class="drapeau"></span> Dashboard BUMIDOM</h1>
-  <div class="sous-titre">Archives de l'Assemblée nationale · Bureau pour le développement des migrations intéressant les DOM</div>
+  <h1><span class="drapeau"></span> Dashboard BUMIDOM — Interactif</h1>
+  <div class="actions">
+    <button onclick="exportVueCSV()">📥 Export CSV</button>
+    <button onclick="exportVueJSON()">📄 Export JSON</button>
+    <button onclick="imprimerVue()">🖨️ Imprimer</button>
+    <button class="primary" onclick="reinitialiser()">🔄 Réinitialiser</button>
+  </div>
 </header>
 
-<div class="layout">
-  <aside>
-    <h2>📊 Statistiques</h2>
-    <div class="stat"><div class="valeur" id="stat-total">—</div><div class="label">Documents</div></div>
-    <div class="stat"><div class="valeur" id="stat-types">—</div><div class="label">Types</div></div>
-    <div class="stat"><div class="valeur" id="stat-legis">—</div><div class="label">Législatures</div></div>
-    <div class="stat"><div class="valeur" id="stat-periodes">—</div><div class="label">Périodes</div></div>
+<div class="filtres-actifs" id="filtres-actifs"></div>
 
-    <h2 style="margin-top:22px;">💾 Export</h2>
-    <button class="secondaire" onclick="exportCSV()">📥 Télécharger CSV</button>
-    <button class="secondaire" onclick="exportURLs()">🔗 Télécharger URLs</button>
-    <button class="secondaire" onclick="window.print()">🖨️ Imprimer</button>
-  </aside>
+<div class="kpis" id="kpis"></div>
 
-  <main>
-    <div class="bandeau">
-      <h2>🔍 Analyse des archives parlementaires</h2>
-      <p>Recherche du terme <strong>BUMIDOM</strong> dans les comptes rendus, questions écrites et journaux officiels de l'Assemblée nationale.</p>
-    </div>
-
-    <!-- ZONE D'UPLOAD (visible tant que rien n'est chargé) -->
-    <div id="zone-upload" class="zone-upload">
-      <div class="icone">📁</div>
-      <h3>Charger le fichier json.json</h3>
-      <p>Glissez-déposez votre fichier <code>json.json</code> ici, ou cliquez pour le sélectionner.<br>
-         <small>(Le fichier est traité localement dans votre navigateur — aucune donnée n'est envoyée.)</small></p>
-      <input type="file" id="file-input" accept=".json,.txt,application/json">
-      <button class="btn-choisir" onclick="document.getElementById('file-input').click()">📂 Choisir un fichier</button>
-      <p style="margin-top:14px;"><small>Ou placez <code>json.json</code> dans le même dossier et lancez un serveur local :<br>
-      <code>python -m http.server 8000</code></small></p>
-    </div>
-
-    <!-- MESSAGE D'ÉTAT -->
-    <div id="message"></div>
-
-    <!-- CONTENU (masqué tant que rien n'est chargé) -->
-    <div id="contenu" style="display:none;">
-      <div class="cartes">
-        <div class="carte"><div class="val" id="c-total">0</div><div class="lbl">Documents</div></div>
-        <div class="carte"><div class="val" id="c-types">0</div><div class="lbl">Types</div></div>
-        <div class="carte"><div class="val" id="c-legis">0</div><div class="lbl">Législatures</div></div>
-        <div class="carte"><div class="val" id="c-periodes">0</div><div class="lbl">Périodes</div></div>
-      </div>
-
-      <div class="filtres">
-        <div>
-          <label for="f-type">Type de document</label>
-          <select id="f-type"><option value="">Tous les types</option></select>
-        </div>
-        <div>
-          <label for="f-legis">Législature</label>
-          <select id="f-legis"><option value="">Toutes</option></select>
-        </div>
-        <div>
-          <label for="f-periode">Période</label>
-          <select id="f-periode"><option value="">Toutes</option></select>
-        </div>
-        <div>
-          <label for="f-recherche">Recherche texte</label>
-          <input type="text" id="f-recherche" placeholder="Ex : Bumidom, Réunion, 1971...">
-        </div>
-      </div>
-
-      <div class="onglets">
-        <button class="onglet actif" data-panneau="liste">📋 Liste des documents</button>
-        <button class="onglet" data-panneau="viz">📈 Visualisations</button>
-        <button class="onglet" data-panneau="detail">🔍 Consultation détaillée</button>
-      </div>
-
-      <div class="panneau actif" id="panneau-liste"><div id="liste-docs"></div></div>
-      <div class="panneau" id="panneau-viz">
-        <div class="viz"><div id="viz-types"></div></div>
-        <div class="viz"><div id="viz-periodes"></div></div>
-        <div class="viz"><div id="viz-legis"></div></div>
-      </div>
-      <div class="panneau" id="panneau-detail">
-        <div id="detail-doc" class="empty">
-          <div class="icone">👈</div>
-          <p>Sélectionnez un document dans la liste pour afficher son détail.</p>
-        </div>
-      </div>
-    </div>
-  </main>
+<div class="slider-zone">
+  <label>Filtrer par plage d'années</label>
+  <div class="rangée">
+    <input type="range" id="annee-min" min="1960" max="1995" value="1960">
+    <span id="annee-min-label">1960</span>
+    <span>—</span>
+    <input type="range" id="annee-max" min="1960" max="1995" value="1995">
+    <span id="annee-max-label">1995</span>
+    <button class="actions button" onclick="resetAnnees()"
+      style="padding:4px 10px;font-size:.75rem;background:#eee">Reset</button>
+  </div>
 </div>
 
-<footer>
-  Dashboard BUMIDOM · Archives Assemblée nationale · <span id="horodatage"></span>
-</footer>
+<div class="tabs" id="tabs">
+  <button class="actif" data-tab="synthese">📊 Synthèse</button>
+  <button data-tab="chiffres">🎯 Chiffres clés</button>
+  <button data-tab="orateurs">👤 Orateurs</button>
+  <button data-tab="themes">🏷️ Thèmes</button>
+  <button data-tab="chrono">🕐 Chronologie</button>
+  <button data-tab="sentiment">😊 Sentiment</button>
+  <button data-tab="reseau">🕸️ Réseau</button>
+  <button data-tab="nlp">🔬 NLP</button>
+  <button data-tab="docs">📄 Documents</button>
+</div>
+
+<div id="message" class="message">⏳ Chargement…</div>
+
+<main id="app" style="display:none">
+
+  <section class="panneau actif" id="tab-synthese">
+    <div class="grille">
+      <div class="carte"><h2>📈 Mentions par période <span class="compteur" id="c-periode"></span></h2><div id="viz-periodes" class="viz"></div></div>
+      <div class="carte"><h2>📁 Types de documents <span class="compteur" id="c-types"></span></h2><div id="viz-types" class="viz"></div></div>
+      <div class="carte"><h2>👤 Top 10 orateurs <span class="compteur" id="c-orateurs"></span></h2><div id="viz-orateurs" class="viz"></div></div>
+      <div class="carte"><h2>🏷️ Top 10 thèmes <span class="compteur" id="c-themes"></span></h2><div id="viz-themes" class="viz"></div></div>
+    </div>
+  </section>
+
+  <section class="panneau" id="tab-chiffres">
+    <div class="grille">
+      <div class="carte"><h2>💰 Budget BUMIDOM</h2><div id="viz-budget" class="viz"></div></div>
+      <div class="carte"><h2>📈 Flux migratoires</h2><div id="viz-flux" class="viz"></div></div>
+    </div>
+    <div class="carte"><h2>🎯 Chiffres clés (cliquez pour filtrer) <span class="compteur" id="c-chiffres"></span></h2>
+      <div id="chiffres-cles"></div>
+    </div>
+    <div class="carte"><h2>👥 Effectifs cités</h2><div id="tab-effectifs"></div></div>
+    <div class="carte"><h2>💰 Montants cités</h2><div id="tab-montants"></div></div>
+  </section>
+
+  <section class="panneau" id="tab-orateurs">
+    <div class="carte"><h2>👤 Top 30 orateurs (cliquez sur une barre)</h2>
+      <div id="viz-orateurs-bar" class="viz tall"></div></div>
+    <div class="carte"><h2>Détail des orateurs</h2><div id="liste-orateurs"></div></div>
+  </section>
+
+  <section class="panneau" id="tab-themes">
+    <div class="grille">
+      <div class="carte"><h2>🎯 Radar</h2><div id="viz-radar" class="viz"></div></div>
+      <div class="carte"><h2>📊 Occurrences</h2><div id="viz-themes-bar" class="viz"></div></div>
+    </div>
+    <div class="carte"><h2>Documents par thème (cliquez pour filtrer)</h2><div id="liste-themes"></div></div>
+  </section>
+
+  <section class="panneau" id="tab-chrono">
+    <div class="carte"><h2>🕐 Mentions par document</h2><div id="viz-chrono" class="viz tall"></div></div>
+    <div class="carte"><h2>📅 Années citées</h2><div id="viz-annees" class="viz"></div></div>
+  </section>
+
+  <section class="panneau" id="tab-sentiment">
+    <div class="carte"><h2>😊 Tonalité par année (positif/négatif)</h2><div id="viz-sentiment" class="viz"></div></div>
+    <div class="carte"><h2>Détail par année</h2><div id="tab-sentiment-detail"></div></div>
+  </section>
+
+  <section class="panneau" id="tab-reseau">
+    <div class="carte"><h2>🕸️ Réseau des orateurs (zoom + clic)</h2><div id="viz-reseau" class="viz reseau"></div></div>
+  </section>
+
+  <section class="panneau" id="tab-nlp">
+    <div class="grille">
+      <div class="carte"><h2>👥 Personnes citées</h2><div id="nlp-pers" class="liste-nlp"></div></div>
+      <div class="carte"><h2>🌍 Lieux cités</h2><div id="nlp-lieux" class="liste-nlp"></div></div>
+      <div class="carte"><h2>🏛️ Organisations</h2><div id="nlp-org" class="liste-nlp"></div></div>
+      <div class="carte"><h2>📝 Mots fréquents (cliquez pour filtrer)</h2><div id="nlp-mots" class="liste-nlp"></div></div>
+    </div>
+  </section>
+
+  <section class="panneau" id="tab-docs">
+    <div class="recherche-wrap">
+      <input type="text" id="recherche" placeholder="🔍 Rechercher (Debré, formation, 1975...)">
+    </div>
+    <div id="liste-docs"></div>
+  </section>
+
+</main>
+
+<footer>Dashboard BUMIDOM interactif · <span id="horodatage"></span></footer>
+
+<!-- Panneau latéral détail -->
+<div class="overlay" id="overlay" onclick="fermerDetail()"></div>
+<aside class="detail-panel" id="detail-panel">
+  <div class="entete">
+    <h3 id="detail-titre">Détail</h3>
+    <span class="fermer" onclick="fermerDetail()">✕</span>
+  </div>
+  <div class="corps" id="detail-corps"></div>
+</aside>
 
 <script>
-/* ============================================================
-   ÉTAT GLOBAL
-   ============================================================ */
-let DOCUMENTS = [];
-let DOCUMENT_SELECTIONNE = null;
+// ============================================================
+// ÉTAT GLOBAL
+// ============================================================
+let DOCS = [];
+let ALL_DOCS = [];
+let NLP = null;
+let CSV = {};
+let FILTRES = {
+  types: new Set(),
+  themes: new Set(),
+  orateurs: new Set(),
+  legis: new Set(),
+  anneeMin: 1960,
+  anneeMax: 1995,
+  recherche: ''
+};
+let TRI = { col: 'mentions', ordre: 'desc' };
+let SELECTION = new Set();  // ids des documents sélectionnés
 
-/* ============================================================
-   CHARGEMENT DU FICHIER JSON
-   ============================================================ */
 document.getElementById('horodatage').textContent = new Date().toLocaleString('fr-FR');
 
-const fileInput = document.getElementById('file-input');
-const zoneUpload = document.getElementById('zone-upload');
-const messageEl = document.getElementById('message');
+// ============================================================
+// UTILITAIRES
+// ============================================================
+function num(v){ const n = parseFloat(String(v||'0').replace(/[^\d.,-]/g,'').replace(',','.')); return isNaN(n)?0:n; }
+function fmt(n){ return Math.round(n).toLocaleString('fr-FR').replace(/\u202f|\u00a0/g,' '); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-fileInput.addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (file) lireFichier(file);
-});
-
-// Drag & drop
-['dragenter','dragover'].forEach(evt => {
-  zoneUpload.addEventListener(evt, e => {
-    e.preventDefault(); e.stopPropagation();
-    zoneUpload.classList.add('drag');
+function parseCSV(text){
+  const lignes = text.trim().split(/\r?\n/);
+  const sep = lignes[0].includes(';') ? ';' : ',';
+  const headers = lignes[0].split(sep).map(h => h.replace(/^"|"$/g,'').trim());
+  return lignes.slice(1).filter(l=>l.trim()).map(l=>{
+    const vals = l.split(sep).map(v=>v.replace(/^"|"$/g,'').trim());
+    const obj = {};
+    headers.forEach((h,i)=>obj[h]=vals[i]||'');
+    return obj;
   });
-});
-['dragleave','drop'].forEach(evt => {
-  zoneUpload.addEventListener(evt, e => {
-    e.preventDefault(); e.stopPropagation();
-    zoneUpload.classList.remove('drag');
-  });
-});
-zoneUpload.addEventListener('drop', e => {
-  const file = e.dataTransfer.files[0];
-  if (file) lireFichier(file);
-});
-
-/**
- * Lit un fichier JSON et lance le parsing.
- */
-function lireFichier(file) {
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      let texte = e.target.result;
-      // Nettoyage : enlève un éventuel wrapper Google CSE
-      texte = texte.replace(/^google\.search\.cse\.api\d+\(/, '').replace(/\);\s*$/, '');
-      const data = JSON.parse(texte);
-      traiterDonnees(data);
-    } catch (err) {
-      afficherMessage('err', '❌ Erreur de lecture JSON : ' + err.message);
-    }
-  };
-  reader.onerror = () => afficherMessage('err', '❌ Impossible de lire le fichier.');
-  reader.readAsText(file, 'UTF-8');
 }
 
-/**
- * Tente aussi un chargement automatique si json.json est servi par un serveur local.
- */
-window.addEventListener('load', () => {
-  fetch('resultats.json')
-    .then(r => {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.text();
-    })
-    .then(texte => {
-      try {
-        const data = JSON.parse(texte);
-        traiterDonnees(data, true);
-      } catch (err) {
-        // silencieux — l'utilisateur peut uploader manuellement
-      }
-    })
-    .catch(() => {
-      // Pas de serveur, on attend l'upload manuel
+function anneeDeDoc(d){
+  const m1 = d.fichier.match(/(\d{4})-\d{2}-\d{2}/);
+  if(m1) return parseInt(m1[1]);
+  const m2 = d.fichier.match(/(\d{4})-(\d{4})/);
+  if(m2) return parseInt(m2[1]);
+  return null;
+}
+
+function typeDeFichier(f){
+  if(f.includes('_qst_')) return 'Question écrite';
+  if(f.includes('_cri_')) return 'Compte rendu';
+  if(f.includes('tanalytique')) return 'Table analytique';
+  if(f.includes('tnominative')) return 'Table nominative';
+  return 'Autre';
+}
+
+// ============================================================
+// CHARGEMENT
+// ============================================================
+Promise.all([
+  fetch('resultats_enrichis.json').then(r=>r.ok?r.json():null),
+  fetch('nlp_results.json').then(r=>r.ok?r.json():null).catch(()=>null),
+  fetch('analyse_chrono.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('analyse_cooccurrences.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('analyse_sentiment.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('analyse_reseau.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('expertise_BUMIDOM/SYNTHESE_CHRONOLOGIQUE.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('expertise_BUMIDOM/BUMIDOM_effectifs.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('expertise_BUMIDOM/BUMIDOM_montants.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+]).then(([data, nlp, chrono, cooc, senti, reseau, chronoExp, effectifs, montants])=>{
+  if(!data){ throw new Error('resultats_enrichis.json introuvable'); }
+  ALL_DOCS = data.results || [];
+  DOCS = ALL_DOCS;
+  NLP = nlp;
+  CSV = { chrono: chrono||[], cooc: cooc||[], senti: senti||[], reseau: reseau||[],
+          chronoExp: chronoExp||[], effectifs: effectifs||[], montants: montants||[] };
+
+  document.getElementById('message').style.display='none';
+  document.getElementById('app').style.display='block';
+
+  initSlider();
+  initOnglets();
+  initRecherche();
+  majVue();
+}).catch(e=>{
+  document.getElementById('message').className='message err';
+  document.getElementById('message').innerHTML='❌ '+e.message;
+});
+
+// ============================================================
+// SLIDER ANNÉES
+// ============================================================
+function initSlider(){
+  const min = document.getElementById('annee-min');
+  const max = document.getElementById('annee-max');
+  min.addEventListener('input', ()=>{
+    if(+min.value > +max.value) min.value = max.value;
+    FILTRES.anneeMin = +min.value;
+    document.getElementById('annee-min-label').textContent = min.value;
+    majVue();
+  });
+  max.addEventListener('input', ()=>{
+    if(+max.value < +min.value) max.value = min.value;
+    FILTRES.anneeMax = +max.value;
+    document.getElementById('annee-max-label').textContent = max.value;
+    majVue();
+  });
+}
+
+function resetAnnees(){
+  document.getElementById('annee-min').value = 1960;
+  document.getElementById('annee-max').value = 1995;
+  document.getElementById('annee-min-label').textContent = '1960';
+  document.getElementById('annee-max-label').textContent = '1995';
+  FILTRES.anneeMin = 1960;
+  FILTRES.anneeMax = 1995;
+  majVue();
+}
+
+// ============================================================
+// ONGLETS
+// ============================================================
+function initOnglets(){
+  document.querySelectorAll('.tabs button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('actif'));
+      document.querySelectorAll('.panneau').forEach(p=>p.classList.remove('actif'));
+      b.classList.add('actif');
+      document.getElementById('tab-'+b.dataset.tab).classList.add('actif');
+      setTimeout(majVue, 60);
     });
-});
-
-/* ============================================================
-   TRAITEMENT DES DONNÉES
-   ============================================================ */
-function traiterDonnees(data, silencieux = false) {
-  let items = [];
-
-  // Stratégie 1 : clé "results"
-  if (Array.isArray(data.results)) {
-    items = data.results;
-  }
-  // Stratégie 2 : recherche récursive d'un tableau d'objets
-  else if (Array.isArray(data)) {
-    items = data;
-  } else if (typeof data === 'object') {
-    for (const k in data) {
-      if (Array.isArray(data[k]) && data[k].length && typeof data[k][0] === 'object') {
-        items = data[k];
-        break;
-      }
-    }
-  }
-
-  if (!items.length) {
-    afficherMessage('err', '❌ Aucun tableau de résultats trouvé dans le JSON.');
-    return;
-  }
-
-  DOCUMENTS = items.map((item, i) => parserItem(item, i));
-  afficherMessage('ok', `✅ ${DOCUMENTS.length} documents chargés avec succès.`);
-
-  // Affiche le contenu
-  document.getElementById('contenu').style.display = 'block';
-  document.getElementById('zone-upload').style.display = 'none';
-
-  // Prépare les filtres, stats, liste, viz
-  remplirFiltres();
-  mettreAJourStats();
-  appliquerFiltres();
-}
-
-/**
- * Transforme un item brut en objet normalisé.
- */
-function parserItem(item, i) {
-  // Titre
-  const titre = item.title || item.titleNoFormatting || item.name || `Document ${i+1}`;
-
-  // URL
-  const url = item.url || item.unescapedUrl || item.link || item.formattedUrl || '';
-
-  // Description
-  let description = item.contentNoFormatting || item.content || item.snippet || item.description || '';
-  description = description.replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ').replace(/\\u003cb\\u003e/g, '').replace(/\\u003c\/b\\u003e/g, '').replace(/<[^>]+>/g, '').trim();
-
-  // Date
-  let date = 'Inconnue';
-  const m = description.match(/(\d{1,2}\s+[a-zéû]+\s+\d{4}|\d{4})/i);
-  if (m) date = m[1];
-
-  // Type de document
-  let type = 'Document';
-  const urlLower = url.toLowerCase();
-  const titreUpper = titre.toUpperCase();
-  if (urlLower.endsWith('.pdf') || (item.fileFormat && item.fileFormat.toLowerCase().includes('pdf'))) type = 'PDF';
-  if (titreUpper.includes('JOURNAL OFFICIEL') || titreUpper.includes('JOURNAL OFFICIAL')) type = 'Journal Officiel';
-  if (urlLower.includes('/cri/')) type = 'Compte rendu';
-  if (urlLower.includes('/qst/')) type = 'Question écrite';
-  if (urlLower.includes('/tanalytique/') || urlLower.includes('/tnominative/')) type = 'Table analytique';
-
-  // Législature (chiffre avant /cri/ ou /qst/)
-  let legislature = '';
-  const mLeg = url.match(/\/(\d+)\/(cri|qst)\//);
-  if (mLeg) legislature = mLeg[1];
-
-  // Période (ex: 1971-1972)
-  let periode = 'Inconnue';
-  const mPer = url.match(/\/(\d{4})-(\d{4})/);
-  if (mPer) periode = `${mPer[1]}-${mPer[2]}`;
-
-  return {
-    id: `DOC_${String(i+1).padStart(4,'0')}`,
-    position: i + 1,
-    titre,
-    titre_court: titre.length > 80 ? titre.slice(0,80) + '…' : titre,
-    url,
-    description,
-    description_courte: description.length > 180 ? description.slice(0,180) + '…' : description,
-    type,
-    legislature,
-    periode,
-    date,
-    format: item.fileFormat || '',
-    source: item.visibleUrl || (url ? new URL(url).hostname : '')
-  };
-}
-
-/* ============================================================
-   MESSAGES
-   ============================================================ */
-function afficherMessage(type, texte) {
-  messageEl.innerHTML = `<div class="message ${type}">${texte}</div>`;
-  if (type === 'ok') setTimeout(() => { messageEl.innerHTML = ''; }, 4000);
-}
-
-/* ============================================================
-   STATS & FILTRES
-   ============================================================ */
-function mettreAJourStats() {
-  const total = DOCUMENTS.length;
-  const types = new Set(DOCUMENTS.map(d => d.type));
-  const legis = new Set(DOCUMENTS.map(d => d.legislature).filter(Boolean));
-  const periodes = new Set(DOCUMENTS.map(d => d.periode).filter(p => p !== 'Inconnue'));
-
-  document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-types').textContent = types.size;
-  document.getElementById('stat-legis').textContent = legis.size;
-  document.getElementById('stat-periodes').textContent = periodes.size;
-  document.getElementById('c-total').textContent = total;
-  document.getElementById('c-types').textContent = types.size;
-  document.getElementById('c-legis').textContent = legis.size;
-  document.getElementById('c-periodes').textContent = periodes.size;
-}
-
-function remplirFiltres() {
-  const selType = document.getElementById('f-type');
-  const selLegis = document.getElementById('f-legis');
-  const selPeriode = document.getElementById('f-periode');
-
-  const types = [...new Set(DOCUMENTS.map(d => d.type))].sort();
-  const legis = [...new Set(DOCUMENTS.map(d => d.legislature).filter(Boolean))].sort();
-  const periodes = [...new Set(DOCUMENTS.map(d => d.periode).filter(p => p !== 'Inconnue'))].sort();
-
-  types.forEach(t => selType.insertAdjacentHTML('beforeend', `<option value="${t}">${t}</option>`));
-  legis.forEach(l => selLegis.insertAdjacentHTML('beforeend', `<option value="${l}">Législature ${l}</option>`));
-  periodes.forEach(p => selPeriode.insertAdjacentHTML('beforeend', `<option value="${p}">${p}</option>`));
-
-  ['f-type','f-legis','f-periode'].forEach(id => {
-    document.getElementById(id).addEventListener('change', appliquerFiltres);
   });
-  document.getElementById('f-recherche').addEventListener('input', appliquerFiltres);
 }
 
-/* ============================================================
-   FILTRAGE
-   ============================================================ */
-function documentsFiltres() {
-  const type = document.getElementById('f-type').value;
-  const legis = document.getElementById('f-legis').value;
-  const periode = document.getElementById('f-periode').value;
-  const recherche = document.getElementById('f-recherche').value.trim().toLowerCase();
+// ============================================================
+// RECHERCHE (avec debounce)
+// ============================================================
+let rechercheTimer;
+function initRecherche(){
+  document.getElementById('recherche').addEventListener('input', e=>{
+    clearTimeout(rechercheTimer);
+    rechercheTimer = setTimeout(()=>{
+      FILTRES.recherche = e.target.value.trim().toLowerCase();
+      majVue();
+    }, 250);
+  });
+}
 
-  return DOCUMENTS.filter(d => {
-    if (type && d.type !== type) return false;
-    if (legis && d.legislature !== legis) return false;
-    if (periode && d.periode !== periode) return false;
-    if (recherche) {
-      const blob = (d.titre + ' ' + d.description + ' ' + d.url + ' ' + d.periode).toLowerCase();
-      if (!blob.includes(recherche)) return false;
+// ============================================================
+// FILTRAGE
+// ============================================================
+function appliquerFiltres(){
+  DOCS = ALL_DOCS.filter(d=>{
+    // Année
+    const a = anneeDeDoc(d);
+    if(a && (a < FILTRES.anneeMin || a > FILTRES.anneeMax)) return false;
+
+    // Type
+    if(FILTRES.types.size > 0){
+      if(!FILTRES.types.has(typeDeFichier(d.fichier))) return false;
+    }
+    // Thèmes (au moins un doit matcher)
+    if(FILTRES.themes.size > 0){
+      const docThemes = Object.keys(d.themes||{});
+      if(!docThemes.some(t=>FILTRES.themes.has(t))) return false;
+    }
+    // Orateurs
+    if(FILTRES.orateurs.size > 0){
+      const docOrateurs = (d.orateurs||[]).map(o=>o.nom);
+      if(!docOrateurs.some(o=>FILTRES.orateurs.has(o))) return false;
+    }
+    // Législature
+    if(FILTRES.legis.size > 0){
+      if(!(d.legislatures||[]).some(l=>FILTRES.legis.has(l))) return false;
+    }
+    // Recherche texte
+    if(FILTRES.recherche){
+      const blob = (d.fichier+' '+JSON.stringify(d.extraits)+' '+
+                    JSON.stringify(d.orateurs)+' '+JSON.stringify(d.themes)).toLowerCase();
+      if(!blob.includes(FILTRES.recherche)) return false;
     }
     return true;
   });
 }
 
-function appliquerFiltres() {
-  const docs = documentsFiltres();
-  afficherListe(docs);
-  afficherVisualisations(docs);
-}
+// ============================================================
+// CHIPS DE FILTRES ACTIFS
+// ============================================================
+function afficherChips(){
+  const wrap = document.getElementById('filtres-actifs');
+  const chips = [];
 
-/* ============================================================
-   LISTE DES DOCUMENTS
-   ============================================================ */
-function classeBadge(type) {
-  if (type === 'PDF') return 'badge-pdf';
-  if (type === 'Compte rendu') return 'badge-cri';
-  if (type === 'Question écrite') return 'badge-qst';
-  if (type === 'Journal Officiel') return 'badge-jo';
-  return 'badge-defaut';
-}
+  FILTRES.types.forEach(t=>chips.push({k:'types',v:t,c:'bleu'}));
+  FILTRES.themes.forEach(t=>chips.push({k:'themes',v:t,c:'rouge'}));
+  FILTRES.orateurs.forEach(t=>chips.push({k:'orateurs',v:t,c:'bleu'}));
+  FILTRES.legis.forEach(t=>chips.push({k:'legis',v:'Lég. '+t,c:'rouge'}));
+  if(FILTRES.recherche) chips.push({k:'recherche',v:'« '+FILTRES.recherche+' »',c:'bleu'});
+  if(FILTRES.anneeMin > 1960 || FILTRES.anneeMax < 1995)
+    chips.push({k:'annees',v:FILTRES.anneeMin+'–'+FILTRES.anneeMax,c:'rouge'});
 
-function afficherListe(docs) {
-  const container = document.getElementById('liste-docs');
-  if (!docs.length) {
-    container.innerHTML = '<div class="empty"><div class="icone">🔍</div><p>Aucun document ne correspond aux filtres.</p></div>';
+  if(chips.length === 0){
+    wrap.innerHTML = '<span class="vide">Aucun filtre actif — cliquez sur les graphiques ou la liste pour filtrer</span>';
     return;
   }
 
-  container.innerHTML = docs.map(d => `
-    <div class="doc" id="doc-${d.id}">
-      <div class="doc-header" onclick="toggleDoc('${d.id}')">
-        <span class="type-badge ${classeBadge(d.type)}">${d.type}</span>
-        <span class="titre">${escapeHtml(d.titre_court)}</span>
-        <span class="meta">${d.periode !== 'Inconnue' ? d.periode : ''} ${d.legislature ? '· Lég. ' + d.legislature : ''}</span>
-      </div>
-      <div class="doc-body">
-        ${d.description ? `<div class="desc">${escapeHtml(d.description)}</div>` : ''}
-        <div class="grille">
-          <div><strong>ID :</strong> ${d.id}</div>
-          <div><strong>Date :</strong> ${escapeHtml(d.date)}</div>
-          <div><strong>Législature :</strong> ${d.legislature || 'N/A'}</div>
-          <div><strong>Période :</strong> ${d.periode}</div>
-          <div><strong>Format :</strong> ${escapeHtml(d.format || '—')}</div>
-          <div><strong>Source :</strong> ${escapeHtml(d.source)}</div>
-        </div>
-        ${d.url ? `<a class="btn-pdf" href="${d.url}" target="_blank" rel="noopener">📄 Ouvrir le document</a>` : ''}
-        <button class="btn-pdf" style="background:#666;margin-left:8px;" onclick="voirDetail('${d.id}')">🔍 Voir le détail</button>
-      </div>
+  wrap.innerHTML = chips.map(ch=>`
+    <span class="chip ${ch.c==='rouge'?'rouge':''}">
+      ${esc(ch.v)}
+      <span class="x" onclick="retirerFiltre('${ch.k}','${esc(ch.v).replace(/'/g,'')}')">✕</span>
+    </span>
+  `).join('') + `<button class="vider" onclick="reinitialiser()">Tout effacer</button>`;
+}
+
+function retirerFiltre(type, valeur){
+  if(type === 'recherche'){ FILTRES.recherche=''; document.getElementById('recherche').value=''; }
+  else if(type === 'annees'){ resetAnnees(); return; }
+  else {
+    const v = valeur.replace('Lég. ','').replace('« ','').replace(' »','');
+    FILTRES[type].delete(v);
+  }
+  majVue();
+}
+
+function toggleFiltre(type, valeur){
+  if(FILTRES[type].has(valeur)) FILTRES[type].delete(valeur);
+  else FILTRES[type].add(valeur);
+  majVue();
+}
+
+function reinitialiser(){
+  FILTRES = { types:new Set(), themes:new Set(), orateurs:new Set(), legis:new Set(),
+              anneeMin:1960, anneeMax:1995, recherche:'' };
+  document.getElementById('recherche').value = '';
+  resetAnnees();
+  majVue();
+}
+
+// ============================================================
+// VUE PRINCIPALE
+// ============================================================
+function majVue(){
+  appliquerFiltres();
+  afficherChips();
+  afficherKPIs();
+  dessinerOngletActif();
+}
+
+function afficherKPIs(){
+  const total = DOCS.length;
+  const mentions = DOCS.reduce((s,d)=>s+d.nb_mentions,0);
+  const orateurs = new Set();
+  DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>orateurs.add(o.nom)));
+  const themes = new Set();
+  DOCS.forEach(d=>Object.keys(d.themes||{}).forEach(t=>themes.add(t)));
+  const annees = DOCS.map(anneeDeDoc).filter(Boolean);
+
+  document.getElementById('kpis').innerHTML = `
+    <div class="kpi" onclick="toggleFiltreParKpi('docs')">
+      <div class="v">${total}</div><div class="l">Documents</div>
     </div>
-  `).join('');
-}
-
-function toggleDoc(id) {
-  const el = document.querySelector(`#doc-${id} .doc-body`);
-  if (el) el.classList.toggle('open');
-}
-
-function escapeHtml(str) {
-  if (str == null) return '';
-  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-/* ============================================================
-   VISUALISATIONS
-   ============================================================ */
-function afficherVisualisations(docs) {
-  const layoutBase = {
-    paper_bgcolor: 'rgba(0,0,0,0)',
-    plot_bgcolor: 'rgba(0,0,0,0)',
-    font: { family: 'Segoe UI, Roboto, sans-serif', color: '#1a1a2e' },
-    margin: { t: 40, r: 20, b: 60, l: 60 }
-  };
-
-  // Types
-  const parType = {};
-  docs.forEach(d => parType[d.type] = (parType[d.type] || 0) + 1);
-  Plotly.newPlot('viz-types', [{
-    values: Object.values(parType),
-    labels: Object.keys(parType),
-    type: 'pie',
-    hole: 0.45,
-    marker: { colors: ['#000091','#E1000F','#1212ff','#ff6b6b','#4a4a8a','#b8000c'] }
-  }], { ...layoutBase, title: 'Répartition par type de document' });
-
-  // Périodes
-  const parPeriode = {};
-  docs.forEach(d => { if (d.periode !== 'Inconnue') parPeriode[d.periode] = (parPeriode[d.periode] || 0) + 1; });
-  const periodesTriees = Object.keys(parPeriode).sort();
-  Plotly.newPlot('viz-periodes', [{
-    x: periodesTriees,
-    y: periodesTriees.map(p => parPeriode[p]),
-    type: 'bar',
-    marker: { color: '#000091' }
-  }], { ...layoutBase, title: 'Documents par période', xaxis: { tickangle: -45 } });
-
-  // Législatures
-  const parLegis = {};
-  docs.forEach(d => { if (d.legislature) parLegis[d.legislature] = (parLegis[d.legislature] || 0) + 1; });
-  const legisTriees = Object.keys(parLegis).sort((a,b) => a - b);
-  Plotly.newPlot('viz-legis', [{
-    x: legisTriees.map(l => 'Lég. ' + l),
-    y: legisTriees.map(l => parLegis[l]),
-    type: 'bar',
-    marker: { color: '#E1000F' }
-  }], { ...layoutBase, title: 'Documents par législature' });
-}
-
-/* ============================================================
-   DÉTAIL D'UN DOCUMENT
-   ============================================================ */
-function voirDetail(id) {
-  const doc = DOCUMENTS.find(d => d.id === id);
-  if (!doc) return;
-  DOCUMENT_SELECTIONNE = doc;
-
-  // Active l'onglet détail
-  document.querySelectorAll('.onglet').forEach(o => o.classList.remove('actif'));
-  document.querySelectorAll('.panneau').forEach(p => p.classList.remove('actif'));
-  document.querySelector('.onglet[data-panneau="detail"]').classList.add('actif');
-  document.getElementById('panneau-detail').classList.add('actif');
-
-  const container = document.getElementById('detail-doc');
-  container.className = 'detail';
-  container.innerHTML = `
-    <h3>${escapeHtml(doc.titre)}</h3>
-    <div class="meta-grid">
-      <div class="item"><div class="k">Type</div><div class="v">${doc.type}</div></div>
-      <div class="item"><div class="k">Législature</div><div class="v">${doc.legislature || 'N/A'}</div></div>
-      <div class="item"><div class="k">Période</div><div class="v">${doc.periode}</div></div>
-      <div class="item"><div class="k">Date</div><div class="v">${escapeHtml(doc.date)}</div></div>
-      <div class="item"><div class="k">Format</div><div class="v">${escapeHtml(doc.format || '—')}</div></div>
-      <div class="item"><div class="k">Source</div><div class="v">${escapeHtml(doc.source)}</div></div>
-      <div class="item"><div class="k">ID</div><div class="v">${doc.id}</div></div>
-      <div class="item"><div class="k">Position</div><div class="v">${doc.position}</div></div>
+    <div class="kpi rouge"><div class="v">${mentions}</div><div class="l">Mentions</div></div>
+    <div class="kpi" onclick="toggleFiltreParKpi('orateurs')">
+      <div class="v">${orateurs.size}</div><div class="l">Orateurs uniques</div>
     </div>
-    ${doc.description ? `<div class="desc">${escapeHtml(doc.description)}</div>` : ''}
-    ${doc.url ? `<a class="btn-pdf" href="${doc.url}" target="_blank" rel="noopener">📄 Ouvrir le document PDF</a>` : ''}
-    <p style="margin-top:14px;font-size:.8rem;color:#888;word-break:break-all;">${escapeHtml(doc.url)}</p>
+    <div class="kpi rouge" onclick="toggleFiltreParKpi('themes')">
+      <div class="v">${themes.size}</div><div class="l">Thèmes</div>
+    </div>
+    <div class="kpi vert"><div class="v">${annees.length ? Math.min(...annees)+'–'+Math.max(...annees) : '—'}</div><div class="l">Période</div></div>
   `;
 }
 
-/* ============================================================
-   ONGLETS
-   ============================================================ */
-document.querySelectorAll('.onglet').forEach(o => {
-  o.addEventListener('click', () => {
-    document.querySelectorAll('.onglet').forEach(x => x.classList.remove('actif'));
-    document.querySelectorAll('.panneau').forEach(p => p.classList.remove('actif'));
-    o.classList.add('actif');
-    document.getElementById('panneau-' + o.dataset.panneau).classList.add('actif');
-  });
-});
-
-/* ============================================================
-   EXPORTS
-   ============================================================ */
-function exportCSV() {
-  const docs = documentsFiltres();
-  if (!docs.length) { alert('Aucun document à exporter.'); return; }
-  const entetes = ['id','position','titre','type','legislature','periode','date','format','source','url','description'];
-  const lignes = [entetes.join(';')];
-  docs.forEach(d => {
-    lignes.push(entetes.map(h => '"' + String(d[h] || '').replace(/"/g, '""') + '"').join(';'));
-  });
-  telecharger(lignes.join('\n'), 'bumidom.csv', 'text/csv;charset=utf-8;');
+function toggleFiltreParKpi(type){
+  // Affiche un message dans la console
+  console.log('Filtre KPIs :', type);
 }
 
-function exportURLs() {
-  const docs = documentsFiltres();
-  if (!docs.length) { alert('Aucun document à exporter.'); return; }
-  telecharger(docs.map(d => d.url).join('\n'), 'urls_bumidom.txt', 'text/plain;charset=utf-8;');
+// ============================================================
+// DESSIN DE L'ONGLET ACTIF
+// ============================================================
+function dessinerOngletActif(){
+  const actif = document.querySelector('.tabs button.actif').dataset.tab;
+  try {
+    if(actif === 'synthese') dessinerSynthese();
+    if(actif === 'chiffres') dessinerChiffres();
+    if(actif === 'orateurs') dessinerOrateurs();
+    if(actif === 'themes') dessinerThemes();
+    if(actif === 'chrono') dessinerChrono();
+    if(actif === 'sentiment') dessinerSentiment();
+    if(actif === 'reseau') dessinerReseau();
+    if(actif === 'nlp') dessinerNLP();
+    if(actif === 'docs') dessinerDocs();
+  } catch(e) {
+    console.error('Erreur dessin:', e);
+  }
 }
 
-function telecharger(contenu, nom, mime) {
-  const blob = new Blob([contenu], { type: mime });
+// ============================================================
+// LAYOUT PLOTLY
+// ============================================================
+const LAYOUT = {
+  paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
+  font:{family:'system-ui', color:'#1a1a2e', size:11},
+  margin:{t:30,r:20,b:60,l:60}, height:380, autosize:true,
+  showlegend:false,
+  hoverlabel:{bgcolor:'#fff', bordercolor:'#000091', font:{color:'#1a1a2e', size:12}}
+};
+const CONFIG = {responsive: true, displayModeBar: true, displaylogo: false,
+  modeBarButtonsToRemove: ['lasso2d','select2d']};
+
+function safePlot(id, data, layout, customConfig){
+  const el = document.getElementById(id);
+  if(!el || typeof Plotly === 'undefined') return;
+  try {
+    Plotly.newPlot(id, data, layout, customConfig || CONFIG);
+  } catch(e) {
+    el.innerHTML = '<p style="color:#E1000F;padding:20px">Erreur : '+e.message+'</p>';
+    console.error(e);
+  }
+}
+
+// ============================================================
+// SYNTHÈSE
+// ============================================================
+function dessinerSynthese(){
+  // Périodes
+  const parPeriode = {};
+  DOCS.forEach(d=>{
+    const m = d.fichier.match(/(\d{4})-(\d{4})/);
+    if(m){
+      const k = m[1]+'-'+m[2];
+      parPeriode[k] = (parPeriode[k]||0) + d.nb_mentions;
+    }
+  });
+  const periodes = Object.keys(parPeriode).sort();
+  const traceP = {
+    x: periodes, y: periodes.map(p=>parPeriode[p]),
+    type:'bar', marker:{color:'#000091'},
+    hovertemplate:'<b>%{x}</b><br>%{y} mentions<extra></extra>'
+  };
+  safePlot('viz-periodes', [traceP], {...LAYOUT, xaxis:{tickangle:-30}}, 
+    {...CONFIG, modeBarButtonsToRemove:[]});
+  document.getElementById('viz-periodes').on('plotly_click', e=>{
+    const p = e.points[0].x;
+    // Filtre par période
+    FILTRES.anneeMin = parseInt(p.split('-')[0]);
+    FILTRES.anneeMax = parseInt(p.split('-')[1]);
+    document.getElementById('annee-min').value = FILTRES.anneeMin;
+    document.getElementById('annee-max').value = FILTRES.anneeMax;
+    document.getElementById('annee-min-label').textContent = FILTRES.anneeMin;
+    document.getElementById('annee-max-label').textContent = FILTRES.anneeMax;
+    majVue();
+  });
+
+  // Types
+  const types = {};
+  DOCS.forEach(d=>{
+    const t = typeDeFichier(d.fichier);
+    types[t] = (types[t]||0) + 1;
+  });
+  const traceT = {
+    values: Object.values(types), labels: Object.keys(types),
+    type:'pie', hole:0.45,
+    marker:{colors:['#000091','#E1000F','#1212ff','#ff6b6b','#888']},
+    hovertemplate:'<b>%{label}</b><br>%{value} documents<br>%{percent}<extra></extra>'
+  };
+  safePlot('viz-types', [traceT], {...LAYOUT, showlegend:true});
+  document.getElementById('viz-types').on('plotly_click', e=>{
+    toggleFiltre('types', e.points[0].label);
+  });
+
+  // Top orateurs
+  const aggO = {};
+  DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>aggO[o.nom]=(aggO[o.nom]||0)+o.occurrences));
+  const topO = Object.entries(aggO).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const traceO = {
+    x: topO.map(o=>o[1]), y: topO.map(o=>o[0]),
+    type:'bar', orientation:'h',
+    marker:{color:topO.map((_,i)=>i<3?'#E1000F':'#000091')},
+    hovertemplate:'<b>%{y}</b><br>%{x} mentions<extra></extra>'
+  };
+  safePlot('viz-orateurs', [traceO], {...LAYOUT, yaxis:{autorange:'reversed'},
+    margin:{t:20,r:20,b:40,l:180}});
+  document.getElementById('viz-orateurs').on('plotly_click', e=>{
+    toggleFiltre('orateurs', e.points[0].y);
+  });
+
+  // Top thèmes
+  const aggTh = {};
+  DOCS.forEach(d=>Object.entries(d.themes||{}).forEach(([t,n])=>aggTh[t]=(aggTh[t]||0)+n));
+  const topTh = Object.entries(aggTh).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const traceTh = {
+    values: topTh.map(t=>t[1]), labels: topTh.map(t=>t[0]),
+    type:'pie', hole:0.45,
+    marker:{colors:['#E1000F','#000091','#1212ff','#ff6b6b','#888','#4a4a8a','#b8000c','#ffa500','#2e7d32','#7b1fa2']},
+    hovertemplate:'<b>%{label}</b><br>%{value} occurrences<br>%{percent}<extra></extra>'
+  };
+  safePlot('viz-themes', [traceTh], {...LAYOUT, showlegend:true});
+  document.getElementById('viz-themes').on('plotly_click', e=>{
+    toggleFiltre('themes', e.points[0].label);
+  });
+
+  // Compteurs
+  document.getElementById('c-periode').textContent = periodes.length + ' périodes';
+  document.getElementById('c-types').textContent = Object.keys(types).length + ' types';
+  document.getElementById('c-orateurs').textContent = topO.length + ' orateurs';
+  document.getElementById('c-themes').textContent = topTh.length + ' thèmes';
+}
+
+// ============================================================
+// CHIFFRES CLÉS
+// ============================================================
+function dessinerChiffres(){
+  // Graph budget (Plotly interactif depuis les données CSV)
+  const m = CSV.montants.filter(x=>+x.valeur > 0).slice(0,30);
+  safePlot('viz-budget', [{
+    x: m.map(x=>x.fichier.substring(0,20)),
+    y: m.map(x=>num(x.valeur)/1e6),
+    type:'bar', marker:{color:'#000091'},
+    hovertemplate:'<b>%{x}</b><br>%{y:.1f} M F<extra></extra>'
+  }], {...LAYOUT, yaxis:{title:'Millions de francs'}, xaxis:{tickangle:-45, tickfont:{size:9}}});
+
+  // Flux (effectifs)
+  const e = CSV.effectifs.filter(x=>num(x.valeur) > 0 && num(x.valeur) < 500000).slice(0,30);
+  safePlot('viz-flux', [{
+    x: e.map(x=>x.fichier.substring(0,20)),
+    y: e.map(x=>num(x.valeur)),
+    type:'bar', marker:{color:'#E1000F'},
+    hovertemplate:'<b>%{x}</b><br>%{y:,} personnes<extra></extra>'
+  }], {...LAYOUT, yaxis:{title:'Personnes'}, xaxis:{tickangle:-45, tickfont:{size:9}}});
+
+  // Chiffres clés
+  const chiffres = [
+    ['💰 Budget BUMIDOM 1981','279 600 000 F',null],
+    ['👥 Migrants 1963-1974','94 000 personnes',null],
+    ['🌍 Antillais métropole 1986','500 000',null],
+    ['👥 Population concernée 1981','400 000 personnes',null],
+    ['💰 Budget BUMIDOM 1975','28 353 000 F',null],
+    ['🌍 Réunionnais métropole 1986','120 000',null],
+    ['📈 Flux annuel 1979-80','10 000 personnes/an',null],
+    ['🏠 Capacité accueil 1972','5 547 places',null],
+    ['📈 Flux annuel 1975-76','5 000 personnes/an',null],
+    ['🏠 Logements 1968','234 logements',null],
+  ];
+  document.getElementById('chiffres-cles').innerHTML = chiffres.map((c,i)=>`
+    <div class="chiffre-cle ${i<3?'top':''}"
+      style="display:flex;justify-content:space-between;padding:10px 14px;margin:5px 0;
+             background:${i<3?'#fff5f5':'#f5f5f7'};border-radius:6px;
+             border-left:4px solid ${i<3?'#E1000F':'#000091'};cursor:pointer">
+      <span>${c[0]}</span>
+      <strong style="color:${i<3?'#E1000F':'#000091'}">${c[1]}</strong>
+    </div>
+  `).join('');
+  document.getElementById('c-chiffres').textContent = chiffres.length + ' chiffres';
+
+  // Tableaux
+  tabInteractif('tab-effectifs', CSV.effectifs.slice(0,200), [
+    {k:'valeur',l:'Nombre',num:true},
+    {k:'unite',l:'Unité'},
+    {k:'fichier',l:'Fichier'},
+    {k:'contexte',l:'Contexte',ctx:true}
+  ], 'valeur', d=>ouvrirDocParFichier(d.fichier));
+
+  tabInteractif('tab-montants', CSV.montants.slice(0,200), [
+    {k:'valeur',l:'Montant (F)',num:true},
+    {k:'unite',l:'Unité'},
+    {k:'fichier',l:'Fichier'},
+    {k:'contexte',l:'Contexte',ctx:true}
+  ], 'valeur', d=>ouvrirDocParFichier(d.fichier));
+}
+
+// ============================================================
+// TABLEAU INTERACTIF (tri au clic)
+// ============================================================
+function tabInteractif(id, rows, cols, triDefaut, onLigne){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(!rows.length){ el.innerHTML='<div class="no-data"><div class="ic">📭</div>Aucune donnée</div>'; return; }
+
+  // Tri par défaut
+  let tri = triDefaut || cols[0].k;
+  let ordre = 'desc';
+  const data = [...rows].sort((a,b)=> ordre==='desc' ? num(b[tri])-num(a[tri]) : num(a[tri])-num(b[tri]));
+
+  function rendre(){
+    let html = '<table><thead><tr>';
+    cols.forEach(c=>{
+      const cls = c.k === tri ? ('tri-'+ordre) : '';
+      html += `<th class="${cls}" data-key="${c.k}">${c.l}</th>`;
+    });
+    html += '</tr></thead><tbody>';
+    data.forEach((r,i)=>{
+      html += `<tr data-idx="${i}">`;
+      cols.forEach(c=>{
+        let v = r[c.k]||'';
+        if(c.num) v = `<span class="nb">${fmt(v)}</span>`;
+        else if(c.ctx) v = `<span class="ctx" title="${esc(v)}">${esc(v.substring(0,80))}</span>`;
+        else v = esc(String(v).substring(0,50));
+        html += `<td>${v}</td>`;
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+
+    el.querySelectorAll('th').forEach(th=>{
+      th.addEventListener('click', ()=>{
+        const k = th.dataset.key;
+        if(tri === k) ordre = ordre === 'desc' ? 'asc' : 'desc';
+        else { tri = k; ordre = 'desc'; }
+        data.sort((a,b)=> ordre==='desc' ? num(b[tri])-num(a[tri]) : num(a[tri])-num(b[tri]));
+        rendre();
+      });
+    });
+    el.querySelectorAll('tbody tr').forEach(tr=>{
+      tr.addEventListener('click', ()=>{
+        const r = data[+tr.dataset.idx];
+        if(onLigne) onLigne(r);
+        else ouvrirDetail(r);
+      });
+    });
+  }
+  rendre();
+}
+
+function ouvrirDocParFichier(fichier){
+  const d = ALL_DOCS.find(x=>x.fichier === fichier);
+  if(d) ouvrirDetail(d);
+}
+
+function ouvrirDetail(obj){
+  const panel = document.getElementById('detail-panel');
+  const corps = document.getElementById('detail-corps');
+  const titre = document.getElementById('detail-titre');
+
+  if(obj.fichier){
+    // Document
+    titre.textContent = obj.fichier;
+    corps.innerHTML = `
+      <p><strong>Mentions BUMIDOM :</strong> ${obj.nb_mentions}</p>
+      <p><strong>Type :</strong> ${typeDeFichier(obj.fichier)}</p>
+      ${obj.url ? `<p><strong>URL :</strong> <a href="${obj.url}" target="_blank">${obj.url}</a></p>` : ''}
+      ${obj.orateurs && obj.orateurs.length ? `<p><strong>Orateurs :</strong> ${
+        obj.orateurs.slice(0,10).map(o=>esc(o.nom)).join(', ')
+      }</p>` : ''}
+      ${Object.keys(obj.themes||{}).length ? `<p><strong>Thèmes :</strong> ${
+        Object.entries(obj.themes).map(([k,v])=>k+' ('+v+')').join(', ')
+      }</p>` : ''}
+      <h4 style="color:#000091;margin-top:16px">Extraits</h4>
+      ${obj.extraits.map((e,i)=>`
+        <div class="extrait"><strong>Extrait ${i+1}</strong> (page ~${e.page_approx})<br>${esc(e.extrait)}</div>
+      `).join('')}
+      ${obj.url ? `<a class="btn" href="${obj.url}" target="_blank">📄 Ouvrir le PDF</a>` : ''}
+    `;
+  } else {
+    // Ligne quelconque
+    titre.textContent = 'Détail';
+    corps.innerHTML = Object.entries(obj).map(([k,v])=>`<p><strong>${esc(k)} :</strong> ${esc(v)}</p>`).join('');
+  }
+
+  panel.classList.add('ouvert');
+  document.getElementById('overlay').classList.add('actif');
+}
+
+function fermerDetail(){
+  document.getElementById('detail-panel').classList.remove('ouvert');
+  document.getElementById('overlay').classList.remove('actif');
+}
+
+// ============================================================
+// ORATEURS
+// ============================================================
+function dessinerOrateurs(){
+  const agg = {};
+  DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>agg[o.nom]=(agg[o.nom]||0)+o.occurrences));
+  const top = Object.entries(agg).sort((a,b)=>b[1]-a[1]).slice(0,30);
+
+  const trace = {
+    x: top.map(o=>o[1]), y: top.map(o=>o[0]),
+    type:'bar', orientation:'h',
+    marker:{color:top.map((_,i)=>i<3?'#E1000F':'#000091')},
+    hovertemplate:'<b>%{y}</b><br>%{x} mentions<extra></extra>'
+  };
+  safePlot('viz-orateurs-bar', [trace], {...LAYOUT, height:880,
+    yaxis:{autorange:'reversed'}, margin:{t:20,r:30,b:40,l:220}});
+  document.getElementById('viz-orateurs-bar').on('plotly_click', e=>{
+    toggleFiltre('orateurs', e.points[0].y);
+  });
+
+  const container = document.getElementById('liste-orateurs');
+  container.innerHTML = top.map(([nom,total])=>{
+    const docs = DOCS.filter(d=>(d.orateurs||[]).some(o=>o.nom === nom));
+    const estFiltre = FILTRES.orateurs.has(nom);
+    return `
+      <div class="doc" onclick="toggleFiltre('orateurs','${esc(nom)}')"
+           style="${estFiltre?'border-left-color:#E1000F':''}">
+        <div class="doc-header">
+          <span class="badge badge-cri">${docs.length} docs</span>
+          <span class="titre">${esc(nom)}</span>
+          <span class="mentions">${total} mentions</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ============================================================
+// THÈMES
+// ============================================================
+function dessinerThemes(){
+  const agg = {};
+  DOCS.forEach(d=>Object.entries(d.themes||{}).forEach(([t,n])=>agg[t]=(agg[t]||0)+n));
+  const entries = Object.entries(agg).sort((a,b)=>b[1]-a[1]);
+
+  safePlot('viz-radar', [{
+    type:'scatterpolar',
+    r:[...entries.map(e=>e[1]), entries[0]?.[1]||0],
+    theta:[...entries.map(e=>e[0]), entries[0]?.[0]||''],
+    fill:'toself', marker:{color:'#E1000F'}, line:{color:'#E1000F'},
+    hovertemplate:'<b>%{theta}</b><br>%{r} occurrences<extra></extra>'
+  }], {...LAYOUT, polar:{bgcolor:'rgba(0,0,0,0)'}});
+
+  const trace = {
+    x: entries.map(e=>e[0]), y: entries.map(e=>e[1]),
+    type:'bar', marker:{color:'#000091'},
+    hovertemplate:'<b>%{x}</b><br>%{y} occurrences<extra></extra>'
+  };
+  safePlot('viz-themes-bar', [trace], {...LAYOUT, xaxis:{tickangle:-45}});
+  document.getElementById('viz-themes-bar').on('plotly_click', e=>{
+    toggleFiltre('themes', e.points[0].x);
+  });
+
+  const container = document.getElementById('liste-themes');
+  container.innerHTML = entries.map(([theme,total])=>{
+    const docs = DOCS.filter(d=>d.themes && d.themes[theme]);
+    const estFiltre = FILTRES.themes.has(theme);
+    return `
+      <div class="doc" onclick="toggleFiltre('themes','${esc(theme)}')"
+           style="${estFiltre?'border-left-color:#E1000F':''}">
+        <div class="doc-header">
+          <span class="badge badge-jo">${docs.length} docs</span>
+          <span class="titre">${esc(theme)}</span>
+          <span class="mentions">${total} occurrences</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ============================================================
+// CHRONOLOGIE
+// ============================================================
+function dessinerChrono(){
+  const sorted = [...DOCS].sort((a,b)=>a.fichier.localeCompare(b.fichier));
+  const trace = {
+    x: sorted.map(d=>d.fichier.replace('.txt','').substring(0,30)),
+    y: sorted.map(d=>d.nb_mentions),
+    type:'bar',
+    marker:{color:sorted.map(d=>d.nb_mentions>5?'#E1000F':'#000091')},
+    hovertemplate:'<b>%{x}</b><br>%{y} mentions<extra></extra>'
+  };
+  safePlot('viz-chrono', [trace], {...LAYOUT, height:500, xaxis:{tickangle:-60, tickfont:{size:8}}});
+  document.getElementById('viz-chrono').on('plotly_click', e=>{
+    const f = e.points[0].x;
+    const d = ALL_DOCS.find(x=>x.fichier.startsWith(f));
+    if(d) ouvrirDetail(d);
+  });
+
+  const parAnnee = {};
+  DOCS.forEach(d=>((d.statistiques&&d.statistiques.annees)||[]).forEach(a=>parAnnee[a]=(parAnnee[a]||0)+1));
+  const annees = Object.keys(parAnnee).sort();
+  safePlot('viz-annees', [{
+    x: annees, y: annees.map(a=>parAnnee[a]),
+    type:'bar', marker:{color:'#1212ff'},
+    hovertemplate:'<b>%{x}</b><br>%{y} documents<extra></extra>'
+  }], {...LAYOUT});
+}
+
+// ============================================================
+// SENTIMENT
+// ============================================================
+function dessinerSentiment(){
+  if(!CSV.senti.length){
+    document.getElementById('viz-sentiment').innerHTML = '<div class="no-data">Aucune donnée sentiment</div>';
+    return;
+  }
+  const annees = CSV.senti.map(r=>r.annee);
+  const pos = CSV.senti.map(r=>+r.positifs);
+  const neg = CSV.senti.map(r=>+r.negatifs);
+  const scores = CSV.senti.map(r=>+r.score);
+
+  safePlot('viz-sentiment', [
+    {x:annees, y:pos, name:'Positifs', type:'bar', marker:{color:'#1b7a2e'}},
+    {x:annees, y:neg, name:'Négatifs', type:'bar', marker:{color:'#E1000F'}},
+  ], {...LAYOUT, barmode:'group', showlegend:true});
+
+  tabInteractif('tab-sentiment-detail', CSV.senti, [
+    {k:'annee', l:'Année'},
+    {k:'positifs', l:'+', num:true},
+    {k:'negatifs', l:'−', num:true},
+    {k:'neutres', l:'=', num:true},
+    {k:'score', l:'Score', num:true},
+  ], 'annee');
+}
+
+// ============================================================
+// RÉSEAU
+// ============================================================
+function dessinerReseau(){
+  if(!CSV.reseau.length){
+    document.getElementById('viz-reseau').innerHTML = '<div class="no-data">Aucune donnée réseau</div>';
+    return;
+  }
+  // Construire un graphe à partir des cooccurrences
+  const nodes = {};
+  const links = [];
+  CSV.reseau.slice(0,80).forEach(r=>{
+    const a = r.orateur_1, b = r.orateur_2, w = +r.cooccurrences;
+    if(!nodes[a]) nodes[a] = {id:a, deg:0};
+    if(!nodes[b]) nodes[b] = {id:b, deg:0};
+    nodes[a].deg++; nodes[b].deg++;
+    links.push({source:a, target:b, w});
+  });
+  const nodeArr = Object.values(nodes);
+  nodeArr.sort((a,b)=>b.deg-a.deg);
+
+  // Layout simple en cercle
+  const N = nodeArr.length;
+  const positions = {};
+  nodeArr.forEach((n,i)=>{
+    const angle = (i/N) * 2 * Math.PI;
+    positions[n.id] = {x: Math.cos(angle)*10, y: Math.sin(angle)*10};
+  });
+
+  // Edges
+  const edgeX = [], edgeY = [];
+  links.forEach(l=>{
+    const p1 = positions[l.source], p2 = positions[l.target];
+    if(p1 && p2){
+      edgeX.push(p1.x, p2.x, null);
+      edgeY.push(p1.y, p2.y, null);
+    }
+  });
+
+  const traceEdges = {
+    x: edgeX, y: edgeY, mode:'lines',
+    line:{color:'#E1000F', width:0.5}, hoverinfo:'skip', type:'scatter'
+  };
+  const traceNodes = {
+    x: nodeArr.map(n=>positions[n.id].x),
+    y: nodeArr.map(n=>positions[n.id].y),
+    mode:'markers+text',
+    text: nodeArr.map(n=>n.id.substring(0,20)),
+    textposition:'top center',
+    textfont:{size:9, color:'#000091'},
+    marker:{size:nodeArr.map(n=>Math.min(10+n.deg*3, 40)), color:'#000091', line:{color:'#fff', width:1}},
+    type:'scatter',
+    hovertemplate:'<b>%{text}</b><br>Connexions : %{marker.size}<extra></extra>',
+    customdata: nodeArr.map(n=>n.id)
+  };
+
+  safePlot('viz-reseau', [traceEdges, traceNodes], {
+    ...LAYOUT, height:650, showlegend:false,
+    xaxis:{showgrid:false, zeroline:false, showticklabels:false},
+    yaxis:{showgrid:false, zeroline:false, showticklabels:false}
+  });
+  document.getElementById('viz-reseau').on('plotly_click', e=>{
+    if(e.points[0].customdata){
+      toggleFiltre('orateurs', e.points[0].customdata);
+    }
+  });
+}
+
+// ============================================================
+// NLP
+// ============================================================
+function dessinerNLP(){
+  const rendre = (id, data, color) => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(!data || !data.length){ el.innerHTML = '<div class="no-data">Aucune donnée</div>'; return; }
+    el.innerHTML = data.slice(0,20).map(([nom,n])=>`
+      <div onclick="toggleFiltre('orateurs','${esc(nom)}')"
+           style="display:flex;justify-content:space-between;padding:8px 12px;margin:3px 0;
+                  background:#f5f5f7;border-radius:6px;border-left:3px solid ${color};
+                  cursor:pointer;transition:.2s"
+           onmouseover="this.style.background='#e5e9ff'"
+           onmouseout="this.style.background='#f5f5f7'">
+        <span>${esc(nom)}</span><strong style="color:${color}">${n}</strong>
+      </div>
+    `).join('');
+  };
+  if(NLP){
+    rendre('nlp-pers', NLP.top_personnes, '#000091');
+    rendre('nlp-lieux', NLP.top_lieux, '#E1000F');
+    rendre('nlp-org', NLP.top_organisations, '#1b7a2e');
+  }
+  // Mots depuis cooccurrences
+  const el = document.getElementById('nlp-mots');
+  if(el && CSV.cooc){
+    el.innerHTML = CSV.cooc.slice(0,20).map(r=>`
+      <div onclick="FILTRES.recherche='${esc(r.mot)}';document.getElementById('recherche').value='${esc(r.mot)}';majVue()"
+           style="display:flex;justify-content:space-between;padding:8px 12px;margin:3px 0;
+                  background:#f5f5f7;border-radius:6px;border-left:3px solid #b26a00;
+                  cursor:pointer;transition:.2s"
+           onmouseover="this.style.background='#fff3e0'"
+           onmouseout="this.style.background='#f5f5f7'">
+        <span>${esc(r.mot)}</span><strong style="color:#b26a00">${r.occurrences}</strong>
+      </div>
+    `).join('');
+  }
+}
+
+// ============================================================
+// DOCUMENTS
+// ============================================================
+function dessinerDocs(){
+  let docs = [...DOCS];
+  // Tri
+  if(TRI.col === 'mentions') docs.sort((a,b)=> TRI.ordre==='desc' ? b.nb_mentions-a.nb_mentions : a.nb_mentions-b.nb_mentions);
+  else if(TRI.col === 'nom') docs.sort((a,b)=> TRI.ordre==='desc' ? b.fichier.localeCompare(a.fichier) : a.fichier.localeCompare(b.fichier));
+
+  const container = document.getElementById('liste-docs');
+  if(!docs.length){
+    container.innerHTML = '<div class="no-data"><div class="ic">🔍</div>Aucun document ne correspond aux filtres</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <p style="margin-bottom:12px;color:#666;font-size:.9rem">${docs.length} document(s)</p>
+    ${docs.map(d=>{
+      const t = typeDeFichier(d.fichier);
+      const sel = SELECTION.has(d.id) ? 'selectionne' : '';
+      return `
+        <div class="doc ${sel}" data-id="${d.id}">
+          <div class="doc-header" onclick="toggleDoc('${d.id}')">
+            <span class="badge badge-${t==='Compte rendu'?'cri':t==='Question écrite'?'qst':t.includes('Table')?'tab':'def'}">${t}</span>
+            <span class="titre">${esc(d.fichier.replace('.txt',''))}</span>
+            <span class="mentions">💬 ${d.nb_mentions}</span>
+          </div>
+          <div class="doc-body">
+            ${Object.keys(d.themes||{}).length ? `<div style="margin:10px 0">${
+              Object.entries(d.themes).slice(0,5).map(([k,v])=>`<span class="tag" onclick="event.stopPropagation();toggleFiltre('themes','${esc(k)}')">${esc(k)} (${v})</span>`).join('')
+            }</div>` : ''}
+            ${d.extraits.slice(0,3).map((e,i)=>`
+              <div class="extrait"><strong>Extrait ${i+1}</strong> (page ~${e.page_approx})<br>${esc(e.extrait)}</div>
+            `).join('')}
+            ${d.orateurs && d.orateurs.length ? `<p style="margin-top:10px"><strong>Orateurs :</strong> ${
+              d.orateurs.slice(0,8).map(o=>`<span class="tag rouge" onclick="event.stopPropagation();toggleFiltre('orateurs','${esc(o.nom)}')">${esc(o.nom)} (${o.occurrences})</span>`).join('')
+            }</p>` : ''}
+            <div style="margin-top:12px">
+              <button class="btn" onclick="event.stopPropagation();ouvrirDetail(${JSON.stringify(d).replace(/"/g,'&quot;')})">🔍 Détails</button>
+              ${d.url ? `<a class="btn" href="${d.url}" target="_blank" onclick="event.stopPropagation()">📄 PDF</a>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+
+function toggleDoc(id){
+  const el = document.querySelector(`[data-id="${id}"] .doc-body`);
+  if(el) el.classList.toggle('open');
+}
+
+// ============================================================
+// EXPORTS
+// ============================================================
+function exportVueCSV(){
+  const lignes = ['id;fichier;type;mentions;legislatures;orateurs;themes'];
+  DOCS.forEach(d=>{
+    lignes.push([
+      d.id,
+      d.fichier,
+      typeDeFichier(d.fichier),
+      d.nb_mentions,
+      (d.legislatures||[]).join(','),
+      (d.orateurs||[]).map(o=>o.nom).join(','),
+      Object.keys(d.themes||{}).join(',')
+    ].map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';'));
+  });
+  telecharger(lignes.join('\n'), 'bumidom_vue.csv', 'text/csv;charset=utf-8');
+}
+
+function exportVueJSON(){
+  const data = {
+    filtres: {
+      types: [...FILTRES.types],
+      themes: [...FILTRES.themes],
+      orateurs: [...FILTRES.orateurs],
+      legis: [...FILTRES.legis],
+      anneeMin: FILTRES.anneeMin,
+      anneeMax: FILTRES.anneeMax,
+      recherche: FILTRES.recherche
+    },
+    total: DOCS.length,
+    documents: DOCS.map(d=>({
+      id:d.id, fichier:d.fichier, mentions:d.nb_mentions,
+      type:typeDeFichier(d.fichier), themes:d.themes, orateurs:d.orateurs, url:d.url
+    }))
+  };
+  telecharger(JSON.stringify(data, null, 2), 'bumidom_vue.json', 'application/json');
+}
+
+function imprimerVue(){
+  window.print();
+}
+
+function telecharger(contenu, nom, mime){
+  const blob = new Blob([contenu], {type: mime});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = nom;
@@ -639,6 +1207,19 @@ function telecharger(contenu, nom, mime) {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+
+// ============================================================
+// RACCOURCIS CLAVIER
+// ============================================================
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape') fermerDetail();
+  if(e.key === '/' && e.target.tagName !== 'INPUT'){
+    e.preventDefault();
+    document.getElementById('recherche').focus();
+    // Active l'onglet documents
+    document.querySelector('.tabs button[data-tab="docs"]').click();
+  }
+});
 </script>
 </body>
 </html>

@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard BUMIDOM — Archives Assemblée Nationale</title>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+  :root{
+    --bleu:#000091;
+    --bleu-clair:#1212ff;
+    --rouge:#E1000F;
+    --blanc:#ffffff;
+    --gris:#f5f5f7;
+    --texte:#1a1a2e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--gris);color:var(--texte);line-height:1.5;}
+
+  header{
+    background:var(--blanc);
+    border-bottom:4px solid;
+    border-image:linear-gradient(to right,var(--bleu) 33.33%,var(--blanc) 33.33%,var(--blanc) 66.66%,var(--rouge) 66.66%) 1;
+    padding:18px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);position:sticky;top:0;z-index:100;
+  }
+  header h1{font-size:1.5rem;color:var(--bleu);display:flex;align-items:center;gap:10px;}
+  header h1 span.drapeau{display:inline-block;width:36px;height:24px;background:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%);border:1px solid #ccc;border-radius:3px;}
+  header .sous-titre{font-size:.85rem;color:#666;font-weight:400;}
+
+  .layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 80px);}
+  @media(max-width:900px){.layout{grid-template-columns:1fr;}}
+
+  aside{background:var(--bleu);color:var(--blanc);padding:22px 18px;overflow-y:auto;}
+  aside h2{font-size:1rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;border-bottom:2px solid var(--rouge);padding-bottom:8px;}
+  aside .stat{background:rgba(255,255,255,.1);border-left:3px solid var(--rouge);padding:10px 12px;margin-bottom:10px;border-radius:0 6px 6px 0;}
+  aside .stat .valeur{font-size:1.4rem;font-weight:700;}
+  aside .stat .label{font-size:.8rem;opacity:.85;}
+  aside button{width:100%;padding:11px;margin-bottom:8px;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:.9rem;transition:.2s;}
+  aside button.principal{background:var(--rouge);color:#fff;}
+  aside button.principal:hover{background:#b8000c;}
+  aside button.secondaire{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);}
+  aside button.secondaire:hover{background:rgba(255,255,255,.28);}
+
+  main{padding:26px 30px;overflow-x:hidden;}
+
+  .bandeau{background:linear-gradient(135deg,var(--bleu) 0%,var(--bleu-clair) 100%);color:#fff;padding:22px 26px;border-radius:10px;margin-bottom:22px;box-shadow:0 4px 14px rgba(0,0,145,.25);border-bottom:4px solid var(--rouge);}
+  .bandeau h2{font-size:1.35rem;margin-bottom:6px;}
+  .bandeau p{font-size:.9rem;opacity:.9;}
+
+  .cartes{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:26px;}
+  .carte{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 2px 10px rgba(0,0,0,.07);border-top:4px solid var(--bleu);transition:.2s;}
+  .carte:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.12);}
+  .carte .val{font-size:1.8rem;font-weight:700;color:var(--bleu);}
+  .carte .lbl{font-size:.8rem;color:#666;text-transform:uppercase;letter-spacing:.5px;}
+
+  .filtres{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:22px;box-shadow:0 2px 10px rgba(0,0,0,.06);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;align-items:end;}
+  .filtres label{display:block;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--bleu);margin-bottom:5px;}
+  .filtres select,.filtres input{width:100%;padding:9px 10px;border:2px solid #e0e0e0;border-radius:6px;font-size:.9rem;transition:.2s;}
+  .filtres select:focus,.filtres input:focus{outline:none;border-color:var(--bleu);}
+
+  .onglets{display:flex;gap:6px;margin-bottom:18px;border-bottom:2px solid #ddd;flex-wrap:wrap;}
+  .onglet{padding:10px 20px;border:none;background:transparent;font-size:.92rem;font-weight:600;color:#666;cursor:pointer;border-bottom:3px solid transparent;transition:.2s;}
+  .onglet:hover{color:var(--bleu);}
+  .onglet.actif{color:var(--bleu);border-bottom-color:var(--rouge);}
+  .panneau{display:none;}
+  .panneau.actif{display:block;animation:fade .3s;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  .doc{background:#fff;border-radius:10px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:5px solid var(--bleu);overflow:hidden;transition:.2s;}
+  .doc:hover{box-shadow:0 4px 16px rgba(0,0,145,.15);}
+  .doc-header{padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;}
+  .doc-header .type-badge{font-size:.68rem;font-weight:700;text-transform:uppercase;padding:3px 9px;border-radius:12px;white-space:nowrap;letter-spacing:.5px;}
+  .badge-pdf{background:#ffe5e5;color:var(--rouge);}
+  .badge-cri{background:#e5e9ff;color:var(--bleu);}
+  .badge-qst{background:#e8f5e9;color:#1b7a2e;}
+  .badge-jo{background:#fff3e0;color:#b26a00;}
+  .badge-defaut{background:#eee;color:#555;}
+  .doc-header .titre{flex:1;font-weight:600;font-size:.95rem;color:var(--texte);}
+  .doc-header .meta{font-size:.78rem;color:#888;white-space:nowrap;}
+  .doc-body{display:none;padding:0 18px 16px 18px;border-top:1px solid #f0f0f0;background:#fafafa;}
+  .doc-body.open{display:block;}
+  .doc-body .desc{font-size:.88rem;color:#444;margin:12px 0;padding:10px 12px;background:#fff;border-left:3px solid var(--rouge);border-radius:0 6px 6px 0;}
+  .doc-body .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0;}
+  .doc-body .grille div{font-size:.82rem;}
+  .doc-body .grille strong{color:var(--bleu);}
+  .btn-pdf{display:inline-block;background:var(--bleu);color:#fff;text-decoration:none;padding:9px 18px;border-radius:6px;font-weight:600;font-size:.85rem;margin-top:8px;transition:.2s;}
+  .btn-pdf:hover{background:var(--rouge);}
+
+  .viz{background:#fff;border-radius:10px;padding:16px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+
+  .detail{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+  .detail h3{color:var(--bleu);margin-bottom:8px;font-size:1.2rem;}
+  .detail .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:16px 0;}
+  .detail .meta-grid .item{background:var(--gris);padding:10px;border-radius:8px;border-left:3px solid var(--bleu);}
+  .detail .meta-grid .item .k{font-size:.72rem;text-transform:uppercase;color:#888;letter-spacing:.5px;}
+  .detail .meta-grid .item .v{font-weight:600;font-size:.95rem;color:var(--texte);word-break:break-word;}
+
+  .empty{text-align:center;padding:60px 20px;color:#999;}
+  .empty .icone{font-size:3rem;margin-bottom:12px;}
+
+  .zone-upload{background:#fff;border:3px dashed #ccc;border-radius:12px;padding:40px 30px;text-align:center;margin-bottom:24px;transition:.2s;}
+  .zone-upload.drag{border-color:var(--bleu);background:#f0f4ff;}
+  .zone-upload .icone{font-size:3rem;margin-bottom:12px;}
+  .zone-upload h3{color:var(--bleu);margin-bottom:8px;}
+  .zone-upload p{color:#666;font-size:.9rem;margin-bottom:16px;}
+  .zone-upload input[type=file]{display:none;}
+  .zone-upload .btn-choisir{background:var(--bleu);color:#fff;border:none;padding:11px 24px;border-radius:6px;font-weight:600;cursor:pointer;font-size:.9rem;}
+  .zone-upload .btn-choisir:hover{background:var(--rouge);}
+
+  .message{padding:12px 18px;border-radius:8px;margin-bottom:16px;font-size:.9rem;font-weight:500;}
+  .message.ok{background:#e8f5e9;color:#1b7a2e;border-left:4px solid #1b7a2e;}
+  .message.err{background:#ffe5e5;color:#b8000c;border-left:4px solid var(--rouge);}
+  .message.info{background:#e5e9ff;color:var(--bleu);border-left:4px solid var(--bleu);}
+
+  footer{text-align:center;padding:18px;font-size:.78rem;color:#999;border-top:2px solid;border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;background:#fff;margin-top:30px;}
+
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-track{background:#eee;}
+  ::-webkit-scrollbar-thumb{background:var(--bleu);border-radius:5px;}
+  ::-webkit-scrollbar-thumb:hover{background:var(--rouge);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="drapeau"></span> Dashboard BUMIDOM</h1>
+  <div class="sous-titre">Archives de l'Assemblée nationale · Bureau pour le développement des migrations intéressant les DOM</div>
+</header>
+
+<div class="layout">
+  <aside>
+    <h2>📊 Statistiques</h2>
+    <div class="stat"><div class="valeur" id="stat-total">—</div><div class="label">Documents</div></div>
+    <div class="stat"><div class="valeur" id="stat-types">—</div><div class="label">Types</div></div>
+    <div class="stat"><div class="valeur" id="stat-legis">—</div><div class="label">Législatures</div></div>
+    <div class="stat"><div class="valeur" id="stat-periodes">—</div><div class="label">Périodes</div></div>
+
+    <h2 style="margin-top:22px;">💾 Export</h2>
+    <button class="secondaire" onclick="exportCSV()">📥 Télécharger CSV</button>
+    <button class="secondaire" onclick="exportURLs()">🔗 Télécharger URLs</button>
+    <button class="secondaire" onclick="window.print()">🖨️ Imprimer</button>
+  </aside>
+
+  <main>
+    <div class="bandeau">
+      <h2>🔍 Analyse des archives parlementaires</h2>
+      <p>Recherche du terme <strong>BUMIDOM</strong> dans les comptes rendus, questions écrites et journaux officiels de l'Assemblée nationale.</p>
+    </div>
+
+    <!-- ZONE D'UPLOAD (visible tant que rien n'est chargé) -->
+    <div id="zone-upload" class="zone-upload">
+      <div class="icone">📁</div>
+      <h3>Charger le fichier json.json</h3>
+      <p>Glissez-déposez votre fichier <code>json.json</code> ici, ou cliquez pour le sélectionner.<br>
+         <small>(Le fichier est traité localement dans votre navigateur — aucune donnée n'est envoyée.)</small></p>
+      <input type="file" id="file-input" accept=".json,.txt,application/json">
+      <button class="btn-choisir" onclick="document.getElementById('file-input').click()">📂 Choisir un fichier</button>
+      <p style="margin-top:14px;"><small>Ou placez <code>json.json</code> dans le même dossier et lancez un serveur local :<br>
+      <code>python -m http.server 8000</code></small></p>
+    </div>
+
+    <!-- MESSAGE D'ÉTAT -->
+    <div id="message"></div>
+
+    <!-- CONTENU (masqué tant que rien n'est chargé) -->
+    <div id="contenu" style="display:none;">
+      <div class="cartes">
+        <div class="carte"><div class="val" id="c-total">0</div><div class="lbl">Documents</div></div>
+        <div class="carte"><div class="val" id="c-types">0</div><div class="lbl">Types</div></div>
+        <div class="carte"><div class="val" id="c-legis">0</div><div class="lbl">Législatures</div></div>
+        <div class="carte"><div class="val" id="c-periodes">0</div><div class="lbl">Périodes</div></div>
+      </div>
+
+      <div class="filtres">
+        <div>
+          <label for="f-type">Type de document</label>
+          <select id="f-type"><option value="">Tous les types</option></select>
+        </div>
+        <div>
+          <label for="f-legis">Législature</label>
+          <select id="f-legis"><option value="">Toutes</option></select>
+        </div>
+        <div>
+          <label for="f-periode">Période</label>
+          <select id="f-periode"><option value="">Toutes</option></select>
+        </div>
+        <div>
+          <label for="f-recherche">Recherche texte</label>
+          <input type="text" id="f-recherche" placeholder="Ex : Bumidom, Réunion, 1971...">
+        </div>
+      </div>
+
+      <div class="onglets">
+        <button class="onglet actif" data-panneau="liste">📋 Liste des documents</button>
+        <button class="onglet" data-panneau="viz">📈 Visualisations</button>
+        <button class="onglet" data-panneau="detail">🔍 Consultation détaillée</button>
+      </div>
+
+      <div class="panneau actif" id="panneau-liste"><div id="liste-docs"></div></div>
+      <div class="panneau" id="panneau-viz">
+        <div class="viz"><div id="viz-types"></div></div>
+        <div class="viz"><div id="viz-periodes"></div></div>
+        <div class="viz"><div id="viz-legis"></div></div>
+      </div>
+      <div class="panneau" id="panneau-detail">
+        <div id="detail-doc" class="empty">
+          <div class="icone">👈</div>
+          <p>Sélectionnez un document dans la liste pour afficher son détail.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  Dashboard BUMIDOM · Archives Assemblée nationale · <span id="horodatage"></span>
+</footer>
+
+<script>
+/* ============================================================
+   ÉTAT GLOBAL
+   ============================================================ */
+let DOCUMENTS = [];
+let DOCUMENT_SELECTIONNE = null;
+
+/* ============================================================
+   CHARGEMENT DU FICHIER JSON
+   ============================================================ */
+document.getElementById('horodatage').textContent = new Date().toLocaleString('fr-FR');
+
+const fileInput = document.getElementById('file-input');
+const zoneUpload = document.getElementById('zone-upload');
+const messageEl = document.getElementById('message');
+
+fileInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file) lireFichier(file);
+});
+
+// Drag & drop
+['dragenter','dragover'].forEach(evt => {
+  zoneUpload.addEventListener(evt, e => {
+    e.preventDefault(); e.stopPropagation();
+    zoneUpload.classList.add('drag');
+  });
+});
+['dragleave','drop'].forEach(evt => {
+  zoneUpload.addEventListener(evt, e => {
+    e.preventDefault(); e.stopPropagation();
+    zoneUpload.classList.remove('drag');
+  });
+});
+zoneUpload.addEventListener('drop', e => {
+  const file = e.dataTransfer.files[0];
+  if (file) lireFichier(file);
+});
+
+/**
+ * Lit un fichier JSON et lance le parsing.
+ */
+function lireFichier(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      let texte = e.target.result;
+      // Nettoyage : enlève un éventuel wrapper Google CSE
+      texte = texte.replace(/^google\.search\.cse\.api\d+\(/, '').replace(/\);\s*$/, '');
+      const data = JSON.parse(texte);
+      traiterDonnees(data);
+    } catch (err) {
+      afficherMessage('err', '❌ Erreur de lecture JSON : ' + err.message);
+    }
+  };
+  reader.onerror = () => afficherMessage('err', '❌ Impossible de lire le fichier.');
+  reader.readAsText(file, 'UTF-8');
+}
+
+/**
+ * Tente aussi un chargement automatique si json.json est servi par un serveur local.
+ */
+window.addEventListener('load', () => {
+  fetch('resultats.json')
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.text();
+    })
+    .then(texte => {
+      try {
+        const data = JSON.parse(texte);
+        traiterDonnees(data, true);
+      } catch (err) {
+        // silencieux — l'utilisateur peut uploader manuellement
+      }
+    })
+    .catch(() => {
+      // Pas de serveur, on attend l'upload manuel
+    });
+});
+
+/* ============================================================
+   TRAITEMENT DES DONNÉES
+   ============================================================ */
+function traiterDonnees(data, silencieux = false) {
+  let items = [];
+
+  // Stratégie 1 : clé "results"
+  if (Array.isArray(data.results)) {
+    items = data.results;
+  }
+  // Stratégie 2 : recherche récursive d'un tableau d'objets
+  else if (Array.isArray(data)) {
+    items = data;
+  } else if (typeof data === 'object') {
+    for (const k in data) {
+      if (Array.isArray(data[k]) && data[k].length && typeof data[k][0] === 'object') {
+        items = data[k];
+        break;
+      }
+    }
+  }
+
+  if (!items.length) {
+    afficherMessage('err', '❌ Aucun tableau de résultats trouvé dans le JSON.');
+    return;
+  }
+
+  DOCUMENTS = items.map((item, i) => parserItem(item, i));
+  afficherMessage('ok', `✅ ${DOCUMENTS.length} documents chargés avec succès.`);
+
+  // Affiche le contenu
+  document.getElementById('contenu').style.display = 'block';
+  document.getElementById('zone-upload').style.display = 'none';
+
+  // Prépare les filtres, stats, liste, viz
+  remplirFiltres();
+  mettreAJourStats();
+  appliquerFiltres();
+}
+
+/**
+ * Transforme un item brut en objet normalisé.
+ */
+function parserItem(item, i) {
+  // Titre
+  const titre = item.title || item.titleNoFormatting || item.name || `Document ${i+1}`;
+
+  // URL
+  const url = item.url || item.unescapedUrl || item.link || item.formattedUrl || '';
+
+  // Description
+  let description = item.contentNoFormatting || item.content || item.snippet || item.description || '';
+  description = description.replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ').replace(/\\u003cb\\u003e/g, '').replace(/\\u003c\/b\\u003e/g, '').replace(/<[^>]+>/g, '').trim();
+
+  // Date
+  let date = 'Inconnue';
+  const m = description.match(/(\d{1,2}\s+[a-zéû]+\s+\d{4}|\d{4})/i);
+  if (m) date = m[1];
+
+  // Type de document
+  let type = 'Document';
+  const urlLower = url.toLowerCase();
+  const titreUpper = titre.toUpperCase();
+  if (urlLower.endsWith('.pdf') || (item.fileFormat && item.fileFormat.toLowerCase().includes('pdf'))) type = 'PDF';
+  if (titreUpper.includes('JOURNAL OFFICIEL') || titreUpper.includes('JOURNAL OFFICIAL')) type = 'Journal Officiel';
+  if (urlLower.includes('/cri/')) type = 'Compte rendu';
+  if (urlLower.includes('/qst/')) type = 'Question écrite';
+  if (urlLower.includes('/tanalytique/') || urlLower.includes('/tnominative/')) type = 'Table analytique';
+
+  // Législature (chiffre avant /cri/ ou /qst/)
+  let legislature = '';
+  const mLeg = url.match(/\/(\d+)\/(cri|qst)\//);
+  if (mLeg) legislature = mLeg[1];
+
+  // Période (ex: 1971-1972)
+  let periode = 'Inconnue';
+  const mPer = url.match(/\/(\d{4})-(\d{4})/);
+  if (mPer) periode = `${mPer[1]}-${mPer[2]}`;
+
+  return {
+    id: `DOC_${String(i+1).padStart(4,'0')}`,
+    position: i + 1,
+    titre,
+    titre_court: titre.length > 80 ? titre.slice(0,80) + '…' : titre,
+    url,
+    description,
+    description_courte: description.length > 180 ? description.slice(0,180) + '…' : description,
+    type,
+    legislature,
+    periode,
+    date,
+    format: item.fileFormat || '',
+    source: item.visibleUrl || (url ? new URL(url).hostname : '')
+  };
+}
+
+/* ============================================================
+   MESSAGES
+   ============================================================ */
+function afficherMessage(type, texte) {
+  messageEl.innerHTML = `<div class="message ${type}">${texte}</div>`;
+  if (type === 'ok') setTimeout(() => { messageEl.innerHTML = ''; }, 4000);
+}
+
+/* ============================================================
+   STATS & FILTRES
+   ============================================================ */
+function mettreAJourStats() {
+  const total = DOCUMENTS.length;
+  const types = new Set(DOCUMENTS.map(d => d.type));
+  const legis = new Set(DOCUMENTS.map(d => d.legislature).filter(Boolean));
+  const periodes = new Set(DOCUMENTS.map(d => d.periode).filter(p => p !== 'Inconnue'));
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-types').textContent = types.size;
+  document.getElementById('stat-legis').textContent = legis.size;
+  document.getElementById('stat-periodes').textContent = periodes.size;
+  document.getElementById('c-total').textContent = total;
+  document.getElementById('c-types').textContent = types.size;
+  document.getElementById('c-legis').textContent = legis.size;
+  document.getElementById('c-periodes').textContent = periodes.size;
+}
+
+function remplirFiltres() {
+  const selType = document.getElementById('f-type');
+  const selLegis = document.getElementById('f-legis');
+  const selPeriode = document.getElementById('f-periode');
+
+  const types = [...new Set(DOCUMENTS.map(d => d.type))].sort();
+  const legis = [...new Set(DOCUMENTS.map(d => d.legislature).filter(Boolean))].sort();
+  const periodes = [...new Set(DOCUMENTS.map(d => d.periode).filter(p => p !== 'Inconnue'))].sort();
+
+  types.forEach(t => selType.insertAdjacentHTML('beforeend', `<option value="${t}">${t}</option>`));
+  legis.forEach(l => selLegis.insertAdjacentHTML('beforeend', `<option value="${l}">Législature ${l}</option>`));
+  periodes.forEach(p => selPeriode.insertAdjacentHTML('beforeend', `<option value="${p}">${p}</option>`));
+
+  ['f-type','f-legis','f-periode'].forEach(id => {
+    document.getElementById(id).addEventListener('change', appliquerFiltres);
+  });
+  document.getElementById('f-recherche').addEventListener('input', appliquerFiltres);
+}
+
+/* ============================================================
+   FILTRAGE
+   ============================================================ */
+function documentsFiltres() {
+  const type = document.getElementById('f-type').value;
+  const legis = document.getElementById('f-legis').value;
+  const periode = document.getElementById('f-periode').value;
+  const recherche = document.getElementById('f-recherche').value.trim().toLowerCase();
+
+  return DOCUMENTS.filter(d => {
+    if (type && d.type !== type) return false;
+    if (legis && d.legislature !== legis) return false;
+    if (periode && d.periode !== periode) return false;
+    if (recherche) {
+      const blob = (d.titre + ' ' + d.description + ' ' + d.url + ' ' + d.periode).toLowerCase();
+      if (!blob.includes(recherche)) return false;
+    }
+    return true;
+  });
+}
+
+function appliquerFiltres() {
+  const docs = documentsFiltres();
+  afficherListe(docs);
+  afficherVisualisations(docs);
+}
+
+/* ============================================================
+   LISTE DES DOCUMENTS
+   ============================================================ */
+function classeBadge(type) {
+  if (type === 'PDF') return 'badge-pdf';
+  if (type === 'Compte rendu') return 'badge-cri';
+  if (type === 'Question écrite') return 'badge-qst';
+  if (type === 'Journal Officiel') return 'badge-jo';
+  return 'badge-defaut';
+}
+
+function afficherListe(docs) {
+  const container = document.getElementById('liste-docs');
+  if (!docs.length) {
+    container.innerHTML = '<div class="empty"><div class="icone">🔍</div><p>Aucun document ne correspond aux filtres.</p></div>';
+    return;
+  }
+
+  container.innerHTML = docs.map(d => `
+    <div class="doc" id="doc-${d.id}">
+      <div class="doc-header" onclick="toggleDoc('${d.id}')">
+        <span class="type-badge ${classeBadge(d.type)}">${d.type}</span>
+        <span class="titre">${escapeHtml(d.titre_court)}</span>
+        <span class="meta">${d.periode !== 'Inconnue' ? d.periode : ''} ${d.legislature ? '· Lég. ' + d.legislature : ''}</span>
+      </div>
+      <div class="doc-body">
+        ${d.description ? `<div class="desc">${escapeHtml(d.description)}</div>` : ''}
+        <div class="grille">
+          <div><strong>ID :</strong> ${d.id}</div>
+          <div><strong>Date :</strong> ${escapeHtml(d.date)}</div>
+          <div><strong>Législature :</strong> ${d.legislature || 'N/A'}</div>
+          <div><strong>Période :</strong> ${d.periode}</div>
+          <div><strong>Format :</strong> ${escapeHtml(d.format || '—')}</div>
+          <div><strong>Source :</strong> ${escapeHtml(d.source)}</div>
+        </div>
+        ${d.url ? `<a class="btn-pdf" href="${d.url}" target="_blank" rel="noopener">📄 Ouvrir le document</a>` : ''}
+        <button class="btn-pdf" style="background:#666;margin-left:8px;" onclick="voirDetail('${d.id}')">🔍 Voir le détail</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleDoc(id) {
+  const el = document.querySelector(`#doc-${id} .doc-body`);
+  if (el) el.classList.toggle('open');
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ============================================================
+   VISUALISATIONS
+   ============================================================ */
+function afficherVisualisations(docs) {
+  const layoutBase = {
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(0,0,0,0)',
+    font: { family: 'Segoe UI, Roboto, sans-serif', color: '#1a1a2e' },
+    margin: { t: 40, r: 20, b: 60, l: 60 }
+  };
+
+  // Types
+  const parType = {};
+  docs.forEach(d => parType[d.type] = (parType[d.type] || 0) + 1);
+  Plotly.newPlot('viz-types', [{
+    values: Object.values(parType),
+    labels: Object.keys(parType),
+    type: 'pie',
+    hole: 0.45,
+    marker: { colors: ['#000091','#E1000F','#1212ff','#ff6b6b','#4a4a8a','#b8000c'] }
+  }], { ...layoutBase, title: 'Répartition par type de document' });
+
+  // Périodes
+  const parPeriode = {};
+  docs.forEach(d => { if (d.periode !== 'Inconnue') parPeriode[d.periode] = (parPeriode[d.periode] || 0) + 1; });
+  const periodesTriees = Object.keys(parPeriode).sort();
+  Plotly.newPlot('viz-periodes', [{
+    x: periodesTriees,
+    y: periodesTriees.map(p => parPeriode[p]),
+    type: 'bar',
+    marker: { color: '#000091' }
+  }], { ...layoutBase, title: 'Documents par période', xaxis: { tickangle: -45 } });
+
+  // Législatures
+  const parLegis = {};
+  docs.forEach(d => { if (d.legislature) parLegis[d.legislature] = (parLegis[d.legislature] || 0) + 1; });
+  const legisTriees = Object.keys(parLegis).sort((a,b) => a - b);
+  Plotly.newPlot('viz-legis', [{
+    x: legisTriees.map(l => 'Lég. ' + l),
+    y: legisTriees.map(l => parLegis[l]),
+    type: 'bar',
+    marker: { color: '#E1000F' }
+  }], { ...layoutBase, title: 'Documents par législature' });
+}
+
+/* ============================================================
+   DÉTAIL D'UN DOCUMENT
+   ============================================================ */
+function voirDetail(id) {
+  const doc = DOCUMENTS.find(d => d.id === id);
+  if (!doc) return;
+  DOCUMENT_SELECTIONNE = doc;
+
+  // Active l'onglet détail
+  document.querySelectorAll('.onglet').forEach(o => o.classList.remove('actif'));
+  document.querySelectorAll('.panneau').forEach(p => p.classList.remove('actif'));
+  document.querySelector('.onglet[data-panneau="detail"]').classList.add('actif');
+  document.getElementById('panneau-detail').classList.add('actif');
+
+  const container = document.getElementById('detail-doc');
+  container.className = 'detail';
+  container.innerHTML = `
+    <h3>${escapeHtml(doc.titre)}</h3>
+    <div class="meta-grid">
+      <div class="item"><div class="k">Type</div><div class="v">${doc.type}</div></div>
+      <div class="item"><div class="k">Législature</div><div class="v">${doc.legislature || 'N/A'}</div></div>
+      <div class="item"><div class="k">Période</div><div class="v">${doc.periode}</div></div>
+      <div class="item"><div class="k">Date</div><div class="v">${escapeHtml(doc.date)}</div></div>
+      <div class="item"><div class="k">Format</div><div class="v">${escapeHtml(doc.format || '—')}</div></div>
+      <div class="item"><div class="k">Source</div><div class="v">${escapeHtml(doc.source)}</div></div>
+      <div class="item"><div class="k">ID</div><div class="v">${doc.id}</div></div>
+      <div class="item"><div class="k">Position</div><div class="v">${doc.position}</div></div>
+    </div>
+    ${doc.description ? `<div class="desc">${escapeHtml(doc.description)}</div>` : ''}
+    ${doc.url ? `<a class="btn-pdf" href="${doc.url}" target="_blank" rel="noopener">📄 Ouvrir le document PDF</a>` : ''}
+    <p style="margin-top:14px;font-size:.8rem;color:#888;word-break:break-all;">${escapeHtml(doc.url)}</p>
+  `;
+}
+
+/* ============================================================
+   ONGLETS
+   ============================================================ */
+document.querySelectorAll('.onglet').forEach(o => {
+  o.addEventListener('click', () => {
+    document.querySelectorAll('.onglet').forEach(x => x.classList.remove('actif'));
+    document.querySelectorAll('.panneau').forEach(p => p.classList.remove('actif'));
+    o.classList.add('actif');
+    document.getElementById('panneau-' + o.dataset.panneau).classList.add('actif');
+  });
+});
+
+/* ============================================================
+   EXPORTS
+   ============================================================ */
+function exportCSV() {
+  const docs = documentsFiltres();
+  if (!docs.length) { alert('Aucun document à exporter.'); return; }
+  const entetes = ['id','position','titre','type','legislature','periode','date','format','source','url','description'];
+  const lignes = [entetes.join(';')];
+  docs.forEach(d => {
+    lignes.push(entetes.map(h => '"' + String(d[h] || '').replace(/"/g, '""') + '"').join(';'));
+  });
+  telecharger(lignes.join('\n'), 'bumidom.csv', 'text/csv;charset=utf-8;');
+}
+
+function exportURLs() {
+  const docs = documentsFiltres();
+  if (!docs.length) { alert('Aucun document à exporter.'); return; }
+  telecharger(docs.map(d => d.url).join('\n'), 'urls_bumidom.txt', 'text/plain;charset=utf-8;');
+}
+
+function telecharger(contenu, nom, mime) {
+  const blob = new Blob([contenu], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = nom;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
