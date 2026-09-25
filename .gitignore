@@ -1,3 +1,7 @@
+# ============================================================
+# BUMIDOM — Fichiers exclus
+# ============================================================
+
 # Environnements virtuels Python
 bumi/
 .venv/
@@ -10,28 +14,18 @@ pyenv/
 */bin/activate
 */lib/python*/
 
-# Sources volumineuses
+# Sources volumineuses (467 Mo — trop lourd pour GitHub)
 pdfs/
 textes/
 corpus/
 *.pdf
+*.tar.gz
+*.zip
 
-# Données régénérables
-resultats.json
-resultats_enrichis.json
-nlp_results.json
+# Base de données (régénérable)
 bumidom.db
 *.db
 *.sqlite
-analyse_*.csv
-analyse_*.png
-analyse_*.json
-orateurs_profils.csv
-fiches_orateurs/
-rapport_final.md
-expertise_BUMIDOM/
-expertise_BUMIDOM_*/
-expertise/
 
 # Python caches
 __pycache__/
