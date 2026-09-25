@@ -152,7 +152,7 @@ Puis ouvrir : **http://localhost:8889/dashboard_interactif.html**
 ---
 
 ## 📁 Structure du projet
-
+```bash
 expertise-bumidom/
 │
 ├── 📄 README.md Ce fichier
@@ -202,7 +202,7 @@ expertise-bumidom/
 └── 📚 Documentation
 ├── json.json
 └── rapport.md
-
+```
 
 ---
 
@@ -308,14 +308,14 @@ Ce projet est sous licence **MIT** — voir le fichier [LICENSE](LICENSE).
 ## 📝 Citation
 
 Si vous utilisez ce travail dans vos recherches :
-
+```bash
 @misc{gunout2026bumidom,
 title={Expertise BUMIDOM},
 author={Gunout},
 year={2026},
 url={https://github.com/gunout/expertise-bumidom}
 }
-
+```
 
 ---
 
