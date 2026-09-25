@@ -1,3 +1,14 @@
+# Expertise BUMIDOM
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Plotly](https://img.shields.io/badge/Plotly-2.27-3F4F75.svg)](https://plotly.com/)
+[![spaCy](https://img.shields.io/badge/spaCy-3.7-09A3D5.svg)](https://spacy.io/)
+[![Status](https://img.shields.io/badge/status-completed-success.svg)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/gunout/expertise-bumidom)]()
+[![GitHub repo size](https://img.shields.io/github/repo-size/gunout/expertise-bumidom)]()
+
+**Un projet d'analyse quantitative et qualitative du BUMIDOM a partir de 100 documents parlementaires.**
 
 ---
 
