@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard BUMIDOM — Analyse complète</title>
+<style>
+  :root{
+    --bleu:#000091; --bleu-clair:#1212ff; --rouge:#E1000F;
+    --blanc:#fff; --gris:#f5f5f7; --texte:#1a1a2e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Roboto,sans-serif;background:var(--gris);color:var(--texte);line-height:1.5;}
+  header{
+    background:var(--blanc);
+    border-bottom:4px solid;
+    border-image:linear-gradient(to right,var(--bleu) 33.33%,var(--blanc) 33.33%,var(--blanc) 66.66%,var(--rouge) 66.66%) 1;
+    padding:16px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);position:sticky;top:0;z-index:100;
+  }
+  header h1{font-size:1.4rem;color:var(--bleu);display:flex;align-items:center;gap:10px;}
+  header h1 span.drapeau{display:inline-block;width:36px;height:24px;
+    background:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%);
+    border:1px solid #ccc;border-radius:3px;}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;padding:20px 28px 0;}
+  .kpi{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 2px 10px rgba(0,0,0,.06);
+       border-top:4px solid var(--bleu);}
+  .kpi.rouge{border-top-color:var(--rouge);}
+  .kpi .val{font-size:1.9rem;font-weight:700;color:var(--bleu);}
+  .kpi.rouge .val{color:var(--rouge);}
+  .kpi .lbl{font-size:.78rem;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+  .onglets{display:flex;gap:4px;padding:16px 28px 0;flex-wrap:wrap;border-bottom:2px solid #ddd;margin:0 28px;}
+  .onglet{padding:10px 18px;border:none;background:transparent;font-size:.9rem;font-weight:600;
+          color:#666;cursor:pointer;border-bottom:3px solid transparent;transition:.2s;}
+  .onglet:hover{color:var(--bleu);}
+  .onglet.actif{color:var(--bleu);border-bottom-color:var(--rouge);}
+  main{padding:24px 28px;max-width:1600px;margin:0 auto;}
+  .panneau{display:none;} .panneau.actif{display:block;animation:fade .3s;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:20px;}
+  .carte{background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+  .carte h3{color:var(--bleu);margin-bottom:12px;}
+  .viz-container{min-height:400px;width:100%;}
+  .filtres{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:20px;
+           box-shadow:0 2px 10px rgba(0,0,0,.06);
+           display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
+  .filtres label{display:block;font-size:.75rem;font-weight:600;color:var(--bleu);
+                 text-transform:uppercase;margin-bottom:5px;letter-spacing:.5px;}
+  .filtres select,.filtres input{width:100%;padding:8px 10px;border:2px solid #e0e0e0;border-radius:6px;font-size:.9rem;}
+  .filtres select:focus,.filtres input:focus{outline:none;border-color:var(--bleu);}
+  .doc{background:#fff;border-radius:10px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);
+       border-left:5px solid var(--bleu);overflow:hidden;}
+  .doc-header{padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;}
+  .doc-header .badge{font-size:.68rem;font-weight:700;text-transform:uppercase;padding:3px 9px;
+                     border-radius:12px;letter-spacing:.5px;white-space:nowrap;}
+  .badge-cri{background:#e5e9ff;color:var(--bleu);}
+  .badge-qst{background:#e8f5e9;color:#1b7a2e;}
+  .badge-jo{background:#fff3e0;color:#b26a00;}
+  .badge-tab{background:#f3e5f5;color:#7b1fa2;}
+  .badge-def{background:#eee;color:#555;}
+  .doc-header .titre{flex:1;font-weight:600;font-size:.95rem;}
+  .doc-header .mentions{font-size:.8rem;color:var(--rouge);font-weight:700;background:#ffe5e5;
+                        padding:3px 10px;border-radius:12px;white-space:nowrap;}
+  .doc-body{display:none;padding:0 18px 16px 18px;border-top:1px solid #f0f0f0;background:#fafafa;}
+  .doc-body.open{display:block;}
+  .extrait{background:#fff;border-left:3px solid var(--rouge);padding:10px 14px;margin:8px 0;
+           font-size:.88rem;color:#333;border-radius:0 6px 6px 0;}
+  .btn{display:inline-block;background:var(--bleu);color:#fff;text-decoration:none;
+       padding:8px 16px;border-radius:6px;font-weight:600;font-size:.85rem;
+       border:none;cursor:pointer;margin-right:6px;margin-top:6px;}
+  .btn:hover{background:var(--rouge);}
+  .btn.secondaire{background:#666;}
+  .tag{display:inline-block;background:var(--bleu);color:#fff;padding:2px 10px;border-radius:12px;
+       font-size:.72rem;margin:2px 4px 2px 0;}
+  .tag.rouge{background:var(--rouge);}
+  .message{padding:14px 20px;border-radius:8px;margin:16px 28px;font-weight:500;}
+  .message.info{background:#e5e9ff;color:var(--bleu);border-left:4px solid var(--bleu);}
+  .message.err{background:#ffe5e5;color:#b8000c;border-left:4px solid var(--rouge);}
+  .message.warn{background:#fff3e0;color:#b26a00;border-left:4px solid #b26a00;}
+  footer{text-align:center;padding:20px;font-size:.78rem;color:#999;margin-top:30px;
+         border-top:2px solid;border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;background:#fff;}
+  .liste-nlp div{display:flex;justify-content:space-between;padding:6px 10px;margin:3px 0;
+                 background:#f5f5f7;border-radius:5px;border-left:3px solid var(--bleu);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="drapeau"></span> Dashboard BUMIDOM — Analyse complète</h1>
+  <div style="font-size:.85rem;color:#666;">Archives de l'Assemblée nationale · 1964-1990</div>
+</header>
+
+<div id="message" class="message info">⏳ Chargement…</div>
+<div id="debug" class="message warn" style="display:none;"></div>
+
+<div id="app" style="display:none;">
+  <div class="kpis">
+    <div class="kpi"><div class="val" id="k-total">—</div><div class="lbl">Documents</div></div>
+    <div class="kpi rouge"><div class="val" id="k-mentions">—</div><div class="lbl">Mentions BUMIDOM</div></div>
+    <div class="kpi"><div class="val" id="k-orateurs">—</div><div class="lbl">Orateurs uniques</div></div>
+    <div class="kpi rouge"><div class="val" id="k-themes">—</div><div class="lbl">Thèmes détectés</div></div>
+    <div class="kpi"><div class="val" id="k-periode">—</div><div class="lbl">Période couverte</div></div>
+  </div>
+
+  <div class="onglets">
+    <button class="onglet actif" data-p="synthese">📊 Synthèse</button>
+    <button class="onglet" data-p="orateurs">👤 Orateurs</button>
+    <button class="onglet" data-p="themes">🏷️ Thèmes</button>
+    <button class="onglet" data-p="chrono">🕐 Chronologie</button>
+    <button class="onglet" data-p="nlp">🔬 NLP</button>
+    <button class="onglet" data-p="docs">📄 Documents</button>
+  </div>
+
+  <main>
+    <div class="panneau actif" id="p-synthese">
+      <div class="grille">
+        <div class="carte"><h3>📈 Mentions par période</h3><div id="viz-timeline" class="viz-container"></div></div>
+        <div class="carte"><h3>📁 Types de documents</h3><div id="viz-types" class="viz-container"></div></div>
+        <div class="carte"><h3>👤 Top 10 orateurs</h3><div id="viz-top-orateurs" class="viz-container"></div></div>
+        <div class="carte"><h3>🏷️ Top 10 thèmes</h3><div id="viz-themes" class="viz-container"></div></div>
+      </div>
+    </div>
+
+    <div class="panneau" id="p-orateurs">
+      <div class="carte" style="margin-bottom:20px;">
+        <h3>👤 Top 30 orateurs</h3>
+        <div id="viz-orateurs-bar" style="min-height:900px;"></div>
+      </div>
+      <div id="liste-orateurs"></div>
+    </div>
+
+    <div class="panneau" id="p-themes">
+      <div class="grille">
+        <div class="carte"><h3>🎯 Radar</h3><div id="viz-themes-radar" class="viz-container"></div></div>
+        <div class="carte"><h3>📊 Occurrences</h3><div id="viz-themes-bar" class="viz-container"></div></div>
+      </div>
+      <div id="liste-themes" style="margin-top:20px;"></div>
+    </div>
+
+    <div class="panneau" id="p-chrono">
+      <div class="carte"><div id="viz-chrono-complete" style="min-height:500px;"></div></div>
+      <div class="carte" style="margin-top:20px;"><div id="viz-annees" class="viz-container"></div></div>
+    </div>
+
+    <div class="panneau" id="p-nlp">
+      <div class="grille">
+        <div class="carte"><h3>👥 Personnes citées</h3><div id="nlp-pers" class="liste-nlp"></div></div>
+        <div class="carte"><h3>🌍 Lieux cités</h3><div id="nlp-lieux" class="liste-nlp"></div></div>
+        <div class="carte"><h3>🏛️ Organisations</h3><div id="nlp-org" class="liste-nlp"></div></div>
+        <div class="carte"><h3>📝 Mots fréquents</h3><div id="nlp-mots" class="liste-nlp"></div></div>
+      </div>
+    </div>
+
+    <div class="panneau" id="p-docs">
+      <div class="filtres">
+        <div><label>Type</label><select id="f-type"><option value="">Tous</option></select></div>
+        <div><label>Thème</label><select id="f-theme"><option value="">Tous</option></select></div>
+        <div><label>Législature</label><select id="f-legis"><option value="">Toutes</option></select></div>
+        <div><label>Recherche</label><input type="text" id="f-rech" placeholder="Ex: Debré..."></div>
+        <div><label>Trier par</label>
+          <select id="f-tri">
+            <option value="mentions_desc">Plus de mentions</option>
+            <option value="mentions_asc">Moins de mentions</option>
+            <option value="date_asc">Nom ↑</option>
+            <option value="date_desc">Nom ↓</option>
+          </select>
+        </div>
+      </div>
+      <div id="liste-docs"></div>
+    </div>
+  </main>
+</div>
+
+<footer>Dashboard BUMIDOM · <span id="horodatage"></span></footer>
+
+<!-- Chargement intelligent de Plotly : CDN puis fallback local -->
+<script>
+(function(){
+  var loaded = false;
+  function onLoad(){ loaded = true; console.log('✅ Plotly chargé'); init(); }
+  function onError(){
+    if (loaded) return;
+    console.warn('⚠️ CDN Plotly inaccessible, tentative locale…');
+    var s = document.createElement('script');
+    s.src = 'plotly.min.js';
+    s.onload = function(){ console.log('✅ Plotly local chargé'); init(); };
+    s.onerror = function(){
+      document.getElementById('message').className = 'message err';
+      document.getElementById('message').innerHTML =
+        '❌ Plotly introuvable. Téléchargez-le : <code>curl -L -o plotly.min.js https://cdn.plot.ly/plotly-2.27.0.min.js</code>';
+    };
+    document.head.appendChild(s);
+  }
+  var s = document.createElement('script');
+  s.src = 'https://cdn.plot.ly/plotly-2.27.0.min.js';
+  s.onload = onLoad;
+  s.onerror = onError;
+  document.head.appendChild(s);
+})();
+
+/* ============================================================
+   VARIABLES GLOBALES
+   ============================================================ */
+let DATA = null, NLP = null, DOCS = [];
+
+function init() {
+  document.getElementById('horodatage').textContent = new Date().toLocaleString('fr-FR');
+
+  Promise.all([
+    fetch('resultats_enrichis.json').then(r => r.ok ? r.json() : Promise.reject('resultats_enrichis.json introuvable (HTTP ' + r.status + ')')),
+    fetch('nlp_results.json').then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([d, n]) => {
+    DATA = d; NLP = n || {};
+    DOCS = d.results || [];
+    console.log('✅ Données chargées :', DOCS.length, 'documents');
+
+    document.getElementById('message').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+
+    // KPIs
+    const totalMentions = DOCS.reduce((s,d) => s + d.nb_mentions, 0);
+    const orateurs = new Set();
+    DOCS.forEach(d => (d.orateurs || []).forEach(o => orateurs.add(o.nom)));
+    const themes = new Set();
+    DOCS.forEach(d => Object.keys(d.themes || {}).forEach(t => themes.add(t)));
+
+    document.getElementById('k-total').textContent    = DOCS.length;
+    document.getElementById('k-mentions').textContent = totalMentions;
+    document.getElementById('k-orateurs').textContent = orateurs.size;
+    document.getElementById('k-themes').textContent   = themes.size;
+
+    const annees = [];
+    DOCS.forEach(d => ((d.statistiques && d.statistiques.annees) || []).forEach(a => annees.push(parseInt(a))));
+    if (annees.length) {
+      document.getElementById('k-periode').textContent = `${Math.min(...annees)}–${Math.max(...annees)}`;
+    }
+
+    // Filtres
+    remplirFiltres();
+
+    // Onglets
+    document.querySelectorAll('.onglet').forEach(o => {
+      o.addEventListener('click', () => {
+        document.querySelectorAll('.onglet').forEach(x => x.classList.remove('actif'));
+        document.querySelectorAll('.panneau').forEach(p => p.classList.remove('actif'));
+        o.classList.add('actif');
+        document.getElementById('p-' + o.dataset.p).classList.add('actif');
+        // Redessine à l'ouverture (car Plotly a besoin de dimensions visibles)
+        setTimeout(redessinerTout, 50);
+      });
+    });
+
+    redessinerTout();
+  }).catch(e => {
+    document.getElementById('message').className = 'message err';
+    document.getElementById('message').innerHTML =
+      '❌ ' + e + '<br><small>Vérifiez que <code>resultats_enrichis.json</code> est bien dans le dossier.</small>';
+    console.error(e);
+  });
+}
+
+function redessinerTout() {
+  if (typeof Plotly === 'undefined') return;
+  dessinerSynthese();
+  dessinerOrateurs();
+  dessinerThemes();
+  dessinerChrono();
+  dessinerNLP();
+  afficherDocs();
+}
+
+/* ============================================================
+   PLOTLY — LAYOUT COMMUN
+   ============================================================ */
+const LAYOUT = {
+  paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
+  font:{family:'Segoe UI,Roboto,sans-serif', color:'#1a1a2e', size:11},
+  margin:{t:30,r:20,b:60,l:60},
+  height:380,
+  autosize:true,
+  showlegend:false,
+};
+const CONFIG = {responsive: true, displayModeBar: false};
+
+function safePlot(id, data, layout) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  try {
+    Plotly.newPlot(id, data, layout, CONFIG);
+  } catch(e) {
+    console.error('Erreur Plotly sur ' + id, e);
+    el.innerHTML = '<p style="color:#E1000F;padding:20px;">Erreur graphique : ' + e.message + '</p>';
+  }
+}
+
+/* ============================================================
+   SYNTHÈSE
+   ============================================================ */
+function dessinerSynthese() {
+  // Mentions par période
+  const parPeriode = {};
+  DOCS.forEach(d => {
+    const m = d.fichier.match(/(\d{4})-(\d{4})/);
+    const cle = m ? `${m[1]}-${m[2]}` : 'Inconnue';
+    parPeriode[cle] = (parPeriode[cle] || 0) + d.nb_mentions;
+  });
+  const periodes = Object.keys(parPeriode).filter(k => k !== 'Inconnue').sort();
+  safePlot('viz-timeline', [{
+    x: periodes, y: periodes.map(p => parPeriode[p]),
+    type: 'bar', marker: { color: '#000091' }
+  }], {...LAYOUT, xaxis:{tickangle:-30}});
+
+  // Types
+  const types = {};
+  DOCS.forEach(d => {
+    const t = typeDepuisFichier(d.fichier);
+    types[t] = (types[t] || 0) + 1;
+  });
+  safePlot('viz-types', [{
+    values: Object.values(types), labels: Object.keys(types),
+    type: 'pie', hole: 0.45,
+    marker: { colors: ['#000091','#E1000F','#1212ff','#ff6b6b','#888'] }
+  }], {...LAYOUT, showlegend:true});
+
+  // Top 10 orateurs
+  const agg = aggregerOrateurs();
+  const top = Object.entries(agg).sort((a,b) => b[1]-a[1]).slice(0, 10);
+  safePlot('viz-top-orateurs', [{
+    x: top.map(o => o[1]), y: top.map(o => o[0]),
+    type: 'bar', orientation: 'h', marker: { color: '#000091' }
+  }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:20,b:40,l:180}});
+
+  // Top 10 thèmes
+  const aggT = aggregerThemes();
+  const topT = Object.entries(aggT).sort((a,b) => b[1]-a[1]).slice(0, 10);
+  safePlot('viz-themes', [{
+    values: topT.map(t => t[1]), labels: topT.map(t => t[0]),
+    type: 'pie', hole: 0.45,
+    marker: { colors: ['#E1000F','#000091','#1212ff','#ff6b6b','#888','#4a4a8a','#b8000c','#ffa500','#2e7d32','#7b1fa2'] }
+  }], {...LAYOUT, showlegend:true});
+}
+
+/* ============================================================
+   ORATEURS
+   ============================================================ */
+function aggregerOrateurs() {
+  const agg = {};
+  DOCS.forEach(d => (d.orateurs || []).forEach(o => {
+    agg[o.nom] = (agg[o.nom] || 0) + o.occurrences;
+  }));
+  return agg;
+}
+
+function dessinerOrateurs() {
+  const agg = aggregerOrateurs();
+  const top = Object.entries(agg).sort((a,b) => b[1]-a[1]).slice(0, 30);
+
+  safePlot('viz-orateurs-bar', [{
+    x: top.map(o => o[1]), y: top.map(o => o[0]),
+    type: 'bar', orientation: 'h',
+    marker: { color: top.map((_, i) => i < 3 ? '#E1000F' : '#000091') }
+  }], {...LAYOUT, height:880, yaxis:{autorange:'reversed'},
+      margin:{t:20,r:30,b:40,l:220}});
+
+  const container = document.getElementById('liste-orateurs');
+  if (!container) return;
+  container.innerHTML = top.map(([nom, total]) => {
+    const docs = DOCS.filter(d => (d.orateurs || []).some(o => o.nom === nom));
+    return `
+      <div class="doc">
+        <div class="doc-header" onclick="this.nextElementSibling.classList.toggle('open')">
+          <span class="badge badge-cri">${docs.length} docs</span>
+          <span class="titre">${esc(nom)}</span>
+          <span class="mentions">${total} mentions</span>
+        </div>
+        <div class="doc-body">
+          ${docs.slice(0, 8).map(d => `
+            <div class="extrait">
+              <strong>${esc(d.fichier)}</strong> — ${d.nb_mentions} mentions BUMIDOM<br>
+              ${esc((d.extraits[0] && d.extraits[0].extrait || '').substring(0, 250))}…
+              ${d.url ? `<br><a class="btn" href="${d.url}" target="_blank">📄 PDF</a>` : ''}
+            </div>
+          `).join('')}
+          ${docs.length > 8 ? `<p style="color:#888;font-size:.85rem;">… et ${docs.length - 8} autre(s)</p>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ============================================================
+   THÈMES
+   ============================================================ */
+function aggregerThemes() {
+  const agg = {};
+  DOCS.forEach(d => Object.entries(d.themes || {}).forEach(([t, n]) => {
+    agg[t] = (agg[t] || 0) + n;
+  }));
+  return agg;
+}
+
+function dessinerThemes() {
+  const agg = aggregerThemes();
+  const entries = Object.entries(agg).sort((a,b) => b[1]-a[1]);
+
+  safePlot('viz-themes-radar', [{
+    type: 'scatterpolar',
+    r: [...entries.map(e => e[1]), entries[0][1]],
+    theta: [...entries.map(e => e[0]), entries[0][0]],
+    fill: 'toself',
+    marker: { color: '#E1000F' },
+    line: { color: '#E1000F' }
+  }], {...LAYOUT, polar: { bgcolor: 'rgba(0,0,0,0)' }});
+
+  safePlot('viz-themes-bar', [{
+    x: entries.map(e => e[0]), y: entries.map(e => e[1]),
+    type: 'bar', marker: { color: '#000091' }
+  }], {...LAYOUT, xaxis:{tickangle:-45}});
+
+  const container = document.getElementById('liste-themes');
+  if (!container) return;
+  container.innerHTML = entries.map(([theme, total]) => {
+    const docs = DOCS.filter(d => d.themes && d.themes[theme]);
+    return `
+      <div class="doc">
+        <div class="doc-header" onclick="this.nextElementSibling.classList.toggle('open')">
+          <span class="badge badge-jo">${docs.length} docs</span>
+          <span class="titre">${esc(theme)}</span>
+          <span class="mentions">${total} occurrences</span>
+        </div>
+        <div class="doc-body">
+          ${docs.slice(0, 8).map(d => `
+            <div class="extrait">
+              <strong>${esc(d.fichier)}</strong> — ${d.themes[theme]} occurrences<br>
+              ${esc((d.extraits[0] && d.extraits[0].extrait || '').substring(0, 220))}…
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ============================================================
+   CHRONOLOGIE
+   ============================================================ */
+function dessinerChrono() {
+  const sorted = [...DOCS].sort((a,b) => a.fichier.localeCompare(b.fichier));
+  safePlot('viz-chrono-complete', [{
+    x: sorted.map(d => d.fichier.replace('.txt','').substring(0, 25)),
+    y: sorted.map(d => d.nb_mentions),
+    type: 'bar',
+    marker: { color: sorted.map(d => d.nb_mentions > 5 ? '#E1000F' : '#000091') },
+    text: sorted.map(d => d.nb_mentions),
+    textposition: 'outside'
+  }], {...LAYOUT, height:500, xaxis:{tickangle:-60, tickfont:{size:8}}});
+
+  const parAnnee = {};
+  DOCS.forEach(d => ((d.statistiques && d.statistiques.annees) || []).forEach(a => {
+    parAnnee[a] = (parAnnee[a] || 0) + 1;
+  }));
+  const annees = Object.keys(parAnnee).sort();
+  safePlot('viz-annees', [{
+    x: annees, y: annees.map(a => parAnnee[a]),
+    type: 'bar', marker: { color: '#1212ff' }
+  }], {...LAYOUT});
+}
+
+/* ============================================================
+   NLP
+   ============================================================ */
+function dessinerNLP() {
+  if (!NLP || !NLP.top_personnes) return;
+  const rendu = (id, data, color) => {
+    const el = document.getElementById(id);
+    if (!el || !data) return;
+    el.innerHTML = data.slice(0, 15).map(([nom, n]) =>
+      `<div style="border-left-color:${color}"><span>${esc(nom)}</span><strong>${n}</strong></div>`
+    ).join('');
+  };
+  rendu('nlp-pers', NLP.top_personnes, '#000091');
+  rendu('nlp-lieux', NLP.top_lieux, '#E1000F');
+  rendu('nlp-org', NLP.top_organisations, '#1b7a2e');
+  rendu('nlp-mots', NLP.mots_frequents, '#b26a00');
+}
+
+/* ============================================================
+   DOCUMENTS
+   ============================================================ */
+function typeDepuisFichier(f) {
+  if (f.includes('_qst_')) return 'Question écrite';
+  if (f.includes('_cri_')) return 'Compte rendu';
+  if (f.includes('tanalytique')) return 'Table analytique';
+  if (f.includes('tnominative')) return 'Table nominative';
+  return 'Autre';
+}
+
+function classeBadge(t) {
+  if (t === 'Compte rendu') return 'badge-cri';
+  if (t === 'Question écrite') return 'badge-qst';
+  if (t.includes('Table')) return 'badge-tab';
+  return 'badge-def';
+}
+
+function remplirFiltres() {
+  const types = new Set(), themes = new Set(), legis = new Set();
+  DOCS.forEach(d => {
+    types.add(typeDepuisFichier(d.fichier));
+    Object.keys(d.themes || {}).forEach(t => themes.add(t));
+    (d.legislatures || []).forEach(l => legis.add(l));
+  });
+  const setOptions = (id, values, placeholder) => {
+    const el = document.getElementById(id);
+    [...values].sort().forEach(v => el.insertAdjacentHTML('beforeend', `<option>${v}</option>`));
+  };
+  setOptions('f-type', types);
+  setOptions('f-theme', themes);
+  setOptions('f-legis', legis);
+
+  ['f-type','f-theme','f-legis','f-tri'].forEach(id =>
+    document.getElementById(id).addEventListener('input', afficherDocs));
+  document.getElementById('f-rech').addEventListener('input', afficherDocs);
+}
+
+function afficherDocs() {
+  const type  = document.getElementById('f-type').value;
+  const theme = document.getElementById('f-theme').value;
+  const legis = document.getElementById('f-legis').value;
+  const rech  = document.getElementById('f-rech').value.trim().toLowerCase();
+  const tri   = document.getElementById('f-tri').value;
+
+  let docs = DOCS.filter(d => {
+    if (type && typeDepuisFichier(d.fichier) !== type) return false;
+    if (theme && !(d.themes && d.themes[theme])) return false;
+    if (legis && !(d.legislatures || []).includes(legis)) return false;
+    if (rech) {
+      const blob = (d.fichier + ' ' + JSON.stringify(d.extraits) + ' ' +
+                    JSON.stringify(d.orateurs) + ' ' + JSON.stringify(d.themes)).toLowerCase();
+      if (!blob.includes(rech)) return false;
+    }
+    return true;
+  });
+
+  if (tri === 'mentions_desc') docs.sort((a,b) => b.nb_mentions - a.nb_mentions);
+  if (tri === 'mentions_asc')  docs.sort((a,b) => a.nb_mentions - b.nb_mentions);
+  if (tri === 'date_asc')      docs.sort((a,b) => a.fichier.localeCompare(b.fichier));
+  if (tri === 'date_desc')     docs.sort((a,b) => b.fichier.localeCompare(a.fichier));
+
+  document.getElementById('liste-docs').innerHTML =
+    `<p style="margin-bottom:12px;color:#666;font-size:.9rem;">${docs.length} document(s)</p>` +
+    docs.map(d => {
+      const t = typeDepuisFichier(d.fichier);
+      const tags = Object.entries(d.themes || {}).slice(0, 5)
+        .map(([k,v]) => `<span class="tag">${esc(k)} (${v})</span>`).join('');
+      return `
+        <div class="doc">
+          <div class="doc-header" onclick="this.nextElementSibling.classList.toggle('open')">
+            <span class="badge ${classeBadge(t)}">${t}</span>
+            <span class="titre">${esc(d.fichier.replace('.txt',''))}</span>
+            <span class="mentions">💬 ${d.nb_mentions}</span>
+          </div>
+          <div class="doc-body">
+            ${tags ? `<div style="margin:10px 0;">${tags}</div>` : ''}
+            ${d.extraits.slice(0, 3).map((e, i) => `
+              <div class="extrait">
+                <strong>Extrait ${i+1}</strong> (page ~${e.page_approx})<br>
+                ${esc(e.extrait)}
+              </div>
+            `).join('')}
+            ${d.extraits.length > 3 ? `<p style="color:#888;font-size:.85rem;margin-top:8px;">… ${d.extraits.length - 3} autre(s) extrait(s)</p>` : ''}
+            ${d.orateurs && d.orateurs.length ? `<p style="margin-top:10px;"><strong>Orateurs :</strong> ${
+              d.orateurs.slice(0, 8).map(o => `<span class="tag rouge">${esc(o.nom)} (${o.occurrences})</span>`).join('')
+            }</p>` : ''}
+            <div style="margin-top:12px;">
+              ${d.url ? `<a class="btn" href="${d.url}" target="_blank">📄 Ouvrir le PDF</a>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+}
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+  ));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Enrichi BUMIDOM</title>
+<script src="plotly.min.js"></script>
+<style>
+  :root{--bleu:#000091;--rouge:#E1000F;--gris:#f5f5f7;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--gris);color:#1a1a2e;}
+  header{background:#fff;border-bottom:4px solid;
+    border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;
+    padding:16px 28px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+  header h1{color:var(--bleu);font-size:1.4rem;}
+  nav{padding:14px 28px;background:#fff;border-bottom:1px solid #eee;display:flex;
+      gap:6px;flex-wrap:wrap;position:sticky;top:73px;z-index:99;box-shadow:0 2px 4px rgba(0,0,0,.03);}
+  nav button{padding:9px 16px;border:none;background:#f0f0f5;color:#555;cursor:pointer;
+             border-radius:6px;font-weight:600;font-size:.85rem;transition:.2s;}
+  nav button:hover{background:#e0e0eb;}
+  nav button.actif{background:var(--bleu);color:#fff;}
+  main{padding:24px 28px;max-width:1400px;margin:0 auto;}
+  section{display:none;} section.actif{display:block;}
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px;margin-bottom:20px;}
+  .carte{background:#fff;padding:18px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.06);margin-bottom:20px;}
+  .carte h2{color:var(--bleu);font-size:1.05rem;margin-bottom:14px;
+            border-bottom:2px solid var(--rouge);padding-bottom:8px;}
+  .carte img{max-width:100%;height:auto;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee;}
+  th{background:var(--bleu);color:#fff;font-weight:600;text-transform:uppercase;
+     font-size:.72rem;letter-spacing:.5px;}
+  tr:hover{background:#fafaff;}
+  .message{padding:14px 20px;border-radius:8px;margin:20px 28px;font-weight:500;
+           background:#e5e9ff;color:var(--bleu);border-left:4px solid var(--bleu);}
+  .message.err{background:#ffe5e5;color:#b8000c;border-left-color:var(--rouge);}
+  .kpi{display:inline-block;background:#fff;padding:12px 20px;border-radius:8px;
+       margin:0 10px 10px 0;box-shadow:0 2px 6px rgba(0,0,0,.06);border-left:4px solid var(--bleu);}
+  .kpi.rouge{border-left-color:var(--rouge);}
+  .kpi strong{color:var(--bleu);font-size:1.3rem;display:block;}
+  .kpi.rouge strong{color:var(--rouge);}
+  .kpi span{font-size:.75rem;color:#666;text-transform:uppercase;letter-spacing:.5px;}
+  footer{text-align:center;padding:20px;font-size:.78rem;color:#999;margin-top:30px;
+         border-top:2px solid;border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;background:#fff;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔬 Dashboard Enrichi BUMIDOM</h1>
+</header>
+
+<nav>
+  <button class="actif" data-s="chrono">📈 Chronologie</button>
+  <button data-s="mots">📝 Mots associés</button>
+  <button data-s="orateurs">👤 Orateurs</button>
+  <button data-s="legis">🏛️ Législatures</button>
+  <button data-s="sentiment">😊 Sentiment</button>
+  <button data-s="reseau">🕸️ Réseau</button>
+</nav>
+
+<div id="msg" class="message">⏳ Chargement des analyses…</div>
+
+<main id="app" style="display:none;">
+  <div id="kpis" style="margin-bottom:20px;"></div>
+
+  <section class="actif" id="s-chrono">
+    <div class="carte"><h2>Évolution des mentions par année</h2>
+      <img src="analyse_chrono.png" alt="Chronologie" onerror="this.parentElement.innerHTML+='<p style=color:#E1000F>⚠️ Image introuvable</p>'">
+      <div id="tab-chrono" style="margin-top:16px;overflow-x:auto;"></div>
+    </div>
+  </section>
+
+  <section id="s-mots">
+    <div class="grille">
+      <div class="carte"><h2>Top 30 mots associés</h2><div id="viz-mots"></div></div>
+      <div class="carte"><h2>Tableau complet</h2><div id="tab-mots" style="max-height:600px;overflow-y:auto;"></div></div>
+    </div>
+  </section>
+
+  <section id="s-orateurs">
+    <div class="carte"><h2>Profils des orateurs</h2><div id="tab-orateurs" style="overflow-x:auto;"></div></div>
+  </section>
+
+  <section id="s-legis">
+    <div class="carte"><h2>Comparaison entre législatures</h2><div id="tab-legis"></div></div>
+  </section>
+
+  <section id="s-sentiment">
+    <div class="carte"><h2>Tonalité par année</h2>
+      <img src="analyse_sentiment.png" alt="Sentiment" onerror="this.parentElement.innerHTML+='<p style=color:#E1000F>⚠️ Image introuvable</p>'">
+      <div id="tab-sentiment" style="margin-top:16px;"></div>
+    </div>
+  </section>
+
+  <section id="s-reseau">
+    <div class="carte"><h2>Réseau des orateurs</h2>
+      <img src="analyse_reseau.png" alt="Réseau" onerror="this.parentElement.innerHTML+='<p style=color:#E1000F>⚠️ Image introuvable</p>'">
+      <div id="tab-reseau" style="margin-top:16px;max-height:500px;overflow-y:auto;"></div>
+    </div>
+  </section>
+</main>
+
+<footer>Dashboard Enrichi BUMIDOM · <span id="horodatage"></span></footer>
+
+<script>
+document.getElementById('horodatage').textContent = new Date().toLocaleString('fr-FR');
+
+document.querySelectorAll('nav button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(x => x.classList.remove('actif'));
+    document.querySelectorAll('section').forEach(s => s.classList.remove('actif'));
+    b.classList.add('actif');
+    document.getElementById('s-' + b.dataset.s).classList.add('actif');
+  });
+});
+
+function parseCSV(text) {
+  const lignes = text.trim().split(/\r?\n/);
+  const sep = lignes[0].includes(';') ? ';' : ',';
+  const headers = lignes[0].split(sep).map(h => h.replace(/^"|"$/g, '').trim());
+  return lignes.slice(1).filter(l => l.trim()).map(l => {
+    const vals = l.split(sep).map(v => v.replace(/^"|"$/g, '').trim());
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = vals[i] || '');
+    return obj;
+  });
+}
+
+function chargerCSV(url) {
+  return fetch(url).then(r => r.ok ? r.text() : Promise.reject(url + ' introuvable')).then(parseCSV);
+}
+
+function rendreTableau(id, rows, colonnes, max = 100) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let html = '<table><thead><tr>';
+  colonnes.forEach(c => html += `<th>${c.label}</th>`);
+  html += '</tr></thead><tbody>';
+  rows.slice(0, max).forEach(r => {
+    html += '<tr>';
+    colonnes.forEach(c => {
+      let v = r[c.key];
+      if (c.key === 'score' && v !== undefined) {
+        const n = parseFloat(v);
+        const color = n > 0 ? '#1b7a2e' : n < 0 ? '#E1000F' : '#888';
+        v = `<span style="color:${color};font-weight:700;">${n > 0 ? '+' : ''}${v}</span>`;
+      }
+      html += `<td>${v || ''}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+Promise.all([
+  chargerCSV('analyse_chrono.csv'),
+  chargerCSV('analyse_cooccurrences.csv'),
+  chargerCSV('orateurs_profils.csv'),
+  chargerCSV('analyse_legislatures.csv'),
+  chargerCSV('analyse_sentiment.csv'),
+  chargerCSV('analyse_reseau.csv'),
+]).then(([chrono, mots, orateurs, legis, senti, reseau]) => {
+  document.getElementById('msg').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+
+  // KPIs
+  const totalMentions = chrono.reduce((s, r) => s + (parseInt(r.mentions) || 0), 0);
+  const totalDocs = chrono.reduce((s, r) => s + (parseInt(r.documents) || 0), 0);
+  document.getElementById('kpis').innerHTML = `
+    <div class="kpi"><strong>${totalDocs}</strong><span>Documents</span></div>
+    <div class="kpi rouge"><strong>${totalMentions}</strong><span>Mentions BUMIDOM</span></div>
+    <div class="kpi"><strong>${orateurs.length}</strong><span>Top orateurs</span></div>
+    <div class="kpi rouge"><strong>${chrono.length}</strong><span>Années couvertes</span></div>
+    <div class="kpi"><strong>${legis.length}</strong><span>Législatures</span></div>
+  `;
+
+  // Chrono
+  rendreTableau('tab-chrono', chrono, [
+    {key:'annee', label:'Année'},
+    {key:'documents', label:'Documents'},
+    {key:'mentions', label:'Mentions'},
+    {key:'comptes_rendus', label:'Comptes rendus'},
+    {key:'questions', label:'Questions'},
+  ]);
+
+  // Mots
+  if (typeof Plotly !== 'undefined') {
+    Plotly.newPlot('viz-mots', [{
+      x: mots.slice(0, 30).map(m => parseInt(m.occurrences) || 0),
+      y: mots.slice(0, 30).map(m => m.mot),
+      type: 'bar', orientation: 'h',
+      marker: { color: '#000091' }
+    }], {
+      height: 700, margin: {t:20,r:20,b:40,l:100},
+      paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
+      yaxis: { autorange: 'reversed' },
+      font: { family: 'system-ui', size: 11 }
+    }, {responsive: true, displayModeBar: false});
+  }
+  rendreTableau('tab-mots', mots, [
+    {key:'mot', label:'Mot'},
+    {key:'occurrences', label:'Occurrences'},
+  ], 100);
+
+  // Orateurs
+  rendreTableau('tab-orateurs', orateurs, [
+    {key:'orateur', label:'Orateur'},
+    {key:'mentions', label:'Mentions'},
+    {key:'nb_docs', label:'Docs'},
+    {key:'theme_1', label:'Thème 1'},
+    {key:'score_1', label:'Occ.'},
+    {key:'theme_2', label:'Thème 2'},
+    {key:'score_2', label:'Occ.'},
+  ]);
+
+  // Législatures
+  rendreTableau('tab-legis', legis, [
+    {key:'legislature', label:'Législature'},
+    {key:'documents', label:'Docs'},
+    {key:'mentions', label:'Mentions'},
+    {key:'cri', label:'CRI'},
+    {key:'qst', label:'QST'},
+    {key:'theme_dominant', label:'Thème dominant'},
+    {key:'orateur_dominant', label:'Orateur dominant'},
+  ]);
+
+  // Sentiment
+  rendreTableau('tab-sentiment', senti, [
+    {key:'annee', label:'Année'},
+    {key:'positifs', label:'Positifs'},
+    {key:'negatifs', label:'Négatifs'},
+    {key:'neutres', label:'Neutres'},
+    {key:'score', label:'Score'},
+  ]);
+
+  // Réseau
+  rendreTableau('tab-reseau', reseau, [
+    {key:'orateur_1', label:'Orateur 1'},
+    {key:'orateur_2', label:'Orateur 2'},
+    {key:'cooccurrences', label:'Cooccurrences'},
+  ], 50);
+
+}).catch(e => {
+  document.getElementById('msg').className = 'message err';
+  document.getElementById('msg').innerHTML =
+    '❌ Erreur : ' + e + '<br><small>Vérifiez que les fichiers analyse_*.csv existent (lancez ./analyse.sh).</small>';
+  console.error(e);
+});
+</script>
+</body>
+</html>

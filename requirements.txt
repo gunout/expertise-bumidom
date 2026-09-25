@@ -1,0 +1,34 @@
+# ============================================================
+# BUMIDOM — Dépendances complètes du projet
+# Python 3.10+ requis
+# Installation : pip install -r requirements.txt
+# ============================================================
+
+# --- Téléchargement HTTP ---
+requests>=2.31.0
+urllib3>=2.0.0
+certifi>=2023.7.22
+
+# --- Extraction de texte depuis PDF ---
+pymupdf>=1.24.0            # Extraction rapide (recommandé)
+pdfplumber>=0.10.0         # Fallback si PyMuPDF échoue
+
+# --- Progression et utilitaires ---
+tqdm>=4.66.0
+
+# --- Analyse NLP ---
+spacy>=3.7.0
+# Modèle français à installer séparément :
+#   python -m spacy download fr_core_news_sm
+
+# --- Analyse statistique & visualisation (optionnel) ---
+pandas>=2.0.0
+numpy>=1.26.0
+matplotlib>=3.8.0
+scikit-learn>=1.3.0
+
+# --- Génération de rapports (optionnel) ---
+markdown>=3.5.0
+
+# --- Base de données ---
+# sqlite3 est inclus dans Python (pas besoin de pip)

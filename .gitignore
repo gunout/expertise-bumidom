@@ -1,0 +1,61 @@
+# Environnements virtuels Python
+bumi/
+.venv/
+venv/
+env/
+ENV/
+.venv_*/
+python_env/
+pyenv/
+*/bin/activate
+*/lib/python*/
+
+# Sources volumineuses
+pdfs/
+textes/
+corpus/
+*.pdf
+
+# Données régénérables
+resultats.json
+resultats_enrichis.json
+nlp_results.json
+bumidom.db
+*.db
+*.sqlite
+analyse_*.csv
+analyse_*.png
+analyse_*.json
+orateurs_profils.csv
+fiches_orateurs/
+rapport_final.md
+expertise_BUMIDOM/
+expertise_BUMIDOM_*/
+expertise/
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+*.egg-info/
+*.egg
+
+# Système
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node
+node_modules/
+
+# Fichier shell accidentel
+chmod

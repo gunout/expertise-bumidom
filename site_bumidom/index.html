@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Expertise BUMIDOM</title>
+<style>
+:root{--bleu:#000091;--rouge:#E1000F;--gris:#f5f5f7}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--gris);color:#1a1a2e;line-height:1.6}
+header{background:#fff;border-bottom:4px solid;border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;padding:28px;text-align:center}
+header h1{color:var(--bleu);font-size:2rem}
+header p{color:#666}
+main{max-width:1100px;margin:0 auto;padding:32px 24px}
+.hero{background:linear-gradient(135deg,var(--bleu),#1212ff);color:#fff;padding:32px;border-radius:12px;margin-bottom:32px;border-bottom:5px solid var(--rouge)}
+.hero h2{font-size:1.5rem;margin-bottom:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin:24px 0}
+.kpi{background:#fff;padding:18px;border-radius:10px;border-top:4px solid var(--bleu);text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.kpi.rouge{border-top-color:var(--rouge)}
+.kpi .v{font-size:1.8rem;font-weight:700;color:var(--bleu)}
+.kpi.rouge .v{color:var(--rouge)}
+.kpi .l{font-size:.75rem;color:#666;text-transform:uppercase}
+section{background:#fff;padding:24px;border-radius:10px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+section h2{color:var(--bleu);border-bottom:2px solid var(--rouge);padding-bottom:8px;margin-bottom:16px;font-size:1.2rem}
+section img{max-width:100%;border-radius:6px;margin:12px 0}
+.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.carte{display:block;padding:20px;background:var(--gris);border-radius:10px;text-decoration:none;color:inherit;border-left:4px solid var(--bleu)}
+.carte:hover{border-left-color:var(--rouge)}
+.carte h3{color:var(--bleu);margin-bottom:6px;font-size:1rem}
+.carte p{color:#666;font-size:.85rem}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{padding:10px;text-align:left;border-bottom:1px solid #eee}
+th{background:var(--bleu);color:#fff;font-size:.75rem;text-transform:uppercase}
+footer{text-align:center;padding:24px;color:#999;font-size:.85rem;border-top:2px solid;border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;background:#fff;margin-top:32px}
+</style>
+</head>
+<body>
+<header>
+<h1>📊 Expertise BUMIDOM</h1>
+<p>Le Bureau pour le développement des migrations intéressant les DOM (1963-1982)</p>
+</header>
+<main>
+<div class="hero">
+<h2>Le BUMIDOM en chiffres</h2>
+<p>Analyse de 71 documents parlementaires de l'Assemblée nationale française</p>
+<div class="kpis">
+<div class="kpi"><div class="v">94 000</div><div class="l">Migrants 1963-74</div></div>
+<div class="kpi rouge"><div class="v">279 M F</div><div class="l">Budget 1981</div></div>
+<div class="kpi"><div class="v">620 000</div><div class="l">Ultramarins 1986</div></div>
+<div class="kpi rouge"><div class="v">5 547</div><div class="l">Places 1972</div></div>
+</div>
+</div>
+
+<section>
+<h2>📈 Évolution budgétaire</h2>
+<img src="ressources/graph_budget.png" alt="Budget">
+<p>Le budget du BUMIDOM passe de <strong>28,4 M F (1975)</strong> à <strong>279,6 M F (1981)</strong> — ×10 en 6 ans.</p>
+</section>
+
+<section>
+<h2>👥 Flux migratoires</h2>
+<img src="ressources/graph_flux.png" alt="Flux">
+<p>Doublement entre 1975 et 1979 : de 5 000 à 10 000 personnes/an.</p>
+</section>
+
+<section>
+<h2>🏠 Capacité d'accueil</h2>
+<img src="ressources/graph_capacite.png" alt="Capacité">
+<p>De 86 logements (1965) à 5 547 places (1972).</p>
+</section>
+
+<section>
+<h2>📖 Ressources</h2>
+<div class="grille">
+<a class="carte" href="ressources/FICHE_SYNTHESE.md"><h3>📄 Fiche de synthèse</h3><p>Chiffres clés en 1 page</p></a>
+<a class="carte" href="ressources/TEXTE_REDIGE.md"><h3>📝 Texte rédigé</h3><p>Présentation structurée</p></a>
+<a class="carte" href="ressources/RAPPORT_EXPERTISE_ENRICHI.md"><h3>📚 Rapport complet</h3><p>Analyse en 10 sections</p></a>
+<a class="carte" href="dashboard.html"><h3>🔬 Dashboard interactif</h3><p>Explorer les données</p></a>
+<a class="carte" href="ressources/SYNTHESE_CHRONOLOGIQUE.csv"><h3>📊 Chronologie (CSV)</h3><p>Tous les événements</p></a>
+<a class="carte" href="ressources/CITATIONS_5_CHIFFRES_CLES.md"><h3>💬 Citations sources</h3><p>Extraits vérifiables</p></a>
+</div>
+</section>
+
+<section>
+<h2>📅 Chronologie essentielle</h2>
+<table>
+<thead><tr><th>Année</th><th>Événement</th><th>Chiffre</th></tr></thead>
+<tbody>
+<tr><td>1963</td><td>Création</td><td>—</td></tr>
+<tr><td>1965</td><td>Premiers logements</td><td><strong>86 logements</strong></td></tr>
+<tr><td>1967</td><td>Transit</td><td><strong>220 lits</strong></td></tr>
+<tr><td>1968</td><td>Logements</td><td><strong>234 logements</strong></td></tr>
+<tr><td>1972</td><td>Capacité</td><td><strong>5 547 places</strong></td></tr>
+<tr><td>1974</td><td>Cumul migrations</td><td><strong>94 000 personnes</strong></td></tr>
+<tr><td>1975</td><td>Flux annuel</td><td>5 000/an</td></tr>
+<tr><td>1979</td><td>Flux annuel</td><td><strong>10 000/an</strong></td></tr>
+<tr><td>1981</td><td>Budget</td><td><strong>279,6 M F</strong></td></tr>
+<tr><td>1982</td><td>→ ANT</td><td>—</td></tr>
+<tr><td>1986</td><td>Ultramarins</td><td><strong>620 000</strong></td></tr>
+</tbody>
+</table>
+</section>
+</main>
+<footer>Expertise BUMIDOM · 100 PDF sources · Analyse automatique</footer>
+</body>
+</html>

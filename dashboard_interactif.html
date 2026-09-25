@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard BUMIDOM — Interactif</title>
+<script src="plotly.min.js"></script>
+<style>
+  :root{--bleu:#000091;--rouge:#E1000F;--gris:#f5f5f7;--vert:#1b7a2e}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--gris);color:#1a1a2e;line-height:1.5}
+  header{background:#fff;border-bottom:4px solid;
+    border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;
+    padding:16px 28px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06);
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  header h1{color:var(--bleu);font-size:1.3rem;display:flex;align-items:center;gap:10px}
+  header h1 .drapeau{display:inline-block;width:32px;height:22px;
+    background:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%);
+    border:1px solid #ccc;border-radius:3px}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .actions button{padding:8px 14px;border:none;border-radius:6px;cursor:pointer;
+    font-weight:600;font-size:.82rem;transition:.2s;background:#f0f0f5;color:#333}
+  .actions button:hover{background:var(--bleu);color:#fff}
+  .actions button.primary{background:var(--bleu);color:#fff}
+  .actions button.primary:hover{background:var(--rouge)}
+
+  /* Bandeau de filtres actifs */
+  .filtres-actifs{padding:12px 28px;background:#fff;border-bottom:1px solid #eee;
+    display:flex;gap:10px;flex-wrap:wrap;align-items:center;min-height:44px}
+  .filtres-actifs .chip{display:inline-flex;align-items:center;gap:6px;
+    background:var(--bleu);color:#fff;padding:5px 12px;border-radius:16px;font-size:.8rem;font-weight:500}
+  .filtres-actifs .chip .x{cursor:pointer;font-weight:700;opacity:.7;margin-left:4px}
+  .filtres-actifs .chip .x:hover{opacity:1}
+  .filtres-actifs .chip.rouge{background:var(--rouge)}
+  .filtres-actifs .vider{background:#eee;color:#666;border:none;padding:5px 12px;
+    border-radius:16px;font-size:.8rem;cursor:pointer;font-weight:600}
+  .filtres-actifs .vide{color:#999;font-size:.85rem;font-style:italic}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;padding:16px 28px 0}
+  .kpi{background:#fff;border-radius:10px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.06);
+    border-top:4px solid var(--bleu);cursor:pointer;transition:.2s}
+  .kpi:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,145,.15)}
+  .kpi.rouge{border-top-color:var(--rouge)}
+  .kpi.vert{border-top-color:var(--vert)}
+  .kpi .v{font-size:1.6rem;font-weight:700;color:var(--bleu)}
+  .kpi.rouge .v{color:var(--rouge)}
+  .kpi.vert .v{color:var(--vert)}
+  .kpi .l{font-size:.7rem;color:#666;text-transform:uppercase;letter-spacing:.5px}
+
+  .slider-zone{background:#fff;padding:16px 28px;border-bottom:1px solid #eee}
+  .slider-zone label{font-size:.75rem;font-weight:600;color:var(--bleu);text-transform:uppercase;
+    display:block;margin-bottom:6px;letter-spacing:.5px}
+  .slider-zone .rangée{display:flex;gap:12px;align-items:center;font-size:.85rem;color:#666}
+  .slider-zone input[type=range]{flex:1;accent-color:var(--bleu)}
+
+  main{padding:20px 28px;max-width:1700px;margin:0 auto}
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:20px}
+  .carte{background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);
+    margin-bottom:20px;transition:.2s}
+  .carte h2{color:var(--bleu);font-size:1rem;margin-bottom:12px;
+    border-bottom:2px solid var(--rouge);padding-bottom:8px;
+    display:flex;justify-content:space-between;align-items:center}
+  .carte h2 .compteur{font-size:.75rem;color:#888;font-weight:400;text-transform:none;letter-spacing:0}
+  .viz{height:380px;width:100%}
+  .viz.tall{height:600px}
+  .viz.reseau{height:650px}
+
+  table{width:100%;border-collapse:collapse;font-size:.83rem}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee}
+  th{background:var(--bleu);color:#fff;font-size:.7rem;text-transform:uppercase;
+    letter-spacing:.5px;cursor:pointer;user-select:none;position:sticky;top:0}
+  th:hover{background:var(--rouge)}
+  th::after{content:'';margin-left:4px;opacity:.4;font-size:.65rem}
+  th.tri-asc::after{content:'▲';opacity:1}
+  th.tri-desc::after{content:'▼';opacity:1}
+  tbody tr{cursor:pointer;transition:.15s}
+  tbody tr:hover{background:#f0f4ff}
+  tbody tr.selectionne{background:#e5e9ff}
+  .nb{text-align:right;font-weight:700;color:var(--rouge);font-variant-numeric:tabular-nums}
+  .ctx{font-size:.75rem;color:#666;font-style:italic;max-width:400px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .recherche-wrap{position:relative;margin-bottom:12px}
+  .recherche-wrap input{width:100%;padding:10px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:.9rem}
+  .recherche-wrap input:focus{outline:none;border-color:var(--bleu)}
+
+  /* Liste documents interactive */
+  .doc{background:#fff;border-radius:10px;margin-bottom:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:5px solid var(--bleu);
+    overflow:hidden;transition:.2s;cursor:pointer}
+  .doc:hover{box-shadow:0 4px 16px rgba(0,0,145,.15);transform:translateX(3px)}
+  .doc.selectionne{border-left-color:var(--rouge);background:#fff9f9}
+  .doc-header{padding:12px 16px;display:flex;align-items:center;gap:10px}
+  .doc-header .badge{font-size:.65rem;font-weight:700;text-transform:uppercase;padding:3px 8px;
+    border-radius:12px;letter-spacing:.5px;white-space:nowrap}
+  .badge-cri{background:#e5e9ff;color:var(--bleu)}
+  .badge-qst{background:#e8f5e9;color:var(--vert)}
+  .badge-jo{background:#fff3e0;color:#b26a00}
+  .badge-tab{background:#f3e5f5;color:#7b1fa2}
+  .badge-def{background:#eee;color:#555}
+  .doc-header .titre{flex:1;font-weight:600;font-size:.9rem}
+  .doc-header .mentions{font-size:.75rem;color:var(--rouge);font-weight:700;background:#ffe5e5;
+    padding:2px 9px;border-radius:12px;white-space:nowrap}
+  .doc-body{display:none;padding:12px 16px;border-top:1px solid #f0f0f0;background:#fafafa}
+  .doc-body.open{display:block}
+  .doc-body .extrait{background:#fff;border-left:3px solid var(--rouge);padding:9px 12px;
+    margin:7px 0;font-size:.85rem;border-radius:0 6px 6px 0}
+  .btn{display:inline-block;background:var(--bleu);color:#fff;text-decoration:none;
+    padding:7px 14px;border-radius:6px;font-weight:600;font-size:.8rem;
+    border:none;cursor:pointer;margin:4px 6px 0 0;transition:.2s}
+  .btn:hover{background:var(--rouge)}
+  .btn.gris{background:#888}
+  .tag{display:inline-block;background:var(--bleu);color:#fff;padding:2px 9px;border-radius:12px;
+    font-size:.7rem;margin:2px 3px 2px 0;cursor:pointer;transition:.2s}
+  .tag:hover{background:var(--rouge)}
+  .tag.rouge{background:var(--rouge)}
+  .tag.rouge:hover{background:var(--bleu)}
+
+  /* Panneau latéral */
+  .detail-panel{position:fixed;right:0;top:0;bottom:0;width:500px;background:#fff;
+    box-shadow:-4px 0 20px rgba(0,0,0,.15);z-index:200;overflow-y:auto;
+    transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column}
+  .detail-panel.ouvert{transform:translateX(0)}
+  .detail-panel .entete{background:var(--bleu);color:#fff;padding:16px 20px;
+    display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+  .detail-panel .entete h3{margin:0;font-size:1rem}
+  .detail-panel .entete .fermer{cursor:pointer;font-size:1.3rem;font-weight:300;opacity:.8}
+  .detail-panel .entete .fermer:hover{opacity:1}
+  .detail-panel .corps{padding:20px;flex:1}
+  .detail-panel .corps p{margin:8px 0;font-size:.9rem}
+  .detail-panel .corps strong{color:var(--bleu)}
+
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;
+    opacity:0;pointer-events:none;transition:opacity .3s}
+  .overlay.actif{opacity:1;pointer-events:auto}
+
+  .message{padding:14px 20px;border-radius:8px;margin:16px 28px;font-weight:500;
+    background:#e5e9ff;color:var(--bleu);border-left:4px solid var(--bleu)}
+  .message.err{background:#ffe5e5;color:#b8000c;border-left-color:var(--rouge)}
+
+  .tabs{display:flex;gap:4px;padding:0 28px;border-bottom:2px solid #ddd;margin-top:16px;
+    overflow-x:auto;background:#fff}
+  .tabs button{padding:11px 18px;border:none;background:transparent;font-size:.85rem;
+    font-weight:600;color:#666;cursor:pointer;border-bottom:3px solid transparent;
+    white-space:nowrap;transition:.2s}
+  .tabs button:hover{color:var(--bleu)}
+  .tabs button.actif{color:var(--bleu);border-bottom-color:var(--rouge)}
+
+  section.panneau{display:none}
+  section.panneau.actif{display:block;animation:fade .3s}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+
+  footer{text-align:center;padding:20px;font-size:.78rem;color:#999;margin-top:40px;
+    border-top:2px solid;
+    border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;
+    background:#fff}
+
+  .no-data{padding:40px;text-align:center;color:#999}
+  .no-data .ic{font-size:2.5rem;margin-bottom:8px}
+
+  kbd{background:#f0f0f5;padding:2px 6px;border-radius:4px;font-size:.75rem;
+    border:1px solid #ddd;font-family:monospace}
+
+  @media(max-width:768px){
+    .detail-panel{width:100%}
+    main{padding:16px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="drapeau"></span> Dashboard BUMIDOM — Interactif</h1>
+  <div class="actions">
+    <button onclick="exportVueCSV()">📥 Export CSV</button>
+    <button onclick="exportVueJSON()">📄 Export JSON</button>
+    <button onclick="imprimerVue()">🖨️ Imprimer</button>
+    <button class="primary" onclick="reinitialiser()">🔄 Réinitialiser</button>
+  </div>
+</header>
+
+<div class="filtres-actifs" id="filtres-actifs"></div>
+
+<div class="kpis" id="kpis"></div>
+
+<div class="slider-zone">
+  <label>Filtrer par plage d'années</label>
+  <div class="rangée">
+    <input type="range" id="annee-min" min="1960" max="1995" value="1960">
+    <span id="annee-min-label">1960</span>
+    <span>—</span>
+    <input type="range" id="annee-max" min="1960" max="1995" value="1995">
+    <span id="annee-max-label">1995</span>
+    <button class="actions button" onclick="resetAnnees()"
+      style="padding:4px 10px;font-size:.75rem;background:#eee">Reset</button>
+  </div>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="actif" data-tab="synthese">📊 Synthèse</button>
+  <button data-tab="chiffres">🎯 Chiffres clés</button>
+  <button data-tab="orateurs">👤 Orateurs</button>
+  <button data-tab="themes">🏷️ Thèmes</button>
+  <button data-tab="chrono">🕐 Chronologie</button>
+  <button data-tab="sentiment">😊 Sentiment</button>
+  <button data-tab="reseau">🕸️ Réseau</button>
+  <button data-tab="nlp">🔬 NLP</button>
+  <button data-tab="docs">📄 Documents</button>
+</div>
+
+<div id="message" class="message">⏳ Chargement…</div>
+
+<main id="app" style="display:none">
+
+  <section class="panneau actif" id="tab-synthese">
+    <div class="grille">
+      <div class="carte"><h2>📈 Mentions par période <span class="compteur" id="c-periode"></span></h2><div id="viz-periodes" class="viz"></div></div>
+      <div class="carte"><h2>📁 Types de documents <span class="compteur" id="c-types"></span></h2><div id="viz-types" class="viz"></div></div>
+      <div class="carte"><h2>👤 Top 10 orateurs <span class="compteur" id="c-orateurs"></span></h2><div id="viz-orateurs" class="viz"></div></div>
+      <div class="carte"><h2>🏷️ Top 10 thèmes <span class="compteur" id="c-themes"></span></h2><div id="viz-themes" class="viz"></div></div>
+    </div>
+  </section>
+
+  <section class="panneau" id="tab-chiffres">
+    <div class="grille">
+      <div class="carte"><h2>💰 Budget BUMIDOM</h2><div id="viz-budget" class="viz"></div></div>
+      <div class="carte"><h2>📈 Flux migratoires</h2><div id="viz-flux" class="viz"></div></div>
+    </div>
+    <div class="carte"><h2>🎯 Chiffres clés (cliquez pour filtrer) <span class="compteur" id="c-chiffres"></span></h2>
+      <div id="chiffres-cles"></div>
+    </div>
+    <div class="carte"><h2>👥 Effectifs cités</h2><div id="tab-effectifs"></div></div>
+    <div class="carte"><h2>💰 Montants cités</h2><div id="tab-montants"></div></div>
+  </section>
+
+  <section class="panneau" id="tab-orateurs">
+    <div class="carte"><h2>👤 Top 30 orateurs (cliquez sur une barre)</h2>
+      <div id="viz-orateurs-bar" class="viz tall"></div></div>
+    <div class="carte"><h2>Détail des orateurs</h2><div id="liste-orateurs"></div></div>
+  </section>
+
+  <section class="panneau" id="tab-themes">
+    <div class="grille">
+      <div class="carte"><h2>🎯 Radar</h2><div id="viz-radar" class="viz"></div></div>
+      <div class="carte"><h2>📊 Occurrences</h2><div id="viz-themes-bar" class="viz"></div></div>
+    </div>
+    <div class="carte"><h2>Documents par thème (cliquez pour filtrer)</h2><div id="liste-themes"></div></div>
+  </section>
+
+  <section class="panneau" id="tab-chrono">
+    <div class="carte"><h2>🕐 Mentions par document</h2><div id="viz-chrono" class="viz tall"></div></div>
+    <div class="carte"><h2>📅 Années citées</h2><div id="viz-annees" class="viz"></div></div>
+  </section>
+
+  <section class="panneau" id="tab-sentiment">
+    <div class="carte"><h2>😊 Tonalité par année (positif/négatif)</h2><div id="viz-sentiment" class="viz"></div></div>
+    <div class="carte"><h2>Détail par année</h2><div id="tab-sentiment-detail"></div></div>
+  </section>
+
+  <section class="panneau" id="tab-reseau">
+    <div class="carte"><h2>🕸️ Réseau des orateurs (zoom + clic)</h2><div id="viz-reseau" class="viz reseau"></div></div>
+  </section>
+
+  <section class="panneau" id="tab-nlp">
+    <div class="grille">
+      <div class="carte"><h2>👥 Personnes citées</h2><div id="nlp-pers" class="liste-nlp"></div></div>
+      <div class="carte"><h2>🌍 Lieux cités</h2><div id="nlp-lieux" class="liste-nlp"></div></div>
+      <div class="carte"><h2>🏛️ Organisations</h2><div id="nlp-org" class="liste-nlp"></div></div>
+      <div class="carte"><h2>📝 Mots fréquents (cliquez pour filtrer)</h2><div id="nlp-mots" class="liste-nlp"></div></div>
+    </div>
+  </section>
+
+  <section class="panneau" id="tab-docs">
+    <div class="recherche-wrap">
+      <input type="text" id="recherche" placeholder="🔍 Rechercher (Debré, formation, 1975...)">
+    </div>
+    <div id="liste-docs"></div>
+  </section>
+
+</main>
+
+<footer>Dashboard BUMIDOM interactif · <span id="horodatage"></span></footer>
+
+<!-- Panneau latéral détail -->
+<div class="overlay" id="overlay" onclick="fermerDetail()"></div>
+<aside class="detail-panel" id="detail-panel">
+  <div class="entete">
+    <h3 id="detail-titre">Détail</h3>
+    <span class="fermer" onclick="fermerDetail()">✕</span>
+  </div>
+  <div class="corps" id="detail-corps"></div>
+</aside>
+
+<script>
+// ============================================================
+// ÉTAT GLOBAL
+// ============================================================
+let DOCS = [];
+let ALL_DOCS = [];
+let NLP = null;
+let CSV = {};
+let FILTRES = {
+  types: new Set(),
+  themes: new Set(),
+  orateurs: new Set(),
+  legis: new Set(),
+  anneeMin: 1960,
+  anneeMax: 1995,
+  recherche: ''
+};
+let TRI = { col: 'mentions', ordre: 'desc' };
+let SELECTION = new Set();  // ids des documents sélectionnés
+
+document.getElementById('horodatage').textContent = new Date().toLocaleString('fr-FR');
+
+// ============================================================
+// UTILITAIRES
+// ============================================================
+function num(v){ const n = parseFloat(String(v||'0').replace(/[^\d.,-]/g,'').replace(',','.')); return isNaN(n)?0:n; }
+function fmt(n){ return Math.round(n).toLocaleString('fr-FR').replace(/\u202f|\u00a0/g,' '); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function parseCSV(text){
+  const lignes = text.trim().split(/\r?\n/);
+  const sep = lignes[0].includes(';') ? ';' : ',';
+  const headers = lignes[0].split(sep).map(h => h.replace(/^"|"$/g,'').trim());
+  return lignes.slice(1).filter(l=>l.trim()).map(l=>{
+    const vals = l.split(sep).map(v=>v.replace(/^"|"$/g,'').trim());
+    const obj = {};
+    headers.forEach((h,i)=>obj[h]=vals[i]||'');
+    return obj;
+  });
+}
+
+function anneeDeDoc(d){
+  const m1 = d.fichier.match(/(\d{4})-\d{2}-\d{2}/);
+  if(m1) return parseInt(m1[1]);
+  const m2 = d.fichier.match(/(\d{4})-(\d{4})/);
+  if(m2) return parseInt(m2[1]);
+  return null;
+}
+
+function typeDeFichier(f){
+  if(f.includes('_qst_')) return 'Question écrite';
+  if(f.includes('_cri_')) return 'Compte rendu';
+  if(f.includes('tanalytique')) return 'Table analytique';
+  if(f.includes('tnominative')) return 'Table nominative';
+  return 'Autre';
+}
+
+// ============================================================
+// CHARGEMENT
+// ============================================================
+Promise.all([
+  fetch('resultats_enrichis.json').then(r=>r.ok?r.json():null),
+  fetch('nlp_results.json').then(r=>r.ok?r.json():null).catch(()=>null),
+  fetch('analyse_chrono.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('analyse_cooccurrences.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('analyse_sentiment.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('analyse_reseau.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('expertise_BUMIDOM/SYNTHESE_CHRONOLOGIQUE.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('expertise_BUMIDOM/BUMIDOM_effectifs.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('expertise_BUMIDOM/BUMIDOM_montants.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+]).then(([data, nlp, chrono, cooc, senti, reseau, chronoExp, effectifs, montants])=>{
+  if(!data){ throw new Error('resultats_enrichis.json introuvable'); }
+  ALL_DOCS = data.results || [];
+  DOCS = ALL_DOCS;
+  NLP = nlp;
+  CSV = { chrono: chrono||[], cooc: cooc||[], senti: senti||[], reseau: reseau||[],
+          chronoExp: chronoExp||[], effectifs: effectifs||[], montants: montants||[] };
+
+  document.getElementById('message').style.display='none';
+  document.getElementById('app').style.display='block';
+
+  initSlider();
+  initOnglets();
+  initRecherche();
+  majVue();
+}).catch(e=>{
+  document.getElementById('message').className='message err';
+  document.getElementById('message').innerHTML='❌ '+e.message;
+});
+
+// ============================================================
+// SLIDER ANNÉES
+// ============================================================
+function initSlider(){
+  const min = document.getElementById('annee-min');
+  const max = document.getElementById('annee-max');
+  min.addEventListener('input', ()=>{
+    if(+min.value > +max.value) min.value = max.value;
+    FILTRES.anneeMin = +min.value;
+    document.getElementById('annee-min-label').textContent = min.value;
+    majVue();
+  });
+  max.addEventListener('input', ()=>{
+    if(+max.value < +min.value) max.value = min.value;
+    FILTRES.anneeMax = +max.value;
+    document.getElementById('annee-max-label').textContent = max.value;
+    majVue();
+  });
+}
+
+function resetAnnees(){
+  document.getElementById('annee-min').value = 1960;
+  document.getElementById('annee-max').value = 1995;
+  document.getElementById('annee-min-label').textContent = '1960';
+  document.getElementById('annee-max-label').textContent = '1995';
+  FILTRES.anneeMin = 1960;
+  FILTRES.anneeMax = 1995;
+  majVue();
+}
+
+// ============================================================
+// ONGLETS
+// ============================================================
+function initOnglets(){
+  document.querySelectorAll('.tabs button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('actif'));
+      document.querySelectorAll('.panneau').forEach(p=>p.classList.remove('actif'));
+      b.classList.add('actif');
+      document.getElementById('tab-'+b.dataset.tab).classList.add('actif');
+      setTimeout(majVue, 60);
+    });
+  });
+}
+
+// ============================================================
+// RECHERCHE (avec debounce)
+// ============================================================
+let rechercheTimer;
+function initRecherche(){
+  document.getElementById('recherche').addEventListener('input', e=>{
+    clearTimeout(rechercheTimer);
+    rechercheTimer = setTimeout(()=>{
+      FILTRES.recherche = e.target.value.trim().toLowerCase();
+      majVue();
+    }, 250);
+  });
+}
+
+// ============================================================
+// FILTRAGE
+// ============================================================
+function appliquerFiltres(){
+  DOCS = ALL_DOCS.filter(d=>{
+    // Année
+    const a = anneeDeDoc(d);
+    if(a && (a < FILTRES.anneeMin || a > FILTRES.anneeMax)) return false;
+
+    // Type
+    if(FILTRES.types.size > 0){
+      if(!FILTRES.types.has(typeDeFichier(d.fichier))) return false;
+    }
+    // Thèmes (au moins un doit matcher)
+    if(FILTRES.themes.size > 0){
+      const docThemes = Object.keys(d.themes||{});
+      if(!docThemes.some(t=>FILTRES.themes.has(t))) return false;
+    }
+    // Orateurs
+    if(FILTRES.orateurs.size > 0){
+      const docOrateurs = (d.orateurs||[]).map(o=>o.nom);
+      if(!docOrateurs.some(o=>FILTRES.orateurs.has(o))) return false;
+    }
+    // Législature
+    if(FILTRES.legis.size > 0){
+      if(!(d.legislatures||[]).some(l=>FILTRES.legis.has(l))) return false;
+    }
+    // Recherche texte
+    if(FILTRES.recherche){
+      const blob = (d.fichier+' '+JSON.stringify(d.extraits)+' '+
+                    JSON.stringify(d.orateurs)+' '+JSON.stringify(d.themes)).toLowerCase();
+      if(!blob.includes(FILTRES.recherche)) return false;
+    }
+    return true;
+  });
+}
+
+// ============================================================
+// CHIPS DE FILTRES ACTIFS
+// ============================================================
+function afficherChips(){
+  const wrap = document.getElementById('filtres-actifs');
+  const chips = [];
+
+  FILTRES.types.forEach(t=>chips.push({k:'types',v:t,c:'bleu'}));
+  FILTRES.themes.forEach(t=>chips.push({k:'themes',v:t,c:'rouge'}));
+  FILTRES.orateurs.forEach(t=>chips.push({k:'orateurs',v:t,c:'bleu'}));
+  FILTRES.legis.forEach(t=>chips.push({k:'legis',v:'Lég. '+t,c:'rouge'}));
+  if(FILTRES.recherche) chips.push({k:'recherche',v:'« '+FILTRES.recherche+' »',c:'bleu'});
+  if(FILTRES.anneeMin > 1960 || FILTRES.anneeMax < 1995)
+    chips.push({k:'annees',v:FILTRES.anneeMin+'–'+FILTRES.anneeMax,c:'rouge'});
+
+  if(chips.length === 0){
+    wrap.innerHTML = '<span class="vide">Aucun filtre actif — cliquez sur les graphiques ou la liste pour filtrer</span>';
+    return;
+  }
+
+  wrap.innerHTML = chips.map(ch=>`
+    <span class="chip ${ch.c==='rouge'?'rouge':''}">
+      ${esc(ch.v)}
+      <span class="x" onclick="retirerFiltre('${ch.k}','${esc(ch.v).replace(/'/g,'')}')">✕</span>
+    </span>
+  `).join('') + `<button class="vider" onclick="reinitialiser()">Tout effacer</button>`;
+}
+
+function retirerFiltre(type, valeur){
+  if(type === 'recherche'){ FILTRES.recherche=''; document.getElementById('recherche').value=''; }
+  else if(type === 'annees'){ resetAnnees(); return; }
+  else {
+    const v = valeur.replace('Lég. ','').replace('« ','').replace(' »','');
+    FILTRES[type].delete(v);
+  }
+  majVue();
+}
+
+function toggleFiltre(type, valeur){
+  if(FILTRES[type].has(valeur)) FILTRES[type].delete(valeur);
+  else FILTRES[type].add(valeur);
+  majVue();
+}
+
+function reinitialiser(){
+  FILTRES = { types:new Set(), themes:new Set(), orateurs:new Set(), legis:new Set(),
+              anneeMin:1960, anneeMax:1995, recherche:'' };
+  document.getElementById('recherche').value = '';
+  resetAnnees();
+  majVue();
+}
+
+// ============================================================
+// VUE PRINCIPALE
+// ============================================================
+function majVue(){
+  appliquerFiltres();
+  afficherChips();
+  afficherKPIs();
+  dessinerOngletActif();
+}
+
+function afficherKPIs(){
+  const total = DOCS.length;
+  const mentions = DOCS.reduce((s,d)=>s+d.nb_mentions,0);
+  const orateurs = new Set();
+  DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>orateurs.add(o.nom)));
+  const themes = new Set();
+  DOCS.forEach(d=>Object.keys(d.themes||{}).forEach(t=>themes.add(t)));
+  const annees = DOCS.map(anneeDeDoc).filter(Boolean);
+
+  document.getElementById('kpis').innerHTML = `
+    <div class="kpi" onclick="toggleFiltreParKpi('docs')">
+      <div class="v">${total}</div><div class="l">Documents</div>
+    </div>
+    <div class="kpi rouge"><div class="v">${mentions}</div><div class="l">Mentions</div></div>
+    <div class="kpi" onclick="toggleFiltreParKpi('orateurs')">
+      <div class="v">${orateurs.size}</div><div class="l">Orateurs uniques</div>
+    </div>
+    <div class="kpi rouge" onclick="toggleFiltreParKpi('themes')">
+      <div class="v">${themes.size}</div><div class="l">Thèmes</div>
+    </div>
+    <div class="kpi vert"><div class="v">${annees.length ? Math.min(...annees)+'–'+Math.max(...annees) : '—'}</div><div class="l">Période</div></div>
+  `;
+}
+
+function toggleFiltreParKpi(type){
+  // Affiche un message dans la console
+  console.log('Filtre KPIs :', type);
+}
+
+// ============================================================
+// DESSIN DE L'ONGLET ACTIF
+// ============================================================
+function dessinerOngletActif(){
+  const actif = document.querySelector('.tabs button.actif').dataset.tab;
+  try {
+    if(actif === 'synthese') dessinerSynthese();
+    if(actif === 'chiffres') dessinerChiffres();
+    if(actif === 'orateurs') dessinerOrateurs();
+    if(actif === 'themes') dessinerThemes();
+    if(actif === 'chrono') dessinerChrono();
+    if(actif === 'sentiment') dessinerSentiment();
+    if(actif === 'reseau') dessinerReseau();
+    if(actif === 'nlp') dessinerNLP();
+    if(actif === 'docs') dessinerDocs();
+  } catch(e) {
+    console.error('Erreur dessin:', e);
+  }
+}
+
+// ============================================================
+// LAYOUT PLOTLY
+// ============================================================
+const LAYOUT = {
+  paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
+  font:{family:'system-ui', color:'#1a1a2e', size:11},
+  margin:{t:30,r:20,b:60,l:60}, height:380, autosize:true,
+  showlegend:false,
+  hoverlabel:{bgcolor:'#fff', bordercolor:'#000091', font:{color:'#1a1a2e', size:12}}
+};
+const CONFIG = {responsive: true, displayModeBar: true, displaylogo: false,
+  modeBarButtonsToRemove: ['lasso2d','select2d']};
+
+function safePlot(id, data, layout, customConfig){
+  const el = document.getElementById(id);
+  if(!el || typeof Plotly === 'undefined') return;
+  try {
+    Plotly.newPlot(id, data, layout, customConfig || CONFIG);
+  } catch(e) {
+    el.innerHTML = '<p style="color:#E1000F;padding:20px">Erreur : '+e.message+'</p>';
+    console.error(e);
+  }
+}
+
+// ============================================================
+// SYNTHÈSE
+// ============================================================
+function dessinerSynthese(){
+  // Périodes
+  const parPeriode = {};
+  DOCS.forEach(d=>{
+    const m = d.fichier.match(/(\d{4})-(\d{4})/);
+    if(m){
+      const k = m[1]+'-'+m[2];
+      parPeriode[k] = (parPeriode[k]||0) + d.nb_mentions;
+    }
+  });
+  const periodes = Object.keys(parPeriode).sort();
+  const traceP = {
+    x: periodes, y: periodes.map(p=>parPeriode[p]),
+    type:'bar', marker:{color:'#000091'},
+    hovertemplate:'<b>%{x}</b><br>%{y} mentions<extra></extra>'
+  };
+  safePlot('viz-periodes', [traceP], {...LAYOUT, xaxis:{tickangle:-30}}, 
+    {...CONFIG, modeBarButtonsToRemove:[]});
+  document.getElementById('viz-periodes').on('plotly_click', e=>{
+    const p = e.points[0].x;
+    // Filtre par période
+    FILTRES.anneeMin = parseInt(p.split('-')[0]);
+    FILTRES.anneeMax = parseInt(p.split('-')[1]);
+    document.getElementById('annee-min').value = FILTRES.anneeMin;
+    document.getElementById('annee-max').value = FILTRES.anneeMax;
+    document.getElementById('annee-min-label').textContent = FILTRES.anneeMin;
+    document.getElementById('annee-max-label').textContent = FILTRES.anneeMax;
+    majVue();
+  });
+
+  // Types
+  const types = {};
+  DOCS.forEach(d=>{
+    const t = typeDeFichier(d.fichier);
+    types[t] = (types[t]||0) + 1;
+  });
+  const traceT = {
+    values: Object.values(types), labels: Object.keys(types),
+    type:'pie', hole:0.45,
+    marker:{colors:['#000091','#E1000F','#1212ff','#ff6b6b','#888']},
+    hovertemplate:'<b>%{label}</b><br>%{value} documents<br>%{percent}<extra></extra>'
+  };
+  safePlot('viz-types', [traceT], {...LAYOUT, showlegend:true});
+  document.getElementById('viz-types').on('plotly_click', e=>{
+    toggleFiltre('types', e.points[0].label);
+  });
+
+  // Top orateurs
+  const aggO = {};
+  DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>aggO[o.nom]=(aggO[o.nom]||0)+o.occurrences));
+  const topO = Object.entries(aggO).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const traceO = {
+    x: topO.map(o=>o[1]), y: topO.map(o=>o[0]),
+    type:'bar', orientation:'h',
+    marker:{color:topO.map((_,i)=>i<3?'#E1000F':'#000091')},
+    hovertemplate:'<b>%{y}</b><br>%{x} mentions<extra></extra>'
+  };
+  safePlot('viz-orateurs', [traceO], {...LAYOUT, yaxis:{autorange:'reversed'},
+    margin:{t:20,r:20,b:40,l:180}});
+  document.getElementById('viz-orateurs').on('plotly_click', e=>{
+    toggleFiltre('orateurs', e.points[0].y);
+  });
+
+  // Top thèmes
+  const aggTh = {};
+  DOCS.forEach(d=>Object.entries(d.themes||{}).forEach(([t,n])=>aggTh[t]=(aggTh[t]||0)+n));
+  const topTh = Object.entries(aggTh).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const traceTh = {
+    values: topTh.map(t=>t[1]), labels: topTh.map(t=>t[0]),
+    type:'pie', hole:0.45,
+    marker:{colors:['#E1000F','#000091','#1212ff','#ff6b6b','#888','#4a4a8a','#b8000c','#ffa500','#2e7d32','#7b1fa2']},
+    hovertemplate:'<b>%{label}</b><br>%{value} occurrences<br>%{percent}<extra></extra>'
+  };
+  safePlot('viz-themes', [traceTh], {...LAYOUT, showlegend:true});
+  document.getElementById('viz-themes').on('plotly_click', e=>{
+    toggleFiltre('themes', e.points[0].label);
+  });
+
+  // Compteurs
+  document.getElementById('c-periode').textContent = periodes.length + ' périodes';
+  document.getElementById('c-types').textContent = Object.keys(types).length + ' types';
+  document.getElementById('c-orateurs').textContent = topO.length + ' orateurs';
+  document.getElementById('c-themes').textContent = topTh.length + ' thèmes';
+}
+
+// ============================================================
+// CHIFFRES CLÉS
+// ============================================================
+function dessinerChiffres(){
+  // Graph budget (Plotly interactif depuis les données CSV)
+  const m = CSV.montants.filter(x=>+x.valeur > 0).slice(0,30);
+  safePlot('viz-budget', [{
+    x: m.map(x=>x.fichier.substring(0,20)),
+    y: m.map(x=>num(x.valeur)/1e6),
+    type:'bar', marker:{color:'#000091'},
+    hovertemplate:'<b>%{x}</b><br>%{y:.1f} M F<extra></extra>'
+  }], {...LAYOUT, yaxis:{title:'Millions de francs'}, xaxis:{tickangle:-45, tickfont:{size:9}}});
+
+  // Flux (effectifs)
+  const e = CSV.effectifs.filter(x=>num(x.valeur) > 0 && num(x.valeur) < 500000).slice(0,30);
+  safePlot('viz-flux', [{
+    x: e.map(x=>x.fichier.substring(0,20)),
+    y: e.map(x=>num(x.valeur)),
+    type:'bar', marker:{color:'#E1000F'},
+    hovertemplate:'<b>%{x}</b><br>%{y:,} personnes<extra></extra>'
+  }], {...LAYOUT, yaxis:{title:'Personnes'}, xaxis:{tickangle:-45, tickfont:{size:9}}});
+
+  // Chiffres clés
+  const chiffres = [
+    ['💰 Budget BUMIDOM 1981','279 600 000 F',null],
+    ['👥 Migrants 1963-1974','94 000 personnes',null],
+    ['🌍 Antillais métropole 1986','500 000',null],
+    ['👥 Population concernée 1981','400 000 personnes',null],
+    ['💰 Budget BUMIDOM 1975','28 353 000 F',null],
+    ['🌍 Réunionnais métropole 1986','120 000',null],
+    ['📈 Flux annuel 1979-80','10 000 personnes/an',null],
+    ['🏠 Capacité accueil 1972','5 547 places',null],
+    ['📈 Flux annuel 1975-76','5 000 personnes/an',null],
+    ['🏠 Logements 1968','234 logements',null],
+  ];
+  document.getElementById('chiffres-cles').innerHTML = chiffres.map((c,i)=>`
+    <div class="chiffre-cle ${i<3?'top':''}"
+      style="display:flex;justify-content:space-between;padding:10px 14px;margin:5px 0;
+             background:${i<3?'#fff5f5':'#f5f5f7'};border-radius:6px;
+             border-left:4px solid ${i<3?'#E1000F':'#000091'};cursor:pointer">
+      <span>${c[0]}</span>
+      <strong style="color:${i<3?'#E1000F':'#000091'}">${c[1]}</strong>
+    </div>
+  `).join('');
+  document.getElementById('c-chiffres').textContent = chiffres.length + ' chiffres';
+
+  // Tableaux
+  tabInteractif('tab-effectifs', CSV.effectifs.slice(0,200), [
+    {k:'valeur',l:'Nombre',num:true},
+    {k:'unite',l:'Unité'},
+    {k:'fichier',l:'Fichier'},
+    {k:'contexte',l:'Contexte',ctx:true}
+  ], 'valeur', d=>ouvrirDocParFichier(d.fichier));
+
+  tabInteractif('tab-montants', CSV.montants.slice(0,200), [
+    {k:'valeur',l:'Montant (F)',num:true},
+    {k:'unite',l:'Unité'},
+    {k:'fichier',l:'Fichier'},
+    {k:'contexte',l:'Contexte',ctx:true}
+  ], 'valeur', d=>ouvrirDocParFichier(d.fichier));
+}
+
+// ============================================================
+// TABLEAU INTERACTIF (tri au clic)
+// ============================================================
+function tabInteractif(id, rows, cols, triDefaut, onLigne){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(!rows.length){ el.innerHTML='<div class="no-data"><div class="ic">📭</div>Aucune donnée</div>'; return; }
+
+  // Tri par défaut
+  let tri = triDefaut || cols[0].k;
+  let ordre = 'desc';
+  const data = [...rows].sort((a,b)=> ordre==='desc' ? num(b[tri])-num(a[tri]) : num(a[tri])-num(b[tri]));
+
+  function rendre(){
+    let html = '<table><thead><tr>';
+    cols.forEach(c=>{
+      const cls = c.k === tri ? ('tri-'+ordre) : '';
+      html += `<th class="${cls}" data-key="${c.k}">${c.l}</th>`;
+    });
+    html += '</tr></thead><tbody>';
+    data.forEach((r,i)=>{
+      html += `<tr data-idx="${i}">`;
+      cols.forEach(c=>{
+        let v = r[c.k]||'';
+        if(c.num) v = `<span class="nb">${fmt(v)}</span>`;
+        else if(c.ctx) v = `<span class="ctx" title="${esc(v)}">${esc(v.substring(0,80))}</span>`;
+        else v = esc(String(v).substring(0,50));
+        html += `<td>${v}</td>`;
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+
+    el.querySelectorAll('th').forEach(th=>{
+      th.addEventListener('click', ()=>{
+        const k = th.dataset.key;
+        if(tri === k) ordre = ordre === 'desc' ? 'asc' : 'desc';
+        else { tri = k; ordre = 'desc'; }
+        data.sort((a,b)=> ordre==='desc' ? num(b[tri])-num(a[tri]) : num(a[tri])-num(b[tri]));
+        rendre();
+      });
+    });
+    el.querySelectorAll('tbody tr').forEach(tr=>{
+      tr.addEventListener('click', ()=>{
+        const r = data[+tr.dataset.idx];
+        if(onLigne) onLigne(r);
+        else ouvrirDetail(r);
+      });
+    });
+  }
+  rendre();
+}
+
+function ouvrirDocParFichier(fichier){
+  const d = ALL_DOCS.find(x=>x.fichier === fichier);
+  if(d) ouvrirDetail(d);
+}
+
+function ouvrirDetail(obj){
+  const panel = document.getElementById('detail-panel');
+  const corps = document.getElementById('detail-corps');
+  const titre = document.getElementById('detail-titre');
+
+  if(obj.fichier){
+    // Document
+    titre.textContent = obj.fichier;
+    corps.innerHTML = `
+      <p><strong>Mentions BUMIDOM :</strong> ${obj.nb_mentions}</p>
+      <p><strong>Type :</strong> ${typeDeFichier(obj.fichier)}</p>
+      ${obj.url ? `<p><strong>URL :</strong> <a href="${obj.url}" target="_blank">${obj.url}</a></p>` : ''}
+      ${obj.orateurs && obj.orateurs.length ? `<p><strong>Orateurs :</strong> ${
+        obj.orateurs.slice(0,10).map(o=>esc(o.nom)).join(', ')
+      }</p>` : ''}
+      ${Object.keys(obj.themes||{}).length ? `<p><strong>Thèmes :</strong> ${
+        Object.entries(obj.themes).map(([k,v])=>k+' ('+v+')').join(', ')
+      }</p>` : ''}
+      <h4 style="color:#000091;margin-top:16px">Extraits</h4>
+      ${obj.extraits.map((e,i)=>`
+        <div class="extrait"><strong>Extrait ${i+1}</strong> (page ~${e.page_approx})<br>${esc(e.extrait)}</div>
+      `).join('')}
+      ${obj.url ? `<a class="btn" href="${obj.url}" target="_blank">📄 Ouvrir le PDF</a>` : ''}
+    `;
+  } else {
+    // Ligne quelconque
+    titre.textContent = 'Détail';
+    corps.innerHTML = Object.entries(obj).map(([k,v])=>`<p><strong>${esc(k)} :</strong> ${esc(v)}</p>`).join('');
+  }
+
+  panel.classList.add('ouvert');
+  document.getElementById('overlay').classList.add('actif');
+}
+
+function fermerDetail(){
+  document.getElementById('detail-panel').classList.remove('ouvert');
+  document.getElementById('overlay').classList.remove('actif');
+}
+
+// ============================================================
+// ORATEURS
+// ============================================================
+function dessinerOrateurs(){
+  const agg = {};
+  DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>agg[o.nom]=(agg[o.nom]||0)+o.occurrences));
+  const top = Object.entries(agg).sort((a,b)=>b[1]-a[1]).slice(0,30);
+
+  const trace = {
+    x: top.map(o=>o[1]), y: top.map(o=>o[0]),
+    type:'bar', orientation:'h',
+    marker:{color:top.map((_,i)=>i<3?'#E1000F':'#000091')},
+    hovertemplate:'<b>%{y}</b><br>%{x} mentions<extra></extra>'
+  };
+  safePlot('viz-orateurs-bar', [trace], {...LAYOUT, height:880,
+    yaxis:{autorange:'reversed'}, margin:{t:20,r:30,b:40,l:220}});
+  document.getElementById('viz-orateurs-bar').on('plotly_click', e=>{
+    toggleFiltre('orateurs', e.points[0].y);
+  });
+
+  const container = document.getElementById('liste-orateurs');
+  container.innerHTML = top.map(([nom,total])=>{
+    const docs = DOCS.filter(d=>(d.orateurs||[]).some(o=>o.nom === nom));
+    const estFiltre = FILTRES.orateurs.has(nom);
+    return `
+      <div class="doc" onclick="toggleFiltre('orateurs','${esc(nom)}')"
+           style="${estFiltre?'border-left-color:#E1000F':''}">
+        <div class="doc-header">
+          <span class="badge badge-cri">${docs.length} docs</span>
+          <span class="titre">${esc(nom)}</span>
+          <span class="mentions">${total} mentions</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ============================================================
+// THÈMES
+// ============================================================
+function dessinerThemes(){
+  const agg = {};
+  DOCS.forEach(d=>Object.entries(d.themes||{}).forEach(([t,n])=>agg[t]=(agg[t]||0)+n));
+  const entries = Object.entries(agg).sort((a,b)=>b[1]-a[1]);
+
+  safePlot('viz-radar', [{
+    type:'scatterpolar',
+    r:[...entries.map(e=>e[1]), entries[0]?.[1]||0],
+    theta:[...entries.map(e=>e[0]), entries[0]?.[0]||''],
+    fill:'toself', marker:{color:'#E1000F'}, line:{color:'#E1000F'},
+    hovertemplate:'<b>%{theta}</b><br>%{r} occurrences<extra></extra>'
+  }], {...LAYOUT, polar:{bgcolor:'rgba(0,0,0,0)'}});
+
+  const trace = {
+    x: entries.map(e=>e[0]), y: entries.map(e=>e[1]),
+    type:'bar', marker:{color:'#000091'},
+    hovertemplate:'<b>%{x}</b><br>%{y} occurrences<extra></extra>'
+  };
+  safePlot('viz-themes-bar', [trace], {...LAYOUT, xaxis:{tickangle:-45}});
+  document.getElementById('viz-themes-bar').on('plotly_click', e=>{
+    toggleFiltre('themes', e.points[0].x);
+  });
+
+  const container = document.getElementById('liste-themes');
+  container.innerHTML = entries.map(([theme,total])=>{
+    const docs = DOCS.filter(d=>d.themes && d.themes[theme]);
+    const estFiltre = FILTRES.themes.has(theme);
+    return `
+      <div class="doc" onclick="toggleFiltre('themes','${esc(theme)}')"
+           style="${estFiltre?'border-left-color:#E1000F':''}">
+        <div class="doc-header">
+          <span class="badge badge-jo">${docs.length} docs</span>
+          <span class="titre">${esc(theme)}</span>
+          <span class="mentions">${total} occurrences</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ============================================================
+// CHRONOLOGIE
+// ============================================================
+function dessinerChrono(){
+  const sorted = [...DOCS].sort((a,b)=>a.fichier.localeCompare(b.fichier));
+  const trace = {
+    x: sorted.map(d=>d.fichier.replace('.txt','').substring(0,30)),
+    y: sorted.map(d=>d.nb_mentions),
+    type:'bar',
+    marker:{color:sorted.map(d=>d.nb_mentions>5?'#E1000F':'#000091')},
+    hovertemplate:'<b>%{x}</b><br>%{y} mentions<extra></extra>'
+  };
+  safePlot('viz-chrono', [trace], {...LAYOUT, height:500, xaxis:{tickangle:-60, tickfont:{size:8}}});
+  document.getElementById('viz-chrono').on('plotly_click', e=>{
+    const f = e.points[0].x;
+    const d = ALL_DOCS.find(x=>x.fichier.startsWith(f));
+    if(d) ouvrirDetail(d);
+  });
+
+  const parAnnee = {};
+  DOCS.forEach(d=>((d.statistiques&&d.statistiques.annees)||[]).forEach(a=>parAnnee[a]=(parAnnee[a]||0)+1));
+  const annees = Object.keys(parAnnee).sort();
+  safePlot('viz-annees', [{
+    x: annees, y: annees.map(a=>parAnnee[a]),
+    type:'bar', marker:{color:'#1212ff'},
+    hovertemplate:'<b>%{x}</b><br>%{y} documents<extra></extra>'
+  }], {...LAYOUT});
+}
+
+// ============================================================
+// SENTIMENT
+// ============================================================
+function dessinerSentiment(){
+  if(!CSV.senti.length){
+    document.getElementById('viz-sentiment').innerHTML = '<div class="no-data">Aucune donnée sentiment</div>';
+    return;
+  }
+  const annees = CSV.senti.map(r=>r.annee);
+  const pos = CSV.senti.map(r=>+r.positifs);
+  const neg = CSV.senti.map(r=>+r.negatifs);
+  const scores = CSV.senti.map(r=>+r.score);
+
+  safePlot('viz-sentiment', [
+    {x:annees, y:pos, name:'Positifs', type:'bar', marker:{color:'#1b7a2e'}},
+    {x:annees, y:neg, name:'Négatifs', type:'bar', marker:{color:'#E1000F'}},
+  ], {...LAYOUT, barmode:'group', showlegend:true});
+
+  tabInteractif('tab-sentiment-detail', CSV.senti, [
+    {k:'annee', l:'Année'},
+    {k:'positifs', l:'+', num:true},
+    {k:'negatifs', l:'−', num:true},
+    {k:'neutres', l:'=', num:true},
+    {k:'score', l:'Score', num:true},
+  ], 'annee');
+}
+
+// ============================================================
+// RÉSEAU
+// ============================================================
+function dessinerReseau(){
+  if(!CSV.reseau.length){
+    document.getElementById('viz-reseau').innerHTML = '<div class="no-data">Aucune donnée réseau</div>';
+    return;
+  }
+  // Construire un graphe à partir des cooccurrences
+  const nodes = {};
+  const links = [];
+  CSV.reseau.slice(0,80).forEach(r=>{
+    const a = r.orateur_1, b = r.orateur_2, w = +r.cooccurrences;
+    if(!nodes[a]) nodes[a] = {id:a, deg:0};
+    if(!nodes[b]) nodes[b] = {id:b, deg:0};
+    nodes[a].deg++; nodes[b].deg++;
+    links.push({source:a, target:b, w});
+  });
+  const nodeArr = Object.values(nodes);
+  nodeArr.sort((a,b)=>b.deg-a.deg);
+
+  // Layout simple en cercle
+  const N = nodeArr.length;
+  const positions = {};
+  nodeArr.forEach((n,i)=>{
+    const angle = (i/N) * 2 * Math.PI;
+    positions[n.id] = {x: Math.cos(angle)*10, y: Math.sin(angle)*10};
+  });
+
+  // Edges
+  const edgeX = [], edgeY = [];
+  links.forEach(l=>{
+    const p1 = positions[l.source], p2 = positions[l.target];
+    if(p1 && p2){
+      edgeX.push(p1.x, p2.x, null);
+      edgeY.push(p1.y, p2.y, null);
+    }
+  });
+
+  const traceEdges = {
+    x: edgeX, y: edgeY, mode:'lines',
+    line:{color:'#E1000F', width:0.5}, hoverinfo:'skip', type:'scatter'
+  };
+  const traceNodes = {
+    x: nodeArr.map(n=>positions[n.id].x),
+    y: nodeArr.map(n=>positions[n.id].y),
+    mode:'markers+text',
+    text: nodeArr.map(n=>n.id.substring(0,20)),
+    textposition:'top center',
+    textfont:{size:9, color:'#000091'},
+    marker:{size:nodeArr.map(n=>Math.min(10+n.deg*3, 40)), color:'#000091', line:{color:'#fff', width:1}},
+    type:'scatter',
+    hovertemplate:'<b>%{text}</b><br>Connexions : %{marker.size}<extra></extra>',
+    customdata: nodeArr.map(n=>n.id)
+  };
+
+  safePlot('viz-reseau', [traceEdges, traceNodes], {
+    ...LAYOUT, height:650, showlegend:false,
+    xaxis:{showgrid:false, zeroline:false, showticklabels:false},
+    yaxis:{showgrid:false, zeroline:false, showticklabels:false}
+  });
+  document.getElementById('viz-reseau').on('plotly_click', e=>{
+    if(e.points[0].customdata){
+      toggleFiltre('orateurs', e.points[0].customdata);
+    }
+  });
+}
+
+// ============================================================
+// NLP
+// ============================================================
+function dessinerNLP(){
+  const rendre = (id, data, color) => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(!data || !data.length){ el.innerHTML = '<div class="no-data">Aucune donnée</div>'; return; }
+    el.innerHTML = data.slice(0,20).map(([nom,n])=>`
+      <div onclick="toggleFiltre('orateurs','${esc(nom)}')"
+           style="display:flex;justify-content:space-between;padding:8px 12px;margin:3px 0;
+                  background:#f5f5f7;border-radius:6px;border-left:3px solid ${color};
+                  cursor:pointer;transition:.2s"
+           onmouseover="this.style.background='#e5e9ff'"
+           onmouseout="this.style.background='#f5f5f7'">
+        <span>${esc(nom)}</span><strong style="color:${color}">${n}</strong>
+      </div>
+    `).join('');
+  };
+  if(NLP){
+    rendre('nlp-pers', NLP.top_personnes, '#000091');
+    rendre('nlp-lieux', NLP.top_lieux, '#E1000F');
+    rendre('nlp-org', NLP.top_organisations, '#1b7a2e');
+  }
+  // Mots depuis cooccurrences
+  const el = document.getElementById('nlp-mots');
+  if(el && CSV.cooc){
+    el.innerHTML = CSV.cooc.slice(0,20).map(r=>`
+      <div onclick="FILTRES.recherche='${esc(r.mot)}';document.getElementById('recherche').value='${esc(r.mot)}';majVue()"
+           style="display:flex;justify-content:space-between;padding:8px 12px;margin:3px 0;
+                  background:#f5f5f7;border-radius:6px;border-left:3px solid #b26a00;
+                  cursor:pointer;transition:.2s"
+           onmouseover="this.style.background='#fff3e0'"
+           onmouseout="this.style.background='#f5f5f7'">
+        <span>${esc(r.mot)}</span><strong style="color:#b26a00">${r.occurrences}</strong>
+      </div>
+    `).join('');
+  }
+}
+
+// ============================================================
+// DOCUMENTS
+// ============================================================
+function dessinerDocs(){
+  let docs = [...DOCS];
+  // Tri
+  if(TRI.col === 'mentions') docs.sort((a,b)=> TRI.ordre==='desc' ? b.nb_mentions-a.nb_mentions : a.nb_mentions-b.nb_mentions);
+  else if(TRI.col === 'nom') docs.sort((a,b)=> TRI.ordre==='desc' ? b.fichier.localeCompare(a.fichier) : a.fichier.localeCompare(b.fichier));
+
+  const container = document.getElementById('liste-docs');
+  if(!docs.length){
+    container.innerHTML = '<div class="no-data"><div class="ic">🔍</div>Aucun document ne correspond aux filtres</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <p style="margin-bottom:12px;color:#666;font-size:.9rem">${docs.length} document(s)</p>
+    ${docs.map(d=>{
+      const t = typeDeFichier(d.fichier);
+      const sel = SELECTION.has(d.id) ? 'selectionne' : '';
+      return `
+        <div class="doc ${sel}" data-id="${d.id}">
+          <div class="doc-header" onclick="toggleDoc('${d.id}')">
+            <span class="badge badge-${t==='Compte rendu'?'cri':t==='Question écrite'?'qst':t.includes('Table')?'tab':'def'}">${t}</span>
+            <span class="titre">${esc(d.fichier.replace('.txt',''))}</span>
+            <span class="mentions">💬 ${d.nb_mentions}</span>
+          </div>
+          <div class="doc-body">
+            ${Object.keys(d.themes||{}).length ? `<div style="margin:10px 0">${
+              Object.entries(d.themes).slice(0,5).map(([k,v])=>`<span class="tag" onclick="event.stopPropagation();toggleFiltre('themes','${esc(k)}')">${esc(k)} (${v})</span>`).join('')
+            }</div>` : ''}
+            ${d.extraits.slice(0,3).map((e,i)=>`
+              <div class="extrait"><strong>Extrait ${i+1}</strong> (page ~${e.page_approx})<br>${esc(e.extrait)}</div>
+            `).join('')}
+            ${d.orateurs && d.orateurs.length ? `<p style="margin-top:10px"><strong>Orateurs :</strong> ${
+              d.orateurs.slice(0,8).map(o=>`<span class="tag rouge" onclick="event.stopPropagation();toggleFiltre('orateurs','${esc(o.nom)}')">${esc(o.nom)} (${o.occurrences})</span>`).join('')
+            }</p>` : ''}
+            <div style="margin-top:12px">
+              <button class="btn" onclick="event.stopPropagation();ouvrirDetail(${JSON.stringify(d).replace(/"/g,'&quot;')})">🔍 Détails</button>
+              ${d.url ? `<a class="btn" href="${d.url}" target="_blank" onclick="event.stopPropagation()">📄 PDF</a>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+
+function toggleDoc(id){
+  const el = document.querySelector(`[data-id="${id}"] .doc-body`);
+  if(el) el.classList.toggle('open');
+}
+
+// ============================================================
+// EXPORTS
+// ============================================================
+function exportVueCSV(){
+  const lignes = ['id;fichier;type;mentions;legislatures;orateurs;themes'];
+  DOCS.forEach(d=>{
+    lignes.push([
+      d.id,
+      d.fichier,
+      typeDeFichier(d.fichier),
+      d.nb_mentions,
+      (d.legislatures||[]).join(','),
+      (d.orateurs||[]).map(o=>o.nom).join(','),
+      Object.keys(d.themes||{}).join(',')
+    ].map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';'));
+  });
+  telecharger(lignes.join('\n'), 'bumidom_vue.csv', 'text/csv;charset=utf-8');
+}
+
+function exportVueJSON(){
+  const data = {
+    filtres: {
+      types: [...FILTRES.types],
+      themes: [...FILTRES.themes],
+      orateurs: [...FILTRES.orateurs],
+      legis: [...FILTRES.legis],
+      anneeMin: FILTRES.anneeMin,
+      anneeMax: FILTRES.anneeMax,
+      recherche: FILTRES.recherche
+    },
+    total: DOCS.length,
+    documents: DOCS.map(d=>({
+      id:d.id, fichier:d.fichier, mentions:d.nb_mentions,
+      type:typeDeFichier(d.fichier), themes:d.themes, orateurs:d.orateurs, url:d.url
+    }))
+  };
+  telecharger(JSON.stringify(data, null, 2), 'bumidom_vue.json', 'application/json');
+}
+
+function imprimerVue(){
+  window.print();
+}
+
+function telecharger(contenu, nom, mime){
+  const blob = new Blob([contenu], {type: mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = nom;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ============================================================
+// RACCOURCIS CLAVIER
+// ============================================================
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape') fermerDetail();
+  if(e.key === '/' && e.target.tagName !== 'INPUT'){
+    e.preventDefault();
+    document.getElementById('recherche').focus();
+    // Active l'onglet documents
+    document.querySelector('.tabs button[data-tab="docs"]').click();
+  }
+});
+</script>
+</body>
+</html>
