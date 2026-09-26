@@ -63,16 +63,16 @@
     border-bottom:2px solid var(--rouge);padding-bottom:8px;
     display:flex;justify-content:space-between;align-items:center}
   .carte h2 .compteur{font-size:.75rem;color:#888;font-weight:400;text-transform:none;letter-spacing:0}
+  
+  /* ✅ FIX : hauteurs CSS strictes pour les graphiques */
   .viz{height:400px;min-height:400px;width:100%;position:relative}
   .viz.tall{height:650px;min-height:650px}
   .viz.reseau{height:700px;min-height:700px}
   
   /* ✅ FIX : Plotly doit respecter la taille du conteneur */
   .js-plotly-plot{height:100%!important;width:100%!important}
-  .js-plotly-plot .plot-container{height:100%!important}
-  .js-plotly-plot .svg-container{height:100%!important}
-  .viz.tall{height:650px;min-height:650px}
-  .viz.reseau{height:700px;min-height:700px}
+  .js-plotly-plot .plot-container{height:100%!important;width:100%!important}
+  .js-plotly-plot .svg-container{height:100%!important;width:100%!important}
 
   table{width:100%;border-collapse:collapse;font-size:.83rem}
   th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee}
@@ -171,14 +171,12 @@
   .filtres-budget select{padding:5px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem}
   .filtres-budget .valeur-score{font-weight:800;color:var(--rouge);font-size:1.1rem;min-width:30px}
 
-  /* ✅ FIX : scroll pour les grands tableaux */
   #budget-table-wrap, #tab-effectifs, #tab-montants{
     max-height:600px;overflow-y:auto;border-radius:8px;
   }
   #liste-orateurs, #liste-themes, #liste-docs, #chiffres-cles{
     max-height:800px;overflow-y:auto;
   }
-  .js-plotly-plot .plot-container{overflow:hidden!important;}
 
   @media(max-width:768px){
     .detail-panel{width:100%}
@@ -429,7 +427,6 @@ Promise.all([
     ALL_DOCS = data.results;
     DOCS = ALL_DOCS;
   } else {
-    // Fallback : créer des documents depuis les CSV budgétaires
     ALL_DOCS = [];
     DOCS = [];
   }
@@ -490,7 +487,17 @@ function initOnglets(){
       document.querySelectorAll('.panneau').forEach(p=>p.classList.remove('actif'));
       b.classList.add('actif');
       document.getElementById('tab-'+b.dataset.tab).classList.add('actif');
-      setTimeout(majVue, 60);
+      
+      // ✅ FIX : redessiner + forcer le resize de tous les graphiques visibles
+      setTimeout(()=>{
+        majVue();
+        // Redimensionner tous les graphiques Plotly visibles
+        document.querySelectorAll('.js-plotly-plot').forEach(el => {
+          if (el.offsetHeight > 0 && el.id) {
+            try { Plotly.Plots.resize(el.id); } catch(e) {}
+          }
+        });
+      }, 100);
     });
   });
 }
@@ -598,13 +605,16 @@ function dessinerOngletActif(){
 const LAYOUT = {
   paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
   font:{family:'system-ui', color:'#1a1a2e', size:11},
-  margin:{t:30,r:20,b:60,l:60}, height:400, autosize:true,
+  margin:{t:30,r:20,b:60,l:60}, autosize:true,
   showlegend:false,
   hoverlabel:{bgcolor:'#fff', bordercolor:'#000091', font:{color:'#1a1a2e', size:12}}
 };
 const CONFIG = {responsive: true, displayModeBar: true, displaylogo: false,
   modeBarButtonsToRemove: ['lasso2d','select2d']};
 
+// ============================================================
+// ✅ FIX CRITIQUE : safePlot avec resize automatique
+// ============================================================
 function safePlot(id, data, layout, customConfig){
   const el = document.getElementById(id);
   if(!el) return;
@@ -612,8 +622,27 @@ function safePlot(id, data, layout, customConfig){
     el.innerHTML = '<div class="no-data">Plotly non chargé</div>';
     return;
   }
+  
+  // ✅ Déterminer la hauteur depuis le CSS du conteneur
+  const hauteurCSS = el.clientHeight || el.offsetHeight || 400;
+  
+  // ✅ Fusionner avec le layout par défaut et utiliser la hauteur CSS
+  const finalLayout = Object.assign({}, LAYOUT, layout, {
+    height: hauteurCSS,
+    autosize: true
+  });
+  
   try {
-    Plotly.newPlot(id, data, layout, customConfig || CONFIG);
+    Plotly.newPlot(id, data, finalLayout, customConfig || CONFIG).then(() => {
+      // ✅ FIX : forcer le resize après le rendu (3 tentatives)
+      [50, 200, 500].forEach(delay => {
+        setTimeout(() => {
+          try { 
+            Plotly.Plots.resize(id); 
+          } catch(e) {}
+        }, delay);
+      });
+    });
   } catch(e) {
     el.innerHTML = '<p style="color:#E1000F;padding:20px">Erreur : '+e.message+'</p>';
     console.error(e);
@@ -753,7 +782,7 @@ function dessinerBudget(){
       textposition: 'outside',
       hovertemplate: '<b>%{x}</b><br>Budget : %{text}<br>Score : %{customdata}<extra></extra>',
       customdata: scoresB,
-    }], {...LAYOUT, height: 650, xaxis:{title:'Année'}, yaxis:{title:'Budget (MF)'}});
+    }], {...LAYOUT, xaxis:{title:'Année'}, yaxis:{title:'Budget (MF)'}});
   } else {
     document.getElementById('viz-budget-evolution').innerHTML = '<div class="no-data">Pas de données</div>';
   }
@@ -805,7 +834,7 @@ function dessinerBudget(){
       textposition: 'outside',
       hovertemplate: '<b>%{y}</b><br>%{text}<br>Score : %{customdata}<extra></extra>',
       customdata: top.map(m=>m.score),
-    }], {...LAYOUT, height: 800, yaxis:{autorange:'reversed'}, margin:{t:20,r:100,b:40,l:280}});
+    }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:100,b:40,l:280}});
   } else {
     document.getElementById('viz-budget-top').innerHTML = '<div class="no-data">Aucun montant</div>';
   }
@@ -889,14 +918,13 @@ function dessinerTableauBudget(montants){
 }
 
 // ============================================================
-// ✅ CHIFFRES CLÉS (complété)
+// CHIFFRES CLÉS
 // ============================================================
 function dessinerChiffres(){
   Promise.all([
     fetch('expertise_BUMIDOM/BUMIDOM_effectifs.csv').then(r=>r.ok?r.text():'').then(t=>t?parseCSV(t):[]).catch(()=>[]),
     fetch('expertise_BUMIDOM/BUMIDOM_montants.csv').then(r=>r.ok?r.text():'').then(t=>t?parseCSV(t):[]).catch(()=>[]),
   ]).then(([effectifs, montants])=>{
-    // Graphique budget (depuis les montants BUDGET filtrés par score)
     const topBudget = [...BUDGET_MONTANTS]
       .filter(m=>+m.score >= 7)
       .sort((a,b)=>+b.valeur_francs - +a.valeur_francs)
@@ -915,7 +943,6 @@ function dessinerChiffres(){
       document.getElementById('viz-budget').innerHTML = '<div class="no-data">Pas de données</div>';
     }
 
-    // Graphique flux (effectifs)
     if (effectifs.length > 0){
       const topEff = effectifs
         .filter(e=>+e.valeur > 0 && +e.valeur < 500000)
@@ -950,7 +977,6 @@ function dessinerChiffres(){
       document.getElementById('tab-effectifs').innerHTML = '<div class="no-data">Pas de données</div>';
     }
 
-    // Tableau montants BUMIDOM
     if (montants.length > 0){
       let html = '<table><thead><tr><th>Montant</th><th>Unité</th><th>Fichier</th><th>Contexte</th></tr></thead><tbody>';
       montants.slice(0, 50).forEach(m=>{
@@ -967,7 +993,6 @@ function dessinerChiffres(){
       document.getElementById('tab-montants').innerHTML = '<div class="no-data">Pas de données</div>';
     }
 
-    // Chiffres clés statiques
     const chiffres = [
       ['💰 Budget BUMIDOM 1981', '279 600 000 F'],
       ['👥 Migrants 1963-1974', '94 000 personnes'],
@@ -993,7 +1018,7 @@ function dessinerChiffres(){
 }
 
 // ============================================================
-// ✅ ORATEURS (complété avec tableau détaillé)
+// ORATEURS
 // ============================================================
 function dessinerOrateurs(){
   const agg = {};
@@ -1010,7 +1035,7 @@ function dessinerOrateurs(){
     x: top.map(o=>o[1]), y: top.map(o=>o[0]),
     type:'bar', orientation:'h',
     marker:{color:top.map((_,i)=>i<3?'#E1000F':'#000091')},
-  }], {...LAYOUT, height:880, yaxis:{autorange:'reversed'}, margin:{t:20,r:30,b:40,l:220}});
+  }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:30,b:40,l:220}});
 
   const container = document.getElementById('liste-orateurs');
   container.innerHTML = `
@@ -1037,7 +1062,7 @@ function dessinerOrateurs(){
 }
 
 // ============================================================
-// ✅ THÈMES (complété avec liste docs)
+// THÈMES
 // ============================================================
 function dessinerThemes(){
   const agg = {};
@@ -1090,7 +1115,7 @@ function dessinerThemes(){
 }
 
 // ============================================================
-// ✅ CHRONOLOGIE (complété avec années citées)
+// CHRONOLOGIE
 // ============================================================
 function dessinerChrono(){
   const sorted = [...DOCS].sort((a,b)=>a.fichier.localeCompare(b.fichier));
@@ -1101,12 +1126,11 @@ function dessinerChrono(){
       y: sorted.map(d=>d.nb_mentions),
       type:'bar',
       marker:{color:sorted.map(d=>d.nb_mentions>5?'#E1000F':'#000091')},
-    }], {...LAYOUT, height:500, xaxis:{tickangle:-60, tickfont:{size:8}}});
+    }], {...LAYOUT, xaxis:{tickangle:-60, tickfont:{size:8}}});
   } else {
     document.getElementById('viz-chrono').innerHTML = '<div class="no-data">Pas de documents</div>';
   }
 
-  // Années citées
   const parAnnee = {};
   DOCS.forEach(d=>{
     const m = d.fichier.match(/(\d{4})/g);
