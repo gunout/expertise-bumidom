@@ -1,14 +1,35 @@
-# Expertise BUMIDOM
+# 🏛️ Expertise BUMIDOM
+
+**Analyse quantitative et qualitative du BUMIDOM à partir de 100 documents parlementaires (1963-1990).**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Plotly](https://img.shields.io/badge/Plotly-2.27-3F4F75.svg)](https://plotly.com/)
 [![spaCy](https://img.shields.io/badge/spaCy-3.7-09A3D5.svg)](https://spacy.io/)
+[![DSFR](https://img.shields.io/badge/Design-DSFR-000091.svg)](https://www.systeme-de-design.gouv.fr/)
 [![Status](https://img.shields.io/badge/status-completed-success.svg)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/gunout/expertise-bumidom)]()
 [![GitHub repo size](https://img.shields.io/github/repo-size/gunout/expertise-bumidom)]()
 
-**Un projet d'analyse quantitative et qualitative du BUMIDOM a partir de 100 documents parlementaires.**
+> **⚠️ Projet indépendant** — Ce projet est un outil d'analyse de données publiques. Il n'est **ni édité ni approuvé** par le Gouvernement français, l'Assemblée nationale ou le Sénat. Voir la section [⚖️ Mentions légales](#️-mentions-légales).
+
+---
+
+## 📖 Table des matières
+
+- [🎯 À propos](#-à-propos)
+- [📊 Chiffres clés](#-chiffres-clés)
+- [🌐 Démo en ligne](#-démo-en-ligne)
+- [✨ Fonctionnalités](#-fonctionnalités)
+- [🚀 Démarrage rapide](#-démarrage-rapide)
+- [📁 Structure du projet](#-structure-du-projet)
+- [📖 Documentation](#-documentation)
+- [🛠️ Technologies](#️-technologies)
+- [🤝 Contribution](#-contribution)
+- [⚖️ Mentions légales](#️-mentions-légales)
+- [🙏 Sources et remerciements](#-sources-et-remerciements)
+- [📝 Citation](#-citation)
+- [📧 Contact](#-contact)
 
 ---
 
@@ -16,17 +37,23 @@
 
 Le **BUMIDOM** (Bureau pour le développement des migrations intéressant les départements d'outre-mer) fut l'instrument central d'une politique migratoire d'État entre **1963 et 1982**, organisant le déplacement de populations des Antilles, de Guyane et de La Réunion vers la métropole.
 
-Ce projet propose une analyse systématique des débats parlementaires qui lui ont été consacrés.
+Ce projet propose une **analyse systématique** des débats parlementaires qui lui ont été consacrés, en combinant :
 
-| Action du projet | Résultat |
-|:---|:---|
-| 📥 Télécharge les sources | 100 PDF (467 Mo) depuis l'Assemblée nationale |
-| 📝 Extrait le texte | 29 Mo de texte brut (99 fichiers) |
-| 🔍 Détecte les mentions | 71 documents contenant BUMIDOM |
-| 👤 Identifie les orateurs | 838 personnes détectées |
-| 🏷️ Classe les thèmes | 10 catégories thématiques |
-| 💰 Extrait les chiffres | +100 chiffres clés |
-| 📊 Génère des dashboards | 5 interfaces Plotly interactives |
+- 🔢 **Analyse quantitative** (chiffres, statistiques)
+- 📝 **Analyse qualitative** (orateurs, thèmes, sentiments)
+- 📊 **Restitution interactive** (dashboards Plotly)
+
+### Pipeline du projet
+
+| Étape | Action | Résultat |
+|:---:|:---|:---|
+| 1️⃣ | 📥 Télécharge les sources | 100 PDF (467 Mo) depuis l'Assemblée nationale |
+| 2️⃣ | 📝 Extrait le texte | 29 Mo de texte brut (99 fichiers) |
+| 3️⃣ | 🔍 Détecte les mentions | 71 documents contenant BUMIDOM |
+| 4️⃣ | 👤 Identifie les orateurs | 838 personnes détectées |
+| 5️⃣ | 🏷️ Classe les thèmes | 10 catégories thématiques |
+| 6️⃣ | 💰 Extrait les chiffres | +100 chiffres clés |
+| 7️⃣ | 📊 Génère des dashboards | 5 interfaces Plotly interactives |
 
 ---
 
@@ -42,6 +69,7 @@ Ce projet propose une analyse systématique des débats parlementaires qui lui o
 | 🏷️ Thèmes détectés | **10** | — |
 | 🔢 Chiffres extraits | **+100** | — |
 | 📅 Période couverte | **1964-1990** | — |
+| 💾 Taille texte extrait | **29 Mo** | — |
 
 ### Chiffres historiques majeurs
 
@@ -57,7 +85,7 @@ Ce projet propose une analyse systématique des débats parlementaires qui lui o
 | 🏠 Capacité d'accueil | **5 547 places** | 1972 |
 | 🏘️ Logements BUMIDOM | **234** | 1968 |
 
-### Top 10 orateurs
+### 🎤 Top 10 orateurs
 
 | # | Orateur | Mentions | Rôle |
 |:---:|:---|:---:|:---|
@@ -72,7 +100,7 @@ Ce projet propose une analyse systématique des débats parlementaires qui lui o
 | 9 | M. Didier Julia | 73 | Député |
 | 10 | M. Robert-André Vivien | 63 | Député |
 
-### Thèmes dominants
+### 🏷️ Thèmes dominants
 
 | # | Thème | Occurrences | Description |
 |:---:|:---|:---:|:---|
@@ -91,42 +119,53 @@ Ce projet propose une analyse systématique des débats parlementaires qui lui o
 
 ## 🌐 Démo en ligne
 
-| Interface | URL |
-|:---|:---|
-| 🎯 **Dashboard interactif** | https://gunout.github.io/expertise-bumidom/dashboard_interactif.html |
-| 📊 Dashboard unifié | https://gunout.github.io/expertise-bumidom/dashboard_unifie.html |
-| 🔬 Dashboard expert | https://gunout.github.io/expertise-bumidom/dashboard_expert.html |
-| 🌐 Site web | https://gunout.github.io/expertise-bumidom/site_bumidom/ |
+| Interface | Description | URL |
+|:---:|:---|:---|
+| 🎯 | **Dashboard interactif** | [dashboard_interactif.html](https://gunout.github.io/expertise-bumidom/dashboard_interactif.html) |
+| 📊 | Dashboard unifié | [dashboard_unifie.html](https://gunout.github.io/expertise-bumidom/dashboard_unifie.html) |
+| 🔬 | Dashboard expert | [dashboard_expert.html](https://gunout.github.io/expertise-bumidom/dashboard_expert.html) |
+| 🌐 | Site web | [site_bumidom/](https://gunout.github.io/expertise-bumidom/site_bumidom/) |
 
 ---
 
 ## ✨ Fonctionnalités
 
 ### 🔢 Analyse quantitative
-- Extraction automatique des chiffres (montants, effectifs, pourcentages)
-- Détection des dates, articles de loi, institutions
-- Comptage des mentions par document, année, législature
-- Statistiques agrégées (moyennes, totaux, distributions)
+
+- ✅ Extraction automatique des chiffres (montants, effectifs, pourcentages)
+- ✅ Détection des dates, articles de loi, institutions
+- ✅ Comptage des mentions par document, année, législature
+- ✅ Statistiques agrégées (moyennes, totaux, distributions)
 
 ### 📝 Analyse qualitative
-- Détection des orateurs (députés, ministres)
-- Classification thématique (10 catégories)
-- Analyse de sentiment (positif/négatif par année)
-- Réseau de cooccurrence entre orateurs
-- Extraction du contexte des mentions
+
+- ✅ Détection des orateurs (députés, ministres)
+- ✅ Classification thématique (10 catégories)
+- ✅ Analyse de sentiment (positif/négatif par année)
+- ✅ Réseau de cooccurrence entre orateurs
+- ✅ Extraction du contexte des mentions
 
 ### 📊 Restitution interactive
-- 5 dashboards HTML avec Plotly
-- Graphiques zoomables, cliquables
-- Filtres par type, thème, orateur, année
-- Recherche full-text dans les extraits
-- Export CSV/JSON
+
+- ✅ 5 dashboards HTML avec Plotly
+- ✅ Graphiques zoomables et cliquables
+- ✅ Filtres par type, thème, orateur, année
+- ✅ Recherche full-text dans les extraits
+- ✅ Export CSV/JSON
 
 ### 🧠 Analyse NLP
-- Entités nommées (personnes, lieux, organisations)
-- Modèle français spaCy (fr_core_news_sm)
-- Mots fréquents et cooccurrences
-- Réseau sémantique
+
+- ✅ Entités nommées (personnes, lieux, organisations)
+- ✅ Modèle français spaCy (`fr_core_news_sm`)
+- ✅ Mots fréquents et cooccurrences
+- ✅ Réseau sémantique
+
+### 🎨 Design
+
+- ✅ Interface conforme au **DSFR** (Système de Design de l'État)
+- ✅ Palette bleu-blanc-rouge
+- ✅ Mode sombre automatique
+- ✅ Accessibilité RGAA
 
 ---
 
@@ -134,19 +173,31 @@ Ce projet propose une analyse systématique des débats parlementaires qui lui o
 
 ### Prérequis
 
-- 🐍 **Python 3.10+**
-- 📥 **curl** (pour le téléchargement des PDF)
-- 📄 **pandoc** (optionnel, pour l'export PDF)
-- 💾 **~500 Mo d'espace disque** (pour les PDF)
+| Outil | Version | Note |
+|:---|:---:|:---|
+| 🐍 Python | 3.10+ | Obligatoire |
+| 📥 curl | — | Pour télécharger les PDF |
+| 📄 pandoc | — | Optionnel (export PDF) |
+| 💾 Espace disque | ~500 Mo | Pour les PDF |
 
 ### Installation
 
-1. 📥 Cloner le dépôt : `git clone https://github.com/gunout/expertise-bumidom.git`
-2. 📂 Entrer dans le dossier : `cd expertise-bumidom`
-3. 🐍 Créer un environnement virtuel : `python3 -m venv .venv`
-4. ✅ Activer l'environnement : `source .venv/bin/activate`
-5. 📦 Installer les dépendances : `pip install -r requirements.txt`
-6. 🧠 Installer le modèle français : `python -m spacy download fr_core_news_sm`
+```bash
+# 1. Cloner le dépôt
+git clone https://github.com/gunout/expertise-bumidom.git
+cd expertise-bumidom
+
+# 2. Créer un environnement virtuel
+python3 -m venv .venv
+source .venv/bin/activate      # Linux/Mac
+# ou .venv\Scripts\activate     # Windows
+
+# 3. Installer les dépendances
+pip install -r requirements.txt
+
+# 4. Installer le modèle français spaCy
+python -m spacy download fr_core_news_sm
+```
 
 ### Utilisation
 
@@ -163,56 +214,58 @@ Puis ouvrir : **http://localhost:8889/dashboard_interactif.html**
 ---
 
 ## 📁 Structure du projet
-```bash
+
+```text
 expertise-bumidom/
 │
-├── 📄 README.md Ce fichier
-├── 📄 LICENSE MIT
-├── 📄 CONTRIBUTING.md Guide de contribution
-├── 📄 requirements.txt Dépendances Python
-├── 📄 .gitignore Exclusions
+├── 📄 README.md                    # Ce fichier
+├── 📄 LICENSE                      # Licence MIT
+├── 📄 CONTRIBUTING.md              # Guide de contribution
+├── 📄 requirements.txt             # Dépendances Python
+├── 📄 .gitignore                   # Exclusions
 │
-├── 🔧 Scripts .sh (9)
-│ ├── run_all.sh Pipeline complet
-│ ├── analyse.sh Analyses
-│ ├── expertise_all.sh Expertise
-│ ├── pipeline.sh Pipeline principal
-│ ├── pipeline_final.sh Pipeline final
-│ ├── tout_faire.sh Package complet
-│ ├── rapport_BUMIDOM_expert.sh
-│ ├── analyse_all.sh
-│ └── netoyage_all.sh
+├── 🔧 Scripts shell (9)
+│   ├── run_all.sh                  # Pipeline complet
+│   ├── analyse.sh                  # Analyses
+│   ├── expertise_all.sh            # Expertise chiffrée
+│   ├── pipeline.sh                 # Pipeline principal
+│   ├── pipeline_final.sh           # Pipeline final
+│   ├── tout_faire.sh               # Package complet
+│   ├── rapport_BUMIDOM_expert.sh   # Rapport expert
+│   ├── analyse_all.sh              # Toutes analyses
+│   └── netoyage_all.sh             # Nettoyage
 │
-├── 🐍 Scripts .py (4)
-│ ├── scraper_bumidom.py
-│ ├── extract_chiffres.py
-│ ├── extract_chiffres_BUMIDOM.py
-│ └── extract_structured.py
+├── 🐍 Scripts Python (5)
+│   ├── scraper_bumidom.py          # Téléchargement
+│   ├── extract_chiffres.py         # Extraction chiffres
+│   ├── extract_chiffres_BUMIDOM.py # Extraction BUMIDOM
+│   ├── extract_structured.py       # Extraction structurée
+│   └── budget.py                   # Extraction budgétaire
 │
-├── 🌐 Dashboards .html (6)
-│ ├── dashboard_interactif.html
-│ ├── dashboard_unifie.html
-│ ├── dashboard_expert.html
-│ ├── dashboard_enrichi.html
-│ ├── dashboard.html
-│ └── index.html
+├── 🌐 Dashboards HTML (6)
+│   ├── dashboard_interactif.html   # Dashboard principal
+│   ├── dashboard_unifie.html       # Dashboard unifié
+│   ├── dashboard_expert.html       # Dashboard expert
+│   ├── dashboard_enrichi.html      # Dashboard enrichi
+│   ├── dashboard.html              # Dashboard simple
+│   └── index.html                  # Page d'accueil
 │
-├── 🎨 site_bumidom/
-│ ├── index.html
-│ ├── dashboard.html
-│ └── ressources/
+├── 🎨 site_bumidom/                # Site web
+│   ├── index.html
+│   ├── dashboard.html
+│   └── ressources/
 │
 ├── 📊 Données
-│ ├── resultats.json
-│ ├── resultats_enrichis.json
-│ ├── nlp_results.json
-│ ├── analyse_*.csv
-│ ├── expertise_BUMIDOM/
-│ └── urls_bumidom.txt
+│   ├── resultats.json
+│   ├── resultats_enrichis.json
+│   ├── nlp_results.json
+│   ├── analyse_*.csv
+│   ├── expertise_BUMIDOM/
+│   └── urls_bumidom.txt
 │
 └── 📚 Documentation
-├── json.json
-└── rapport.md
+    ├── json.json
+    └── rapport.md
 ```
 
 ---
@@ -221,12 +274,14 @@ expertise-bumidom/
 
 ### 🔬 Méthodologie
 
-1. **Collecte** — 100 PDF depuis archives.assemblee-nationale.fr
-2. **Extraction** — PyMuPDF avec fallback pdfplumber
-3. **Recherche** — Détection de BUMIDOM dans un rayon de 800 caractères
-4. **Enrichissement** — Détection des orateurs, thèmes et dates
-5. **NLP** — Analyse spaCy (personnes, lieux, organisations)
-6. **Restitution** — Dashboards Plotly + rapports Markdown
+| # | Étape | Détail |
+|:---:|:---|:---|
+| 1 | **Collecte** | 100 PDF depuis `archives.assemblee-nationale.fr` |
+| 2 | **Extraction** | PyMuPDF avec fallback pdfplumber |
+| 3 | **Recherche** | Détection de BUMIDOM dans un rayon de 800 caractères |
+| 4 | **Enrichissement** | Détection des orateurs, thèmes et dates |
+| 5 | **NLP** | Analyse spaCy (personnes, lieux, organisations) |
+| 6 | **Restitution** | Dashboards Plotly + rapports Markdown |
 
 ### 📄 Fichiers d'analyse produits
 
@@ -251,11 +306,12 @@ expertise-bumidom/
 | `BUMIDOM_effectifs.csv` | Tous les effectifs |
 | `BUMIDOM_logements.csv` | Logements |
 | `BUMIDOM_articles.csv` | Articles de loi |
-| `BUMIDOM_dates.csv` | Dates citées |
+| `BUDGET_montants.csv` | Montants budgétaires (775 entrées) |
+| `BUDGET_budget_annuel_estime.csv` | Budget annuel reconstitué |
 
 ---
 
-## 🛠️ Technologies utilisées
+## 🛠️ Technologies
 
 | Catégorie | Technologie | Usage |
 |:---:|:---|:---|
@@ -267,20 +323,30 @@ expertise-bumidom/
 | 📈 Viz | Plotly, Matplotlib | Graphiques |
 | 💾 BDD | SQLite | Base de données |
 | 🕸️ Réseau | NetworkX | Graphes |
+| 🎨 Design | DSFR | Interface État |
 
 ---
 
 ## 🤝 Contribution
 
-Les contributions sont bienvenues ! Voir [CONTRIBUTING.md](CONTRIBUTING.md).
+Les contributions sont **bienvenues** ! Voir [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### Workflow
 
-1. 🍴 Fork le projet
-2. 🌿 Créer une branche : `git checkout -b feature/nouvelle-analyse`
-3. ✏️ Commit : `git commit -m "feat: ajout analyse XYZ"`
-4. 📤 Push : `git push origin feature/nouvelle-analyse`
-5. 🎯 Ouvrir une Pull Request
+```bash
+# 1. Fork le projet (sur GitHub)
+
+# 2. Créer une branche
+git checkout -b feature/nouvelle-analyse
+
+# 3. Commit
+git commit -m "feat: ajout analyse XYZ"
+
+# 4. Push
+git push origin feature/nouvelle-analyse
+
+# 5. Ouvrir une Pull Request sur GitHub
+```
 
 ### Style des commits
 
@@ -296,11 +362,48 @@ Les contributions sont bienvenues ! Voir [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
-## 📄 Licence
+## ⚖️ Mentions légales
 
-Ce projet est sous licence **MIT** — voir le fichier [LICENSE](LICENSE).
+### 📜 Statut du projet
 
-⚠️ **Note importante** : les PDF sources et les textes extraits appartiennent à l'**Assemblée nationale française** et sont soumis aux conditions d'utilisation de leur site.
+> **Ce projet est un outil indépendant d'analyse de données publiques.**
+> 
+> Il **n'est ni édité ni approuvé** par :
+> 
+> - Le Gouvernement français
+> - L'Assemblée nationale
+> - Le Sénat
+> - Le Ministère chargé des Outre-mer
+> - Aucune autre institution publique
+
+### 📚 Sources des données
+
+Les textes analysés proviennent des **débats parlementaires français** :
+
+| Source | Statut légal |
+|:---|:---|
+| Comptes rendus de l'Assemblée nationale | 🟢 **Domaine public** (art. L211-1 CPI) |
+| Questions écrites et orales | 🟢 **Domaine public** |
+| Rapports officiels | 🟢 **Domaine public** |
+
+**Article L. 211-1 du Code de la propriété intellectuelle** :
+
+> *"Les dispositions relatives au droit d'auteur ne s'appliquent pas aux actes officiels de l'autorité publique."*
+
+### 🎨 Ressources graphiques
+
+| Ressource | Licence | Utilisation |
+|:---|:---|:---|
+| **DSFR** (Système de Design de l'État) | Etalab 2.0 | Interface |
+| **Police Marianne** | Etalab 2.0 | Typographie |
+| **Logo "République Française"** | Usage encadré | Informatif uniquement |
+| **Plotly.js** | MIT | Graphiques |
+
+⚠️ **Le logo "République Française" est utilisé à titre informatif et historique uniquement.** Il ne saurait en aucun cas laisser croire que ce projet émane du Gouvernement français.
+
+### 📄 Licence du code
+
+Ce projet est sous licence **MIT** — voir [LICENSE](LICENSE).
 
 ---
 
@@ -313,18 +416,20 @@ Ce projet est sous licence **MIT** — voir le fichier [LICENSE](LICENSE).
 | 🧠 spaCy | https://spacy.io/ |
 | 📈 Plotly | https://plotly.com/ |
 | 🐼 pandas | https://pandas.pydata.org/ |
+| 🎨 DSFR | https://www.systeme-de-design.gouv.fr/ |
 
 ---
 
 ## 📝 Citation
 
 Si vous utilisez ce travail dans vos recherches :
-```bash
+
+```bibtex
 @misc{gunout2026bumidom,
-title={Expertise BUMIDOM},
-author={Gunout},
-year={2026},
-url={https://github.com/gunout/expertise-bumidom}
+  title  = {Expertise BUMIDOM},
+  author = {Gunout},
+  year   = {2026},
+  url    = {https://github.com/gunout/expertise-bumidom}
 }
 ```
 
@@ -333,7 +438,7 @@ url={https://github.com/gunout/expertise-bumidom}
 ## 📧 Contact
 
 | Canal | Lien |
-|:---|:---|
+|:---:|:---|
 | 🐙 GitHub | https://github.com/gunout |
 | 🐛 Issues | https://github.com/gunout/expertise-bumidom/issues |
 | 💬 Discussions | https://github.com/gunout/expertise-bumidom/discussions |
@@ -342,7 +447,23 @@ url={https://github.com/gunout/expertise-bumidom}
 
 <div align="center">
 
-**⭐ Si ce projet vous est utile, n'hésitez pas à lui donner une étoile ! ⭐**
+## ⭐ Si ce projet vous est utile, n'hésitez pas à lui donner une étoile ! ⭐
+
+---
+
+### 🇫🇷 Gunout · 2026
+
+![Made in France](https://img.shields.io/badge/Made_in-France-002395?style=flat-square&labelColor=FFFFFF)
+![GitHub](https://img.shields.io/badge/GitHub-gunout-181717?style=flat-square&logo=github&logoColor=white)
+![Year](https://img.shields.io/badge/2026-ED2939?style=flat-square&labelColor=FFFFFF)
+
+<sub>© 2026 <strong>Gunout</strong> — Tous droits réservés sur le code.</sub>
+
+<sub>Les données sources appartiennent au <strong>domaine public</strong> (art. L211-1 CPI).</sub>
+
+<sub>Fait avec ❤️ pour la recherche historique.</sub>
+
+</div>
 
 ---
 
