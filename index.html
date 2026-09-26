@@ -56,16 +56,16 @@
   .slider-zone input[type=range]{flex:1;accent-color:var(--bleu)}
 
   main{padding:20px 28px;max-width:1700px;margin:0 auto}
-  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:20px}
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:20px;margin-bottom:20px}
   .carte{background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);
-    margin-bottom:20px;transition:.2s}
+    margin-bottom:20px;transition:.2s;overflow:hidden}
   .carte h2{color:var(--bleu);font-size:1rem;margin-bottom:12px;
     border-bottom:2px solid var(--rouge);padding-bottom:8px;
     display:flex;justify-content:space-between;align-items:center}
   .carte h2 .compteur{font-size:.75rem;color:#888;font-weight:400;text-transform:none;letter-spacing:0}
-  .viz{height:380px;width:100%}
-  .viz.tall{height:600px}
-  .viz.reseau{height:650px}
+  .viz{height:400px;min-height:400px;width:100%}
+  .viz.tall{height:650px;min-height:650px}
+  .viz.reseau{height:700px;min-height:700px}
 
   table{width:100%;border-collapse:collapse;font-size:.83rem}
   th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee}
@@ -80,7 +80,7 @@
   tbody tr.selectionne{background:#e5e9ff}
   .nb{text-align:right;font-weight:700;color:var(--rouge);font-variant-numeric:tabular-nums}
   .ctx{font-size:.75rem;color:#666;font-style:italic;max-width:400px;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
   .score-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-weight:700;font-size:.7rem}
   .score-12,.score-11{background:#1b7a2e;color:#fff}
   .score-10,.score-9{background:#4a9d3a;color:#fff}
@@ -142,7 +142,6 @@
   kbd{background:#f0f0f5;padding:2px 6px;border-radius:4px;font-size:.75rem;
     border:1px solid #ddd;font-family:monospace}
 
-  /* ✅ NOUVEAU : Styles pour l'onglet Budget */
   .budget-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
   .budget-kpi{background:linear-gradient(135deg,#fff,#f8f9fa);border-radius:10px;padding:16px;
     border-left:5px solid var(--bleu);box-shadow:0 2px 8px rgba(0,0,0,.06)}
@@ -164,6 +163,15 @@
     width:120px;font-size:.85rem}
   .filtres-budget select{padding:5px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem}
   .filtres-budget .valeur-score{font-weight:800;color:var(--rouge);font-size:1.1rem;min-width:30px}
+
+  /* ✅ FIX : scroll pour les grands tableaux */
+  #budget-table-wrap, #tab-effectifs, #tab-montants{
+    max-height:600px;overflow-y:auto;border-radius:8px;
+  }
+  #liste-orateurs, #liste-themes, #liste-docs, #chiffres-cles{
+    max-height:800px;overflow-y:auto;
+  }
+  .js-plotly-plot .plot-container{overflow:hidden!important;}
 
   @media(max-width:768px){
     .detail-panel{width:100%}
@@ -223,12 +231,9 @@
     </div>
   </section>
 
-  <!-- ✅ NOUVEAU : Onglet BUDGET -->
   <section class="panneau" id="tab-budget">
-    <!-- KPIs budgétaires -->
     <div class="budget-kpis" id="budget-kpis"></div>
 
-    <!-- Filtres budgétaires -->
     <div class="filtres-budget">
       <label>
         Score minimum :
@@ -255,7 +260,6 @@
       </label>
     </div>
 
-    <!-- Graphiques budgétaires -->
     <div class="grille">
       <div class="carte">
         <h2>📊 Évolution du budget BUMIDOM <span class="compteur" id="c-budget-evol"></span></h2>
@@ -272,9 +276,11 @@
       <div id="viz-budget-top" class="viz tall"></div>
     </div>
 
-    <div class="carte">
-      <h2>💸 Répartition par confiance <span class="compteur" id="c-budget-conf"></span></h2>
-      <div id="viz-budget-confiance" class="viz"></div>
+    <div class="grille">
+      <div class="carte">
+        <h2>💸 Répartition par confiance <span class="compteur" id="c-budget-conf"></span></h2>
+        <div id="viz-budget-confiance" class="viz"></div>
+      </div>
     </div>
 
     <div class="carte">
@@ -299,7 +305,7 @@
   </section>
 
   <section class="panneau" id="tab-orateurs">
-    <div class="carte"><h2>👤 Top 30 orateurs (cliquez sur une barre)</h2>
+    <div class="carte"><h2>👤 Top 30 orateurs</h2>
       <div id="viz-orateurs-bar" class="viz tall"></div></div>
     <div class="carte"><h2>Détail des orateurs</h2><div id="liste-orateurs"></div></div>
   </section>
@@ -309,7 +315,7 @@
       <div class="carte"><h2>🎯 Radar</h2><div id="viz-radar" class="viz"></div></div>
       <div class="carte"><h2>📊 Occurrences</h2><div id="viz-themes-bar" class="viz"></div></div>
     </div>
-    <div class="carte"><h2>Documents par thème (cliquez pour filtrer)</h2><div id="liste-themes"></div></div>
+    <div class="carte"><h2>Documents par thème</h2><div id="liste-themes"></div></div>
   </section>
 
   <section class="panneau" id="tab-chrono">
@@ -380,9 +386,9 @@ function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;'
 function parseCSV(text, sep){
   sep = sep || ';';
   const lignes = text.trim().split(/\r?\n/);
+  if (lignes.length === 0) return [];
   const headers = lignes[0].split(sep).map(h => h.replace(/^"|"$/g,'').trim());
   return lignes.slice(1).filter(l=>l.trim()).map(l=>{
-    // Parse robuste : gère les guillemets
     const vals = [];
     let cur = '';
     let inQuote = false;
@@ -415,6 +421,10 @@ Promise.all([
   if (data && data.results){
     ALL_DOCS = data.results;
     DOCS = ALL_DOCS;
+  } else {
+    // Fallback : créer des documents depuis les CSV budgétaires
+    ALL_DOCS = [];
+    DOCS = [];
   }
   BUDGET_MONTANTS = montants;
   BUDGET_BUDGETS = budgets;
@@ -581,7 +591,7 @@ function dessinerOngletActif(){
 const LAYOUT = {
   paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
   font:{family:'system-ui', color:'#1a1a2e', size:11},
-  margin:{t:30,r:20,b:60,l:60}, height:380, autosize:true,
+  margin:{t:30,r:20,b:60,l:60}, height:400, autosize:true,
   showlegend:false,
   hoverlabel:{bgcolor:'#fff', bordercolor:'#000091', font:{color:'#1a1a2e', size:12}}
 };
@@ -590,11 +600,16 @@ const CONFIG = {responsive: true, displayModeBar: true, displaylogo: false,
 
 function safePlot(id, data, layout, customConfig){
   const el = document.getElementById(id);
-  if(!el || typeof Plotly === 'undefined') return;
+  if(!el) return;
+  if(typeof Plotly === 'undefined') {
+    el.innerHTML = '<div class="no-data">Plotly non chargé</div>';
+    return;
+  }
   try {
     Plotly.newPlot(id, data, layout, customConfig || CONFIG);
   } catch(e) {
     el.innerHTML = '<p style="color:#E1000F;padding:20px">Erreur : '+e.message+'</p>';
+    console.error(e);
   }
 }
 
@@ -657,7 +672,7 @@ function dessinerSynthese(){
 }
 
 // ============================================================
-// ✅ NOUVEAU : BUDGET
+// BUDGET
 // ============================================================
 function filtrerMontantsBudget(){
   return BUDGET_MONTANTS.filter(m=>{
@@ -680,7 +695,6 @@ function filtrerMontantsBudget(){
 function dessinerBudget(){
   const montants = filtrerMontantsBudget();
 
-  // ---- KPIs ----
   const total = montants.length;
   const maxMontant = montants.length ? Math.max(...montants.map(m=>num(m.valeur_francs))) : 0;
   const scoreMax = montants.length ? Math.max(...montants.map(m=>+m.score)) : 0;
@@ -710,33 +724,35 @@ function dessinerBudget(){
     </div>
   `;
 
-  // ---- Évolution du budget annuel ----
+  // Évolution du budget annuel
   const annees = BUDGET_BUDGETS.map(b=>+b.annee).filter(Boolean).sort((a,b)=>a-b);
-  const budgets = BUDGET_BUDGETS.map(b=>+b.budget_francs || +b.budget_francs || 0);
   const scoresB = BUDGET_BUDGETS.map(b=>+b.score || 0);
 
-  safePlot('viz-budget-evolution', [{
-    x: annees,
-    y: BUDGET_BUDGETS.map(b=>+b.budget_francs / 1e6),
-    type: 'bar',
-    marker: {
-      color: BUDGET_BUDGETS.map(b=>{
-        const s = +b.score || 0;
-        if (s >= 10) return '#1b7a2e';
-        if (s >= 8) return '#4a9d3a';
-        if (s >= 7) return '#d4af37';
-        return '#ccc';
-      }),
-    },
-    text: BUDGET_BUDGETS.map(b=>fmtM(+b.budget_francs) + ' F'),
-    textposition: 'outside',
-    hovertemplate: '<b>%{x}</b><br>Budget : %{text}<br>Score : %{customdata}<extra></extra>',
-    customdata: scoresB,
-  }], {...LAYOUT, height: 600, xaxis:{title:'Année'}, yaxis:{title:'Budget (MF)'}});
-
+  if (BUDGET_BUDGETS.length > 0){
+    safePlot('viz-budget-evolution', [{
+      x: annees,
+      y: BUDGET_BUDGETS.map(b=>+b.budget_francs / 1e6),
+      type: 'bar',
+      marker: {
+        color: BUDGET_BUDGETS.map(b=>{
+          const s = +b.score || 0;
+          if (s >= 10) return '#1b7a2e';
+          if (s >= 8) return '#4a9d3a';
+          if (s >= 7) return '#d4af37';
+          return '#ccc';
+        }),
+      },
+      text: BUDGET_BUDGETS.map(b=>fmtM(+b.budget_francs) + ' F'),
+      textposition: 'outside',
+      hovertemplate: '<b>%{x}</b><br>Budget : %{text}<br>Score : %{customdata}<extra></extra>',
+      customdata: scoresB,
+    }], {...LAYOUT, height: 650, xaxis:{title:'Année'}, yaxis:{title:'Budget (MF)'}});
+  } else {
+    document.getElementById('viz-budget-evolution').innerHTML = '<div class="no-data">Pas de données</div>';
+  }
   document.getElementById('c-budget-evol').textContent = annees.length + ' années';
 
-  // ---- Distribution des scores ----
+  // Distribution des scores
   const scoreCounts = {};
   for (let i = 0; i <= 13; i++) scoreCounts[i] = 0;
   montants.forEach(m=>{ scoreCounts[+m.score || 0]++; });
@@ -760,32 +776,35 @@ function dessinerBudget(){
 
   document.getElementById('c-budget-scores').textContent = montants.length + ' montants';
 
-  // ---- Top 30 montants ----
+  // Top 30 montants
   const top = [...montants].sort((a,b)=>num(b.valeur_francs) - num(a.valeur_francs)).slice(0, 30);
 
-  safePlot('viz-budget-top', [{
-    x: top.map(m=>num(m.valeur_francs) / 1e6),
-    y: top.map(m=>m.fichier.substring(0,30) + ' (' + m.annee + ')'),
-    type: 'bar',
-    orientation: 'h',
-    marker: {
-      color: top.map(m=>{
-        const s = +m.score;
-        if (s >= 10) return '#1b7a2e';
-        if (s >= 8) return '#4a9d3a';
-        if (s >= 7) return '#d4af37';
-        return '#ccc';
-      }),
-    },
-    text: top.map(m=>fmtM(num(m.valeur_francs)) + ' F'),
-    textposition: 'outside',
-    hovertemplate: '<b>%{y}</b><br>%{text}<br>Score : %{customdata}<extra></extra>',
-    customdata: top.map(m=>m.score),
-  }], {...LAYOUT, height: 800, yaxis:{autorange:'reversed'}, margin:{t:20,r:100,b:40,l:280}});
-
+  if (top.length > 0){
+    safePlot('viz-budget-top', [{
+      x: top.map(m=>num(m.valeur_francs) / 1e6),
+      y: top.map(m=>m.fichier.substring(0,30) + ' (' + m.annee + ')'),
+      type: 'bar',
+      orientation: 'h',
+      marker: {
+        color: top.map(m=>{
+          const s = +m.score;
+          if (s >= 10) return '#1b7a2e';
+          if (s >= 8) return '#4a9d3a';
+          if (s >= 7) return '#d4af37';
+          return '#ccc';
+        }),
+      },
+      text: top.map(m=>fmtM(num(m.valeur_francs)) + ' F'),
+      textposition: 'outside',
+      hovertemplate: '<b>%{y}</b><br>%{text}<br>Score : %{customdata}<extra></extra>',
+      customdata: top.map(m=>m.score),
+    }], {...LAYOUT, height: 800, yaxis:{autorange:'reversed'}, margin:{t:20,r:100,b:40,l:280}});
+  } else {
+    document.getElementById('viz-budget-top').innerHTML = '<div class="no-data">Aucun montant</div>';
+  }
   document.getElementById('c-budget-top').textContent = top.length + ' montants';
 
-  // ---- Répartition par confiance ----
+  // Répartition par confiance
   const confCounts = { strict:0, proche:0, moyen:0, large:0 };
   montants.forEach(m=>{ if (m.confiance in confCounts) confCounts[m.confiance]++; });
 
@@ -800,15 +819,13 @@ function dessinerBudget(){
 
   document.getElementById('c-budget-conf').textContent = montants.length + ' montants';
 
-  // ---- Tableau interactif ----
+  // Tableau
   dessinerTableauBudget(montants);
 }
 
 function dessinerTableauBudget(montants){
   const wrap = document.getElementById('budget-table-wrap');
-  const cols = ['fichier','annee','valeur_francs','score','confiance','contexte'];
 
-  // Tri
   const col = TRI.col;
   const ordre = TRI.ordre;
   const data = [...montants].sort((a,b)=>{
@@ -852,7 +869,6 @@ function dessinerTableauBudget(montants){
   }
   wrap.innerHTML = html;
 
-  // Tri au clic
   wrap.querySelectorAll('th[data-key]').forEach(th=>{
     th.addEventListener('click', ()=>{
       const k = th.dataset.key;
@@ -866,20 +882,122 @@ function dessinerTableauBudget(montants){
 }
 
 // ============================================================
-// CHIFFRES CLÉS (version simplifiée)
+// ✅ CHIFFRES CLÉS (complété)
 // ============================================================
 function dessinerChiffres(){
-  document.getElementById('viz-budget').innerHTML = '<div class="no-data">Voir l\'onglet Budget</div>';
-  document.getElementById('viz-flux').innerHTML = '<div class="no-data">Voir l\'onglet Documents</div>';
+  Promise.all([
+    fetch('expertise_BUMIDOM/BUMIDOM_effectifs.csv').then(r=>r.ok?r.text():'').then(t=>t?parseCSV(t):[]).catch(()=>[]),
+    fetch('expertise_BUMIDOM/BUMIDOM_montants.csv').then(r=>r.ok?r.text():'').then(t=>t?parseCSV(t):[]).catch(()=>[]),
+  ]).then(([effectifs, montants])=>{
+    // Graphique budget (depuis les montants BUDGET filtrés par score)
+    const topBudget = [...BUDGET_MONTANTS]
+      .filter(m=>+m.score >= 7)
+      .sort((a,b)=>+b.valeur_francs - +a.valeur_francs)
+      .slice(0, 15);
+
+    if (topBudget.length > 0){
+      safePlot('viz-budget', [{
+        x: topBudget.map(m=>m.annee),
+        y: topBudget.map(m=>+m.valeur_francs / 1e6),
+        type: 'bar',
+        marker: { color: '#E1000F' },
+        hovertemplate: '<b>%{x}</b><br>%{y:.1f} MF<br>%{customdata}<extra></extra>',
+        customdata: topBudget.map(m=>m.fichier.substring(0, 30))
+      }], {...LAYOUT, yaxis:{title:'Millions F'}});
+    } else {
+      document.getElementById('viz-budget').innerHTML = '<div class="no-data">Pas de données</div>';
+    }
+
+    // Graphique flux (effectifs)
+    if (effectifs.length > 0){
+      const topEff = effectifs
+        .filter(e=>+e.valeur > 0 && +e.valeur < 500000)
+        .sort((a,b)=>+b.valeur - +a.valeur)
+        .slice(0, 15);
+
+      if (topEff.length > 0){
+        safePlot('viz-flux', [{
+          x: topEff.map(e=>e.fichier.substring(0,20)),
+          y: topEff.map(e=>+e.valeur),
+          type: 'bar',
+          marker: { color: '#000091' },
+          hovertemplate: '<b>%{x}</b><br>%{y:,} personnes<extra></extra>'
+        }], {...LAYOUT, xaxis:{tickangle:-45, tickfont:{size:9}}});
+      } else {
+        document.getElementById('viz-flux').innerHTML = '<div class="no-data">Pas de flux valides</div>';
+      }
+
+      let html = '<table><thead><tr><th>Nombre</th><th>Unité</th><th>Fichier</th><th>Contexte</th></tr></thead><tbody>';
+      effectifs.slice(0, 50).forEach(e=>{
+        html += `<tr>
+          <td class="nb">${fmt(+e.valeur)}</td>
+          <td>${esc(e.unite || '')}</td>
+          <td>${esc((e.fichier || '').substring(0, 35))}</td>
+          <td><span class="ctx">${esc((e.contexte || '').substring(0, 80))}</span></td>
+        </tr>`;
+      });
+      html += '</tbody></table>';
+      document.getElementById('tab-effectifs').innerHTML = html;
+    } else {
+      document.getElementById('viz-flux').innerHTML = '<div class="no-data">Fichier BUMIDOM_effectifs.csv absent</div>';
+      document.getElementById('tab-effectifs').innerHTML = '<div class="no-data">Pas de données</div>';
+    }
+
+    // Tableau montants BUMIDOM
+    if (montants.length > 0){
+      let html = '<table><thead><tr><th>Montant</th><th>Unité</th><th>Fichier</th><th>Contexte</th></tr></thead><tbody>';
+      montants.slice(0, 50).forEach(m=>{
+        html += `<tr>
+          <td class="nb">${fmt(+m.valeur)}</td>
+          <td>${esc(m.unite || 'F')}</td>
+          <td>${esc((m.fichier || '').substring(0, 35))}</td>
+          <td><span class="ctx">${esc((m.contexte || '').substring(0, 80))}</span></td>
+        </tr>`;
+      });
+      html += '</tbody></table>';
+      document.getElementById('tab-montants').innerHTML = html;
+    } else {
+      document.getElementById('tab-montants').innerHTML = '<div class="no-data">Pas de données</div>';
+    }
+
+    // Chiffres clés statiques
+    const chiffres = [
+      ['💰 Budget BUMIDOM 1981', '279 600 000 F'],
+      ['👥 Migrants 1963-1974', '94 000 personnes'],
+      ['🌍 Antillais métropole 1986', '500 000'],
+      ['👥 Population concernée 1981', '400 000 personnes'],
+      ['💰 Budget BUMIDOM 1975', '28 353 000 F'],
+      ['🌍 Réunionnais métropole 1986', '120 000'],
+      ['📈 Flux annuel 1979-80', '10 000 personnes/an'],
+      ['🏠 Capacité accueil 1972', '5 547 places'],
+      ['📈 Flux annuel 1975-76', '5 000 personnes/an'],
+      ['🏠 Logements 1968', '234 logements'],
+    ];
+    document.getElementById('chiffres-cles').innerHTML = chiffres.map((c,i)=>`
+      <div style="display:flex;justify-content:space-between;padding:10px 14px;margin:5px 0;
+                  background:${i<3?'#fff5f5':'#f5f5f7'};border-radius:6px;
+                  border-left:4px solid ${i<3?'#E1000F':'#000091'}">
+        <span>${c[0]}</span>
+        <strong style="color:${i<3?'#E1000F':'#000091'}">${c[1]}</strong>
+      </div>
+    `).join('');
+    document.getElementById('c-chiffres').textContent = chiffres.length + ' chiffres';
+  });
 }
 
 // ============================================================
-// ORATEURS
+// ✅ ORATEURS (complété avec tableau détaillé)
 // ============================================================
 function dessinerOrateurs(){
   const agg = {};
   DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>agg[o.nom]=(agg[o.nom]||0)+o.occurrences));
   const top = Object.entries(agg).sort((a,b)=>b[1]-a[1]).slice(0,30);
+
+  if (top.length === 0){
+    document.getElementById('viz-orateurs-bar').innerHTML = '<div class="no-data">Pas d\'orateurs (resultats_enrichis.json manquant ?)</div>';
+    document.getElementById('liste-orateurs').innerHTML = '<div class="no-data">Pas de données</div>';
+    return;
+  }
 
   safePlot('viz-orateurs-bar', [{
     x: top.map(o=>o[1]), y: top.map(o=>o[0]),
@@ -888,51 +1006,121 @@ function dessinerOrateurs(){
   }], {...LAYOUT, height:880, yaxis:{autorange:'reversed'}, margin:{t:20,r:30,b:40,l:220}});
 
   const container = document.getElementById('liste-orateurs');
-  container.innerHTML = top.map(([nom,total])=>{
-    const docs = DOCS.filter(d=>(d.orateurs||[]).some(o=>o.nom === nom));
-    return `
-      <div class="doc" style="border-left-color:#000091">
-        <div class="doc-header">
-          <span class="badge badge-cri">${docs.length} docs</span>
-          <span class="titre">${esc(nom)}</span>
-          <span class="mentions">${total} mentions</span>
-        </div>
-      </div>`;
-  }).join('');
+  container.innerHTML = `
+    <p style="margin-bottom:12px;color:#666;font-size:.85rem">${top.length} orateurs (top 30)</p>
+    <table>
+      <thead><tr>
+        <th>Rang</th><th>Orateur</th><th>Mentions</th><th>Documents</th>
+      </tr></thead>
+      <tbody>
+        ${top.map(([nom, total], i) => {
+          const docs = DOCS.filter(d=>(d.orateurs||[]).some(o=>o.nom === nom));
+          return `
+            <tr onclick="toggleFiltre('orateurs', '${esc(nom).replace(/'/g, "\\'")}')">
+              <td>${i+1}</td>
+              <td><strong>${esc(nom)}</strong></td>
+              <td class="nb">${total}</td>
+              <td>${docs.length}</td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
 }
 
 // ============================================================
-// THÈMES
+// ✅ THÈMES (complété avec liste docs)
 // ============================================================
 function dessinerThemes(){
   const agg = {};
   DOCS.forEach(d=>Object.entries(d.themes||{}).forEach(([t,n])=>agg[t]=(agg[t]||0)+n));
   const entries = Object.entries(agg).sort((a,b)=>b[1]-a[1]);
 
+  if (entries.length === 0){
+    document.getElementById('viz-radar').innerHTML = '<div class="no-data">Pas de thèmes (resultats_enrichis.json manquant ?)</div>';
+    document.getElementById('viz-themes-bar').innerHTML = '<div class="no-data">Pas de thèmes</div>';
+    document.getElementById('liste-themes').innerHTML = '<div class="no-data">Pas de données</div>';
+    return;
+  }
+
   safePlot('viz-radar', [{
     type:'scatterpolar',
-    r:[...entries.map(e=>e[1]), entries[0]?.[1]||0],
-    theta:[...entries.map(e=>e[0]), entries[0]?.[0]||''],
-    fill:'toself', marker:{color:'#E1000F'},
+    r:[...entries.slice(0,10).map(e=>e[1]), entries[0][1]],
+    theta:[...entries.slice(0,10).map(e=>e[0]), entries[0][0]],
+    fill:'toself', marker:{color:'#E1000F'}, line:{color:'#E1000F'},
   }], {...LAYOUT, polar:{bgcolor:'rgba(0,0,0,0)'}});
 
   safePlot('viz-themes-bar', [{
-    x: entries.map(e=>e[0]), y: entries.map(e=>e[1]),
+    x: entries.slice(0,15).map(e=>e[0]),
+    y: entries.slice(0,15).map(e=>e[1]),
     type:'bar', marker:{color:'#000091'},
   }], {...LAYOUT, xaxis:{tickangle:-45}});
+
+  const container = document.getElementById('liste-themes');
+  container.innerHTML = `
+    <p style="margin-bottom:12px;color:#666;font-size:.85rem">${entries.length} thèmes</p>
+    <table>
+      <thead><tr>
+        <th>Thème</th><th>Occurrences</th><th>Documents</th><th>Fichiers</th>
+      </tr></thead>
+      <tbody>
+        ${entries.map(([theme, total]) => {
+          const docs = DOCS.filter(d=>d.themes && d.themes[theme]);
+          const fichiers = docs.slice(0, 3).map(d=>d.fichier.substring(0, 25)).join(', ');
+          return `
+            <tr onclick="toggleFiltre('themes', '${esc(theme).replace(/'/g, "\\'")}')">
+              <td><strong>${esc(theme)}</strong></td>
+              <td class="nb">${total}</td>
+              <td>${docs.length}</td>
+              <td><span class="ctx">${esc(fichiers)}${docs.length > 3 ? '…' : ''}</span></td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
 }
 
 // ============================================================
-// CHRONOLOGIE
+// ✅ CHRONOLOGIE (complété avec années citées)
 // ============================================================
 function dessinerChrono(){
   const sorted = [...DOCS].sort((a,b)=>a.fichier.localeCompare(b.fichier));
-  safePlot('viz-chrono', [{
-    x: sorted.map(d=>d.fichier.replace('.txt','').substring(0,30)),
-    y: sorted.map(d=>d.nb_mentions),
-    type:'bar',
-    marker:{color:sorted.map(d=>d.nb_mentions>5?'#E1000F':'#000091')},
-  }], {...LAYOUT, height:500, xaxis:{tickangle:-60, tickfont:{size:8}}});
+  
+  if (sorted.length > 0){
+    safePlot('viz-chrono', [{
+      x: sorted.map(d=>d.fichier.replace('.txt','').substring(0,30)),
+      y: sorted.map(d=>d.nb_mentions),
+      type:'bar',
+      marker:{color:sorted.map(d=>d.nb_mentions>5?'#E1000F':'#000091')},
+    }], {...LAYOUT, height:500, xaxis:{tickangle:-60, tickfont:{size:8}}});
+  } else {
+    document.getElementById('viz-chrono').innerHTML = '<div class="no-data">Pas de documents</div>';
+  }
+
+  // Années citées
+  const parAnnee = {};
+  DOCS.forEach(d=>{
+    const m = d.fichier.match(/(\d{4})/g);
+    if (m) m.forEach(y=>parAnnee[y] = (parAnnee[y]||0) + 1);
+    if (d.statistiques && d.statistiques.annees){
+      d.statistiques.annees.forEach(a=>parAnnee[a] = (parAnnee[a]||0) + 1);
+    }
+  });
+  const annees = Object.keys(parAnnee).sort();
+  
+  if (annees.length > 0){
+    safePlot('viz-annees', [{
+      x: annees,
+      y: annees.map(a=>parAnnee[a]),
+      type: 'bar',
+      marker: { color: '#1212ff' },
+      hovertemplate: '<b>%{x}</b><br>%{y} documents<extra></extra>'
+    }], {...LAYOUT});
+  } else {
+    document.getElementById('viz-annees').innerHTML = '<div class="no-data">Pas d\'années détectées</div>';
+  }
 }
 
 // ============================================================
@@ -1012,6 +1200,12 @@ function reinitialiser(){
   document.getElementById('budget-fourchette').checked = true;
   document.getElementById('recherche-budget').value = '';
   dessinerBudget();
+}
+
+function toggleFiltre(type, valeur){
+  if (FILTRES[type] && FILTRES[type].has(valeur)) FILTRES[type].delete(valeur);
+  else if (FILTRES[type]) FILTRES[type].add(valeur);
+  majVue();
 }
 
 // ============================================================
