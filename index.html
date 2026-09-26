@@ -3,196 +3,822 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard BUMIDOM — Interactif</title>
+<title>BUMIDOM — Dashboard Interactif</title>
+<link rel="stylesheet" href="https://unpkg.com/@gouvfr/dsfr@1.11.2/dist/dsfr.min.css">
+<link rel="stylesheet" href="https://unpkg.com/@gouvfr/dsfr@1.11.2/dist/utility/utility.min.css">
 <script src="plotly.min.js"></script>
 <style>
-  :root{--bleu:#000091;--rouge:#E1000F;--gris:#f5f5f7;--vert:#1b7a2e;--or:#d4af37}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:system-ui,-apple-system,sans-serif;background:var(--gris);color:#1a1a2e;line-height:1.5}
-  header{background:#fff;border-bottom:4px solid;
-    border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;
-    padding:16px 28px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06);
-    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-  header h1{color:var(--bleu);font-size:1.3rem;display:flex;align-items:center;gap:10px}
-  header h1 .drapeau{display:inline-block;width:32px;height:22px;
-    background:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%);
-    border:1px solid #ccc;border-radius:3px}
-  .actions{display:flex;gap:8px;flex-wrap:wrap}
-  .actions button{padding:8px 14px;border:none;border-radius:6px;cursor:pointer;
-    font-weight:600;font-size:.82rem;transition:.2s;background:#f0f0f5;color:#333}
-  .actions button:hover{background:var(--bleu);color:#fff}
-  .actions button.primary{background:var(--bleu);color:#fff}
-  .actions button.primary:hover{background:var(--rouge)}
-
-  .filtres-actifs{padding:12px 28px;background:#fff;border-bottom:1px solid #eee;
-    display:flex;gap:10px;flex-wrap:wrap;align-items:center;min-height:44px}
-  .filtres-actifs .chip{display:inline-flex;align-items:center;gap:6px;
-    background:var(--bleu);color:#fff;padding:5px 12px;border-radius:16px;font-size:.8rem;font-weight:500}
-  .filtres-actifs .chip .x{cursor:pointer;font-weight:700;opacity:.7;margin-left:4px}
-  .filtres-actifs .chip .x:hover{opacity:1}
-  .filtres-actifs .chip.rouge{background:var(--rouge)}
-  .filtres-actifs .chip.or{background:var(--or);color:#000}
-  .filtres-actifs .vider{background:#eee;color:#666;border:none;padding:5px 12px;
-    border-radius:16px;font-size:.8rem;cursor:pointer;font-weight:600}
-  .filtres-actifs .vide{color:#999;font-size:.85rem;font-style:italic}
-
-  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;padding:16px 28px 0}
-  .kpi{background:#fff;border-radius:10px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.06);
-    border-top:4px solid var(--bleu);cursor:pointer;transition:.2s}
-  .kpi:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,145,.15)}
-  .kpi.rouge{border-top-color:var(--rouge)}
-  .kpi.vert{border-top-color:var(--vert)}
-  .kpi.or{border-top-color:var(--or)}
-  .kpi .v{font-size:1.6rem;font-weight:700;color:var(--bleu)}
-  .kpi.rouge .v{color:var(--rouge)}
-  .kpi.vert .v{color:var(--vert)}
-  .kpi.or .v{color:#b8860b}
-  .kpi .l{font-size:.7rem;color:#666;text-transform:uppercase;letter-spacing:.5px}
-
-  .slider-zone{background:#fff;padding:16px 28px;border-bottom:1px solid #eee}
-  .slider-zone label{font-size:.75rem;font-weight:600;color:var(--bleu);text-transform:uppercase;
-    display:block;margin-bottom:6px;letter-spacing:.5px}
-  .slider-zone .rangée{display:flex;gap:12px;align-items:center;font-size:.85rem;color:#666}
-  .slider-zone input[type=range]{flex:1;accent-color:var(--bleu)}
-
-  main{padding:20px 28px;max-width:1700px;margin:0 auto}
-  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:20px;margin-bottom:20px}
-  .carte{background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);
-    margin-bottom:20px;transition:.2s;overflow:hidden}
-  .carte h2{color:var(--bleu);font-size:1rem;margin-bottom:12px;
-    border-bottom:2px solid var(--rouge);padding-bottom:8px;
-    display:flex;justify-content:space-between;align-items:center}
-  .carte h2 .compteur{font-size:.75rem;color:#888;font-weight:400;text-transform:none;letter-spacing:0}
+/* ============================================================
+   SYSTÈME DE DESIGN DE L'ÉTAT (DSFR) — ADAPTATIONS
+   ============================================================ */
+:root{
+  /* Couleurs DSFR officielles */
+  --bf-500:#000091;  /* Bleu France */
+  --bf-600:#1212ff;
+  --bf-100:#e3e3fd;
+  --bf-900:#2323b4;
+  --rm-500:#e1000f;  /* Rouge Marianne */
+  --rm-600:#c9191e;
+  --rm-100:#ffe9e9;
+  --gs-900:#1e1e1e;
+  --gs-700:#3a3a3a;
+  --gs-500:#666666;
+  --gs-300:#929292;
+  --gs-200:#e5e5e5;
+  --gs-100:#f6f6f6;
+  --gs-000:#ffffff;
+  --vert-500:#18753c; /* Succès */
+  --orange-500:#b34000; /* Attention */
+  --jaune-500:#d8a800; /* Or */
   
-  /* ✅ FIX : hauteurs CSS strictes pour les graphiques */
-  .viz{height:400px;min-height:400px;width:100%;position:relative}
-  .viz.tall{height:650px;min-height:650px}
-  .viz.reseau{height:700px;min-height:700px}
+  /* Typographie */
+  --font: 'Marianne', 'system-ui', -apple-system, sans-serif;
   
-  /* ✅ FIX : Plotly doit respecter la taille du conteneur */
-  .js-plotly-plot{height:100%!important;width:100%!important}
-  .js-plotly-plot .plot-container{height:100%!important;width:100%!important}
-  .js-plotly-plot .svg-container{height:100%!important;width:100%!important}
+  /* Grille 8px DSFR */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  
+  /* Rayon DSFR : très peu arrondi */
+  --radius: 4px;
+  --radius-lg: 8px;
+}
 
-  table{width:100%;border-collapse:collapse;font-size:.83rem}
-  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee}
-  th{background:var(--bleu);color:#fff;font-size:.7rem;text-transform:uppercase;
-    letter-spacing:.5px;cursor:pointer;user-select:none;position:sticky;top:0;z-index:2}
-  th:hover{background:var(--rouge)}
-  th::after{content:'';margin-left:4px;opacity:.4;font-size:.65rem}
-  th.tri-asc::after{content:'▲';opacity:1}
-  th.tri-desc::after{content:'▼';opacity:1}
-  tbody tr{cursor:pointer;transition:.15s}
-  tbody tr:hover{background:#f0f4ff}
-  tbody tr.selectionne{background:#e5e9ff}
-  .nb{text-align:right;font-weight:700;color:var(--rouge);font-variant-numeric:tabular-nums}
-  .ctx{font-size:.75rem;color:#666;font-style:italic;max-width:400px;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
-  .score-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-weight:700;font-size:.7rem}
-  .score-12,.score-11{background:#1b7a2e;color:#fff}
-  .score-10,.score-9{background:#4a9d3a;color:#fff}
-  .score-8,.score-7{background:var(--or);color:#000}
-  .score-6,.score-5{background:#e0a800;color:#000}
-  .score-4,.score-3,.score-2,.score-1,.score-0{background:#ccc;color:#333}
+*{box-sizing:border-box;margin:0;padding:0}
 
-  .confiance-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:600}
-  .confiance-strict{background:#1b7a2e;color:#fff}
-  .confiance-proche{background:#4a9d3a;color:#fff}
-  .confiance-moyen{background:var(--or);color:#000}
-  .confiance-large{background:#ccc;color:#333}
+body{
+  font-family: var(--font);
+  background: var(--gs-100);
+  color: var(--gs-900);
+  line-height: 1.5;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
 
-  .recherche-wrap{position:relative;margin-bottom:12px}
-  .recherche-wrap input{width:100%;padding:10px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:.9rem}
-  .recherche-wrap input:focus{outline:none;border-color:var(--bleu)}
+/* ============================================================
+   EN-TÊTE — Style "Marianne" institutionnel
+   ============================================================ */
+header{
+  background: var(--gs-000);
+  border-bottom: 2px solid var(--gs-200);
+  padding: var(--space-4) var(--space-6);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
 
-  .detail-panel{position:fixed;right:0;top:0;bottom:0;width:500px;background:#fff;
-    box-shadow:-4px 0 20px rgba(0,0,0,.15);z-index:200;overflow-y:auto;
-    transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column}
-  .detail-panel.ouvert{transform:translateX(0)}
-  .detail-panel .entete{background:var(--bleu);color:#fff;padding:16px 20px;
-    display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-  .detail-panel .entete h3{margin:0;font-size:1rem}
-  .detail-panel .entete .fermer{cursor:pointer;font-size:1.3rem;font-weight:300;opacity:.8}
-  .detail-panel .entete .fermer:hover{opacity:1}
-  .detail-panel .corps{padding:20px;flex:1}
-  .detail-panel .corps p{margin:8px 0;font-size:.9rem}
-  .detail-panel .corps strong{color:var(--bleu)}
+header::before{
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(to right,
+    var(--bf-500) 0%, var(--bf-500) 33.33%,
+    var(--gs-000) 33.33%, var(--gs-000) 66.66%,
+    var(--rm-500) 66.66%, var(--rm-500) 100%);
+}
 
-  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;
-    opacity:0;pointer-events:none;transition:opacity .3s}
-  .overlay.actif{opacity:1;pointer-events:auto}
+header h1{
+  color: var(--gs-900);
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: 4px;
+}
 
-  .message{padding:14px 20px;border-radius:8px;margin:16px 28px;font-weight:500;
-    background:#e5e9ff;color:var(--bleu);border-left:4px solid var(--bleu)}
-  .message.err{background:#ffe5e5;color:#b8000c;border-left-color:var(--rouge)}
+header h1 .marianne{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--bf-500);
+  color: var(--gs-000);
+  font-weight: 800;
+  font-size: 1rem;
+  border-radius: var(--radius);
+  letter-spacing: -0.5px;
+}
 
-  .tabs{display:flex;gap:4px;padding:0 28px;border-bottom:2px solid #ddd;margin-top:16px;
-    overflow-x:auto;background:#fff}
-  .tabs button{padding:11px 18px;border:none;background:transparent;font-size:.85rem;
-    font-weight:600;color:#666;cursor:pointer;border-bottom:3px solid transparent;
-    white-space:nowrap;transition:.2s}
-  .tabs button:hover{color:var(--bleu)}
-  .tabs button.actif{color:var(--bleu);border-bottom-color:var(--rouge)}
+header h1 .sous-titre{
+  display: block;
+  font-size: .75rem;
+  color: var(--gs-500);
+  font-weight: 400;
+  margin-top: 2px;
+}
 
-  section.panneau{display:none}
-  section.panneau.actif{display:block;animation:fade .3s}
-  @keyframes fade{from{opacity:0}to{opacity:1}}
+/* ============================================================
+   BOUTONS — Style DSFR
+   ============================================================ */
+.actions{display:flex;gap:var(--space-2);flex-wrap:wrap}
 
-  footer{text-align:center;padding:20px;font-size:.78rem;color:#999;margin-top:40px;
-    border-top:2px solid;
-    border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;
-    background:#fff}
+.btn{
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: .875rem;
+  font-family: var(--font);
+  transition: background-color .2s;
+  background: transparent;
+  color: var(--bf-500);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
 
-  .no-data{padding:40px;text-align:center;color:#999}
-  .no-data .ic{font-size:2.5rem;margin-bottom:8px}
+.btn:hover{background: var(--bf-100);}
 
-  kbd{background:#f0f0f5;padding:2px 6px;border-radius:4px;font-size:.75rem;
-    border:1px solid #ddd;font-family:monospace}
+.btn--primary{
+  background: var(--bf-500);
+  color: var(--gs-000);
+}
+.btn--primary:hover{
+  background: var(--bf-900);
+}
 
-  .budget-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
-  .budget-kpi{background:linear-gradient(135deg,#fff,#f8f9fa);border-radius:10px;padding:16px;
-    border-left:5px solid var(--bleu);box-shadow:0 2px 8px rgba(0,0,0,.06)}
-  .budget-kpi.or{border-left-color:var(--or)}
-  .budget-kpi.rouge{border-left-color:var(--rouge)}
-  .budget-kpi.vert{border-left-color:var(--vert)}
-  .budget-kpi .v{font-size:1.5rem;font-weight:800;color:var(--bleu);line-height:1.1}
-  .budget-kpi.or .v{color:#b8860b}
-  .budget-kpi.rouge .v{color:var(--rouge)}
-  .budget-kpi.vert .v{color:var(--vert)}
-  .budget-kpi .l{font-size:.72rem;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+.btn--secondary{
+  background: var(--gs-000);
+  border-color: var(--gs-300);
+  color: var(--gs-900);
+}
+.btn--secondary:hover{
+  background: var(--gs-100);
+}
 
-  .filtres-budget{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:20px;
-    box-shadow:0 2px 10px rgba(0,0,0,.06);display:flex;gap:16px;flex-wrap:wrap;align-items:center}
-  .filtres-budget label{font-size:.8rem;font-weight:600;color:var(--bleu);display:flex;
-    align-items:center;gap:8px}
-  .filtres-budget input[type=range]{width:200px;accent-color:var(--rouge)}
-  .filtres-budget input[type=number]{padding:5px 10px;border:1px solid #ddd;border-radius:6px;
-    width:120px;font-size:.85rem}
-  .filtres-budget select{padding:5px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem}
-  .filtres-budget .valeur-score{font-weight:800;color:var(--rouge);font-size:1.1rem;min-width:30px}
+.btn--danger{
+  background: var(--rm-500);
+  color: var(--gs-000);
+}
+.btn--danger:hover{
+  background: var(--rm-600);
+}
 
-  #budget-table-wrap, #tab-effectifs, #tab-montants{
-    max-height:600px;overflow-y:auto;border-radius:8px;
-  }
-  #liste-orateurs, #liste-themes, #liste-docs, #chiffres-cles{
-    max-height:800px;overflow-y:auto;
-  }
+.btn--sm{
+  padding: var(--space-1) var(--space-3);
+  font-size: .75rem;
+}
 
-  @media(max-width:768px){
-    .detail-panel{width:100%}
-    main{padding:16px}
-  }
+/* ============================================================
+   FILTRES ACTIFS
+   ============================================================ */
+.filtres-actifs{
+  padding: var(--space-3) var(--space-6);
+  background: var(--gs-000);
+  border-bottom: 1px solid var(--gs-200);
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: 44px;
+}
+
+.filtres-actifs .chip{
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--bf-100);
+  color: var(--bf-500);
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  font-size: .75rem;
+  font-weight: 500;
+}
+
+.filtres-actifs .chip .x{
+  cursor: pointer;
+  font-weight: 700;
+  opacity: .6;
+  margin-left: var(--space-1);
+}
+.filtres-actifs .chip .x:hover{opacity:1}
+
+.filtres-actifs .chip.rouge{
+  background: var(--rm-100);
+  color: var(--rm-500);
+}
+
+.filtres-actifs .vide{
+  color: var(--gs-500);
+  font-size: .875rem;
+  font-style: italic;
+}
+
+/* ============================================================
+   KPIs — Cartes sobres
+   ============================================================ */
+.kpis{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6) 0;
+}
+
+.kpi{
+  background: var(--gs-000);
+  border: 1px solid var(--gs-200);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  border-top: 3px solid var(--bf-500);
+  transition: box-shadow .2s;
+}
+
+.kpi:hover{
+  box-shadow: 0 2px 8px rgba(0,0,145,.08);
+}
+
+.kpi.rouge{border-top-color: var(--rm-500)}
+.kpi.vert{border-top-color: var(--vert-500)}
+.kpi.or{border-top-color: var(--jaune-500)}
+
+.kpi .v{
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--bf-500);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.kpi.rouge .v{color: var(--rm-500)}
+.kpi.vert .v{color: var(--vert-500)}
+.kpi.or .v{color: #8f6a00}
+
+.kpi .l{
+  font-size: .75rem;
+  color: var(--gs-500);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-top: var(--space-1);
+}
+
+/* ============================================================
+   SLIDER ANNÉES
+   ============================================================ */
+.slider-zone{
+  background: var(--gs-000);
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--gs-200);
+}
+
+.slider-zone label{
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--gs-700);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: var(--space-2);
+  letter-spacing: .5px;
+}
+
+.slider-zone .rangée{
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  font-size: .875rem;
+  color: var(--gs-500);
+}
+
+.slider-zone input[type=range]{
+  flex: 1;
+  accent-color: var(--bf-500);
+}
+
+/* ============================================================
+   ONGLETS — Style DSFR "tabs"
+   ============================================================ */
+.tabs{
+  display: flex;
+  gap: 0;
+  padding: 0 var(--space-6);
+  border-bottom: 2px solid var(--gs-200);
+  margin-top: var(--space-4);
+  overflow-x: auto;
+  background: var(--gs-000);
+}
+
+.tabs button{
+  padding: var(--space-3) var(--space-4);
+  border: none;
+  background: transparent;
+  font-size: .875rem;
+  font-weight: 500;
+  font-family: var(--font);
+  color: var(--gs-500);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: color .2s, border-color .2s;
+  margin-bottom: -2px;
+}
+
+.tabs button:hover{
+  color: var(--bf-500);
+  background: var(--gs-100);
+}
+
+.tabs button.actif{
+  color: var(--bf-500);
+  border-bottom-color: var(--bf-500);
+  font-weight: 700;
+}
+
+/* ============================================================
+   MAIN
+   ============================================================ */
+main{
+  padding: var(--space-5) var(--space-6);
+  max-width: 1700px;
+  margin: 0 auto;
+}
+
+.grille{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.carte{
+  background: var(--gs-000);
+  border: 1px solid var(--gs-200);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  margin-bottom: var(--space-5);
+  overflow: hidden;
+}
+
+.carte h2{
+  color: var(--bf-500);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--gs-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.carte h2 .compteur{
+  font-size: .75rem;
+  color: var(--gs-500);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ✅ FIX Plotly */
+.viz{
+  height: 400px;
+  min-height: 400px;
+  width: 100%;
+  position: relative;
+}
+.viz.tall{height: 650px; min-height: 650px}
+.viz.reseau{height: 700px; min-height: 700px}
+
+.js-plotly-plot{height:100%!important; width:100%!important}
+.js-plotly-plot .plot-container{height:100%!important; width:100%!important}
+.js-plotly-plot .svg-container{height:100%!important; width:100%!important}
+
+/* ============================================================
+   TABLEAUX
+   ============================================================ */
+table{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .875rem;
+}
+
+th, td{
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  border-bottom: 1px solid var(--gs-200);
+}
+
+th{
+  background: var(--gs-100);
+  color: var(--gs-700);
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+th:hover{
+  background: var(--bf-100);
+  color: var(--bf-500);
+}
+
+th::after{content:''; margin-left: var(--space-1); opacity: .3; font-size: .65rem}
+th.tri-asc::after{content:'▲'; opacity: 1; color: var(--bf-500)}
+th.tri-desc::after{content:'▼'; opacity: 1; color: var(--bf-500)}
+
+tbody tr{
+  cursor: pointer;
+  transition: background .15s;
+}
+tbody tr:hover{background: var(--bf-100)}
+
+.nb{
+  text-align: right;
+  font-weight: 700;
+  color: var(--rm-500);
+  font-variant-numeric: tabular-nums;
+}
+
+.ctx{
+  font-size: .75rem;
+  color: var(--gs-500);
+  font-style: italic;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* ============================================================
+   BADGES — Style DSFR
+   ============================================================ */
+.score-badge, .confiance-badge{
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: .7rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.score-12, .score-11{background: var(--vert-500); color: var(--gs-000)}
+.score-10, .score-9{background: #2f9e44; color: var(--gs-000)}
+.score-8, .score-7{background: var(--jaune-500); color: var(--gs-900)}
+.score-6, .score-5{background: #e0a800; color: var(--gs-900)}
+.score-4, .score-3, .score-2, .score-1, .score-0{background: var(--gs-200); color: var(--gs-700)}
+
+.confiance-strict{background: var(--vert-500); color: var(--gs-000)}
+.confiance-proche{background: #2f9e44; color: var(--gs-000)}
+.confiance-moyen{background: var(--jaune-500); color: var(--gs-900)}
+.confiance-large{background: var(--gs-200); color: var(--gs-700)}
+
+/* ============================================================
+   RECHERCHE
+   ============================================================ */
+.recherche-wrap{
+  position: relative;
+  margin-bottom: var(--space-3);
+}
+
+.recherche-wrap input{
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--gs-300);
+  border-radius: var(--radius);
+  font-size: .875rem;
+  font-family: var(--font);
+  background: var(--gs-000);
+}
+
+.recherche-wrap input:focus{
+  outline: none;
+  border-color: var(--bf-500);
+  box-shadow: 0 0 0 2px var(--bf-100);
+}
+
+/* ============================================================
+   BUDGET — KPIs et filtres
+   ============================================================ */
+.budget-kpis{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.budget-kpi{
+  background: var(--gs-000);
+  border: 1px solid var(--gs-200);
+  border-left: 4px solid var(--bf-500);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+
+.budget-kpi.or{border-left-color: var(--jaune-500)}
+.budget-kpi.rouge{border-left-color: var(--rm-500)}
+.budget-kpi.vert{border-left-color: var(--vert-500)}
+
+.budget-kpi .v{
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--bf-500);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.budget-kpi.or .v{color: #8f6a00}
+.budget-kpi.rouge .v{color: var(--rm-500)}
+.budget-kpi.vert .v{color: var(--vert-500)}
+
+.budget-kpi .l{
+  font-size: .7rem;
+  color: var(--gs-500);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-top: var(--space-1);
+}
+
+.filtres-budget{
+  background: var(--gs-000);
+  border: 1px solid var(--gs-200);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  margin-bottom: var(--space-5);
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filtres-budget label{
+  font-size: .8125rem;
+  font-weight: 500;
+  color: var(--gs-700);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.filtres-budget input[type=range]{
+  width: 200px;
+  accent-color: var(--bf-500);
+}
+
+.filtres-budget input[type=number]{
+  padding: 5px 10px;
+  border: 1px solid var(--gs-300);
+  border-radius: var(--radius);
+  width: 130px;
+  font-size: .8125rem;
+  font-family: var(--font);
+}
+
+.filtres-budget select{
+  padding: 5px 10px;
+  border: 1px solid var(--gs-300);
+  border-radius: var(--radius);
+  font-size: .8125rem;
+  font-family: var(--font);
+  background: var(--gs-000);
+}
+
+.filtres-budget .valeur-score{
+  font-weight: 700;
+  color: var(--bf-500);
+  font-size: 1rem;
+  min-width: 30px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   MESSAGES
+   ============================================================ */
+.message{
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  margin: var(--space-4) var(--space-6);
+  font-weight: 500;
+  background: var(--bf-100);
+  color: var(--bf-500);
+  border-left: 4px solid var(--bf-500);
+}
+
+.message.err{
+  background: var(--rm-100);
+  color: var(--rm-500);
+  border-left-color: var(--rm-500);
+}
+
+/* ============================================================
+   NO DATA
+   ============================================================ */
+.no-data{
+  padding: var(--space-7) var(--space-4);
+  text-align: center;
+  color: var(--gs-500);
+  font-size: .875rem;
+}
+
+.no-data .ic{
+  font-size: 2.5rem;
+  margin-bottom: var(--space-2);
+  opacity: .5;
+}
+
+/* ============================================================
+   PANNEAU DÉTAIL
+   ============================================================ */
+.detail-panel{
+  position: fixed;
+  right: 0; top: 0; bottom: 0;
+  width: 500px;
+  background: var(--gs-000);
+  box-shadow: -4px 0 20px rgba(0,0,0,.15);
+  z-index: 200;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform .3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-panel.ouvert{transform: translateX(0)}
+
+.detail-panel .entete{
+  background: var(--bf-500);
+  color: var(--gs-000);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.detail-panel .entete h3{
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.detail-panel .entete .fermer{
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: 300;
+  opacity: .8;
+}
+
+.detail-panel .entete .fermer:hover{opacity: 1}
+
+.detail-panel .corps{padding: var(--space-5); flex: 1}
+
+.detail-panel .corps p{
+  margin: var(--space-2) 0;
+  font-size: .875rem;
+}
+
+.detail-panel .corps strong{color: var(--bf-500)}
+
+.overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 150;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+
+.overlay.actif{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ============================================================
+   SCROLL TABLEAUX
+   ============================================================ */
+#budget-table-wrap, #tab-effectifs, #tab-montants{
+  max-height: 600px;
+  overflow-y: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--gs-200);
+}
+
+#liste-orateurs, #liste-themes, #liste-docs, #chiffres-cles{
+  max-height: 800px;
+  overflow-y: auto;
+}
+
+/* ============================================================
+   DOCUMENTS LIST
+   ============================================================ */
+.doc{
+  background: var(--gs-000);
+  border: 1px solid var(--gs-200);
+  border-left: 4px solid var(--bf-500);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-2);
+  cursor: pointer;
+  transition: box-shadow .2s;
+}
+
+.doc:hover{
+  box-shadow: 0 2px 8px rgba(0,0,145,.1);
+}
+
+.doc-header{
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.doc-header .badge{
+  font-size: .65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: var(--radius);
+  letter-spacing: .5px;
+}
+
+.badge-cri{background: var(--bf-100); color: var(--bf-500)}
+.badge-qst{background: #dffee6; color: var(--vert-500)}
+.badge-def{background: var(--gs-200); color: var(--gs-700)}
+
+.doc-header .titre{
+  flex: 1;
+  font-weight: 600;
+  font-size: .875rem;
+}
+
+.doc-header .mentions{
+  font-size: .75rem;
+  color: var(--rm-500);
+  font-weight: 700;
+  background: var(--rm-100);
+  padding: 2px 9px;
+  border-radius: var(--radius);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{
+  text-align: center;
+  padding: var(--space-5);
+  font-size: .8125rem;
+  color: var(--gs-500);
+  margin-top: var(--space-6);
+  border-top: 2px solid var(--gs-200);
+  background: var(--gs-000);
+}
+
+footer::after{
+  content: '';
+  display: block;
+  margin: var(--space-4) auto 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(to right,
+    var(--bf-500) 33.33%,
+    var(--gs-000) 33.33%, var(--gs-000) 66.66%,
+    var(--rm-500) 66.66%);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:768px){
+  .detail-panel{width: 100%}
+  main{padding: var(--space-4)}
+  header{padding: var(--space-3) var(--space-4)}
+  .tabs, .kpis, .filtres-actifs, .slider-zone{padding-left: var(--space-4); padding-right: var(--space-4)}
+  .grille{grid-template-columns: 1fr}
+}
 </style>
 </head>
 <body>
 
 <header>
-  <h1><span class="drapeau"></span> Dashboard BUMIDOM — Interactif</h1>
+  <h1>
+    <span class="marianne">RF</span>
+    <div>
+      BUMIDOM — Dashboard Interactif
+      <span class="sous-titre">République Française · Analyse budgétaire et parlementaire</span>
+    </div>
+  </h1>
   <div class="actions">
-    <button onclick="exportVueCSV()">📥 Export CSV</button>
-    <button onclick="exportVueJSON()">📄 Export JSON</button>
-    <button onclick="imprimerVue()">🖨️ Imprimer</button>
-    <button class="primary" onclick="reinitialiser()">🔄 Réinitialiser</button>
+    <button class="btn btn--secondary btn--sm" onclick="exportVueCSV()">📥 Export CSV</button>
+    <button class="btn btn--secondary btn--sm" onclick="exportVueJSON()">📄 Export JSON</button>
+    <button class="btn btn--secondary btn--sm" onclick="imprimerVue()">🖨️ Imprimer</button>
+    <button class="btn btn--primary btn--sm" onclick="reinitialiser()">🔄 Réinitialiser</button>
   </div>
 </header>
 
@@ -208,8 +834,7 @@
     <span>—</span>
     <input type="range" id="annee-max" min="1960" max="1995" value="1995">
     <span id="annee-max-label">1995</span>
-    <button class="actions button" onclick="resetAnnees()"
-      style="padding:4px 10px;font-size:.75rem;background:#eee">Reset</button>
+    <button class="btn btn--secondary btn--sm" onclick="resetAnnees()">Reset</button>
   </div>
 </div>
 
@@ -337,7 +962,10 @@
 
 </main>
 
-<footer>Dashboard BUMIDOM interactif · <span id="horodatage"></span></footer>
+<footer>
+  <strong>République Française</strong> · Dashboard BUMIDOM interactif<br>
+  <span id="horodatage"></span>
+</footer>
 
 <div class="overlay" id="overlay" onclick="fermerDetail()"></div>
 <aside class="detail-panel" id="detail-panel">
@@ -488,10 +1116,8 @@ function initOnglets(){
       b.classList.add('actif');
       document.getElementById('tab-'+b.dataset.tab).classList.add('actif');
       
-      // ✅ FIX : redessiner + forcer le resize de tous les graphiques visibles
       setTimeout(()=>{
         majVue();
-        // Redimensionner tous les graphiques Plotly visibles
         document.querySelectorAll('.js-plotly-plot').forEach(el => {
           if (el.offsetHeight > 0 && el.id) {
             try { Plotly.Plots.resize(el.id); } catch(e) {}
@@ -600,20 +1226,47 @@ function dessinerOngletActif(){
 }
 
 // ============================================================
-// LAYOUT PLOTLY
+// LAYOUT PLOTLY — Palette DSFR
 // ============================================================
-const LAYOUT = {
-  paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
-  font:{family:'system-ui', color:'#1a1a2e', size:11},
-  margin:{t:30,r:20,b:60,l:60}, autosize:true,
-  showlegend:false,
-  hoverlabel:{bgcolor:'#fff', bordercolor:'#000091', font:{color:'#1a1a2e', size:12}}
+const COULEURS_DSFR = {
+  bleu: '#000091',
+  bleuClair: '#1212ff',
+  rouge: '#e1000f',
+  vert: '#18753c',
+  jaune: '#d8a800',
+  orange: '#b34000',
+  gris: '#666666',
+  grisClair: '#929292',
+  grisTresClair: '#e5e5e5',
 };
-const CONFIG = {responsive: true, displayModeBar: true, displaylogo: false,
-  modeBarButtonsToRemove: ['lasso2d','select2d']};
+
+const LAYOUT = {
+  paper_bgcolor: 'rgba(0,0,0,0)',
+  plot_bgcolor: 'rgba(0,0,0,0)',
+  font: {
+    family: "'Marianne', system-ui, -apple-system, sans-serif",
+    color: '#1e1e1e',
+    size: 12
+  },
+  margin: {t: 30, r: 20, b: 60, l: 60},
+  autosize: true,
+  showlegend: false,
+  hoverlabel: {
+    bgcolor: '#ffffff',
+    bordercolor: '#000091',
+    font: {color: '#1e1e1e', size: 12, family: "'Marianne', system-ui, sans-serif"}
+  }
+};
+
+const CONFIG = {
+  responsive: true,
+  displayModeBar: true,
+  displaylogo: false,
+  modeBarButtonsToRemove: ['lasso2d','select2d']
+};
 
 // ============================================================
-// ✅ FIX CRITIQUE : safePlot avec resize automatique
+// SAFE PLOT — avec resize automatique
 // ============================================================
 function safePlot(id, data, layout, customConfig){
   const el = document.getElementById(id);
@@ -623,10 +1276,8 @@ function safePlot(id, data, layout, customConfig){
     return;
   }
   
-  // ✅ Déterminer la hauteur depuis le CSS du conteneur
   const hauteurCSS = el.clientHeight || el.offsetHeight || 400;
   
-  // ✅ Fusionner avec le layout par défaut et utiliser la hauteur CSS
   const finalLayout = Object.assign({}, LAYOUT, layout, {
     height: hauteurCSS,
     autosize: true
@@ -634,12 +1285,9 @@ function safePlot(id, data, layout, customConfig){
   
   try {
     Plotly.newPlot(id, data, finalLayout, customConfig || CONFIG).then(() => {
-      // ✅ FIX : forcer le resize après le rendu (3 tentatives)
       [50, 200, 500].forEach(delay => {
         setTimeout(() => {
-          try { 
-            Plotly.Plots.resize(id); 
-          } catch(e) {}
+          try { Plotly.Plots.resize(id); } catch(e) {}
         }, delay);
       });
     });
@@ -653,7 +1301,6 @@ function safePlot(id, data, layout, customConfig){
 // SYNTHÈSE
 // ============================================================
 function dessinerSynthese(){
-  // Périodes
   const parPeriode = {};
   DOCS.forEach(d=>{
     const m = d.fichier.match(/(\d{4})-(\d{4})/);
@@ -665,12 +1312,11 @@ function dessinerSynthese(){
   const periodes = Object.keys(parPeriode).sort();
   safePlot('viz-periodes', [{
     x: periodes, y: periodes.map(p=>parPeriode[p]),
-    type:'bar', marker:{color:'#000091'},
+    type:'bar', marker:{color: COULEURS_DSFR.bleu},
     hovertemplate:'<b>%{x}</b><br>%{y} mentions<extra></extra>'
   }], {...LAYOUT, xaxis:{tickangle:-30}});
   document.getElementById('c-periode').textContent = periodes.length + ' périodes';
 
-  // Types
   const types = {};
   DOCS.forEach(d=>{
     const t = d.fichier.includes('_qst_') ? 'Question écrite' :
@@ -679,30 +1325,28 @@ function dessinerSynthese(){
   });
   safePlot('viz-types', [{
     values: Object.values(types), labels: Object.keys(types),
-    type:'pie', hole:0.45,
-    marker:{colors:['#000091','#E1000F','#888']},
+    type:'pie', hole:0.5,
+    marker:{colors:[COULEURS_DSFR.bleu, COULEURS_DSFR.rouge, COULEURS_DSFR.grisClair]},
   }], {...LAYOUT, showlegend:true});
   document.getElementById('c-types').textContent = Object.keys(types).length + ' types';
 
-  // Top orateurs
   const aggO = {};
   DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>aggO[o.nom]=(aggO[o.nom]||0)+o.occurrences));
   const topO = Object.entries(aggO).sort((a,b)=>b[1]-a[1]).slice(0,10);
   safePlot('viz-orateurs', [{
     x: topO.map(o=>o[1]), y: topO.map(o=>o[0]),
     type:'bar', orientation:'h',
-    marker:{color:topO.map((_,i)=>i<3?'#E1000F':'#000091')},
+    marker:{color:topO.map((_,i)=>i<3?COULEURS_DSFR.rouge:COULEURS_DSFR.bleu)},
   }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:20,b:40,l:180}});
   document.getElementById('c-orateurs').textContent = topO.length + ' orateurs';
 
-  // Top thèmes
   const aggTh = {};
   DOCS.forEach(d=>Object.entries(d.themes||{}).forEach(([t,n])=>aggTh[t]=(aggTh[t]||0)+n));
   const topTh = Object.entries(aggTh).sort((a,b)=>b[1]-a[1]).slice(0,10);
   safePlot('viz-themes', [{
     values: topTh.map(t=>t[1]), labels: topTh.map(t=>t[0]),
-    type:'pie', hole:0.45,
-    marker:{colors:['#E1000F','#000091','#1212ff','#ff6b6b','#888','#4a4a8a','#b8000c','#ffa500','#2e7d32','#7b1fa2']},
+    type:'pie', hole:0.5,
+    marker:{colors:[COULEURS_DSFR.rouge, COULEURS_DSFR.bleu, COULEURS_DSFR.bleuClair, '#ff6b6b', COULEURS_DSFR.gris, '#4a4a8a', '#b8000c', COULEURS_DSFR.orange, COULEURS_DSFR.vert, '#7b1fa2']},
   }], {...LAYOUT, showlegend:true});
   document.getElementById('c-themes').textContent = topTh.length + ' thèmes';
 }
@@ -760,7 +1404,6 @@ function dessinerBudget(){
     </div>
   `;
 
-  // Évolution du budget annuel
   const annees = BUDGET_BUDGETS.map(b=>+b.annee).filter(Boolean).sort((a,b)=>a-b);
   const scoresB = BUDGET_BUDGETS.map(b=>+b.score || 0);
 
@@ -772,10 +1415,10 @@ function dessinerBudget(){
       marker: {
         color: BUDGET_BUDGETS.map(b=>{
           const s = +b.score || 0;
-          if (s >= 10) return '#1b7a2e';
-          if (s >= 8) return '#4a9d3a';
-          if (s >= 7) return '#d4af37';
-          return '#ccc';
+          if (s >= 10) return COULEURS_DSFR.vert;
+          if (s >= 8) return '#2f9e44';
+          if (s >= 7) return COULEURS_DSFR.jaune;
+          return COULEURS_DSFR.grisClair;
         }),
       },
       text: BUDGET_BUDGETS.map(b=>fmtM(+b.budget_francs) + ' F'),
@@ -788,7 +1431,6 @@ function dessinerBudget(){
   }
   document.getElementById('c-budget-evol').textContent = annees.length + ' années';
 
-  // Distribution des scores
   const scoreCounts = {};
   for (let i = 0; i <= 13; i++) scoreCounts[i] = 0;
   montants.forEach(m=>{ scoreCounts[+m.score || 0]++; });
@@ -800,11 +1442,11 @@ function dessinerBudget(){
     type: 'bar',
     marker: {
       color: scores.map(s=>{
-        if (s >= 10) return '#1b7a2e';
-        if (s >= 8) return '#4a9d3a';
-        if (s >= 7) return '#d4af37';
+        if (s >= 10) return COULEURS_DSFR.vert;
+        if (s >= 8) return '#2f9e44';
+        if (s >= 7) return COULEURS_DSFR.jaune;
         if (s >= 5) return '#e0a800';
-        return '#ccc';
+        return COULEURS_DSFR.grisClair;
       }),
     },
     hovertemplate: '<b>%{x}</b><br>%{y} montants<extra></extra>',
@@ -812,7 +1454,6 @@ function dessinerBudget(){
 
   document.getElementById('c-budget-scores').textContent = montants.length + ' montants';
 
-  // Top 30 montants
   const top = [...montants].sort((a,b)=>num(b.valeur_francs) - num(a.valeur_francs)).slice(0, 30);
 
   if (top.length > 0){
@@ -824,10 +1465,10 @@ function dessinerBudget(){
       marker: {
         color: top.map(m=>{
           const s = +m.score;
-          if (s >= 10) return '#1b7a2e';
-          if (s >= 8) return '#4a9d3a';
-          if (s >= 7) return '#d4af37';
-          return '#ccc';
+          if (s >= 10) return COULEURS_DSFR.vert;
+          if (s >= 8) return '#2f9e44';
+          if (s >= 7) return COULEURS_DSFR.jaune;
+          return COULEURS_DSFR.grisClair;
         }),
       },
       text: top.map(m=>fmtM(num(m.valeur_francs)) + ' F'),
@@ -840,7 +1481,6 @@ function dessinerBudget(){
   }
   document.getElementById('c-budget-top').textContent = top.length + ' montants';
 
-  // Répartition par confiance
   const confCounts = { strict:0, proche:0, moyen:0, large:0 };
   montants.forEach(m=>{ if (m.confiance in confCounts) confCounts[m.confiance]++; });
 
@@ -849,13 +1489,12 @@ function dessinerBudget(){
     labels: Object.keys(confCounts).map(c=>c.charAt(0).toUpperCase()+c.slice(1)),
     type: 'pie',
     hole: 0.5,
-    marker: { colors: ['#1b7a2e','#4a9d3a','#d4af37','#ccc'] },
+    marker: { colors: [COULEURS_DSFR.vert, '#2f9e44', COULEURS_DSFR.jaune, COULEURS_DSFR.grisClair] },
     hovertemplate: '<b>%{label}</b><br>%{value} montants (%{percent})<extra></extra>',
   }], {...LAYOUT, showlegend:true});
 
   document.getElementById('c-budget-conf').textContent = montants.length + ' montants';
 
-  // Tableau
   dessinerTableauBudget(montants);
 }
 
@@ -935,7 +1574,7 @@ function dessinerChiffres(){
         x: topBudget.map(m=>m.annee),
         y: topBudget.map(m=>+m.valeur_francs / 1e6),
         type: 'bar',
-        marker: { color: '#E1000F' },
+        marker: { color: COULEURS_DSFR.rouge },
         hovertemplate: '<b>%{x}</b><br>%{y:.1f} MF<br>%{customdata}<extra></extra>',
         customdata: topBudget.map(m=>m.fichier.substring(0, 30))
       }], {...LAYOUT, yaxis:{title:'Millions F'}});
@@ -954,7 +1593,7 @@ function dessinerChiffres(){
           x: topEff.map(e=>e.fichier.substring(0,20)),
           y: topEff.map(e=>+e.valeur),
           type: 'bar',
-          marker: { color: '#000091' },
+          marker: { color: COULEURS_DSFR.bleu },
           hovertemplate: '<b>%{x}</b><br>%{y:,} personnes<extra></extra>'
         }], {...LAYOUT, xaxis:{tickangle:-45, tickfont:{size:9}}});
       } else {
@@ -1007,10 +1646,10 @@ function dessinerChiffres(){
     ];
     document.getElementById('chiffres-cles').innerHTML = chiffres.map((c,i)=>`
       <div style="display:flex;justify-content:space-between;padding:10px 14px;margin:5px 0;
-                  background:${i<3?'#fff5f5':'#f5f5f7'};border-radius:6px;
-                  border-left:4px solid ${i<3?'#E1000F':'#000091'}">
+                  background:${i<3?'#ffe9e9':'#f6f6f6'};border-radius:4px;
+                  border-left:4px solid ${i<3?'#e1000f':'#000091'}">
         <span>${c[0]}</span>
-        <strong style="color:${i<3?'#E1000F':'#000091'}">${c[1]}</strong>
+        <strong style="color:${i<3?'#e1000f':'#000091'}">${c[1]}</strong>
       </div>
     `).join('');
     document.getElementById('c-chiffres').textContent = chiffres.length + ' chiffres';
@@ -1034,7 +1673,7 @@ function dessinerOrateurs(){
   safePlot('viz-orateurs-bar', [{
     x: top.map(o=>o[1]), y: top.map(o=>o[0]),
     type:'bar', orientation:'h',
-    marker:{color:top.map((_,i)=>i<3?'#E1000F':'#000091')},
+    marker:{color:top.map((_,i)=>i<3?COULEURS_DSFR.rouge:COULEURS_DSFR.bleu)},
   }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:30,b:40,l:220}});
 
   const container = document.getElementById('liste-orateurs');
@@ -1070,7 +1709,7 @@ function dessinerThemes(){
   const entries = Object.entries(agg).sort((a,b)=>b[1]-a[1]);
 
   if (entries.length === 0){
-    document.getElementById('viz-radar').innerHTML = '<div class="no-data">Pas de thèmes (resultats_enrichis.json manquant ?)</div>';
+    document.getElementById('viz-radar').innerHTML = '<div class="no-data">Pas de thèmes</div>';
     document.getElementById('viz-themes-bar').innerHTML = '<div class="no-data">Pas de thèmes</div>';
     document.getElementById('liste-themes').innerHTML = '<div class="no-data">Pas de données</div>';
     return;
@@ -1080,13 +1719,13 @@ function dessinerThemes(){
     type:'scatterpolar',
     r:[...entries.slice(0,10).map(e=>e[1]), entries[0][1]],
     theta:[...entries.slice(0,10).map(e=>e[0]), entries[0][0]],
-    fill:'toself', marker:{color:'#E1000F'}, line:{color:'#E1000F'},
+    fill:'toself', marker:{color:COULEURS_DSFR.rouge}, line:{color:COULEURS_DSFR.rouge},
   }], {...LAYOUT, polar:{bgcolor:'rgba(0,0,0,0)'}});
 
   safePlot('viz-themes-bar', [{
     x: entries.slice(0,15).map(e=>e[0]),
     y: entries.slice(0,15).map(e=>e[1]),
-    type:'bar', marker:{color:'#000091'},
+    type:'bar', marker:{color:COULEURS_DSFR.bleu},
   }], {...LAYOUT, xaxis:{tickangle:-45}});
 
   const container = document.getElementById('liste-themes');
@@ -1125,7 +1764,7 @@ function dessinerChrono(){
       x: sorted.map(d=>d.fichier.replace('.txt','').substring(0,30)),
       y: sorted.map(d=>d.nb_mentions),
       type:'bar',
-      marker:{color:sorted.map(d=>d.nb_mentions>5?'#E1000F':'#000091')},
+      marker:{color:sorted.map(d=>d.nb_mentions>5?COULEURS_DSFR.rouge:COULEURS_DSFR.bleu)},
     }], {...LAYOUT, xaxis:{tickangle:-60, tickfont:{size:8}}});
   } else {
     document.getElementById('viz-chrono').innerHTML = '<div class="no-data">Pas de documents</div>';
@@ -1146,7 +1785,7 @@ function dessinerChrono(){
       x: annees,
       y: annees.map(a=>parAnnee[a]),
       type: 'bar',
-      marker: { color: '#1212ff' },
+      marker: { color: COULEURS_DSFR.bleuClair },
       hovertemplate: '<b>%{x}</b><br>%{y} documents<extra></extra>'
     }], {...LAYOUT});
   } else {
@@ -1172,7 +1811,7 @@ function dessinerDocs(){
                 d.fichier.includes('_cri_') ? 'Compte rendu' : 'Autre';
       const badge = t === 'Compte rendu' ? 'cri' : t === 'Question écrite' ? 'qst' : 'def';
       return `
-        <div class="doc" style="border-left-color:#000091">
+        <div class="doc">
           <div class="doc-header">
             <span class="badge badge-${badge}">${t}</span>
             <span class="titre">${esc(d.fichier.replace('.txt',''))}</span>
