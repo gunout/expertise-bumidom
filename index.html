@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html lang="fr" data-fr-scheme="light">
+<html lang="fr" data-fr-scheme="system" data-fr-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BUMIDOM — Analyse budgétaire et parlementaire</title>
 
-<!-- ✅ DSFR officiel (Système de Design de l'État) -->
+<!-- ✅ DSFR officiel complet -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.11.2/dist/dsfr.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.11.2/dist/utility/utility.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.11.2/dist/component/component.min.css">
 
 <script src="plotly.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.11.2/dist/dsfr.module.min.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.11.2/dist/dsfr.nomodule.min.js"></script>
 
 <style>
 /* ============================================================
-   VARIABLES DSFR + COMPLÉMENTS
+   ADAPTATIONS AU DSFR — Compléments
    ============================================================ */
 :root{
   --bf-500:#000091;
@@ -38,19 +40,6 @@
   --font-marianne: 'Marianne', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
-/* ✅ MODE SOMBRE DSFR */
-@media (prefers-color-scheme: dark){
-  html[data-fr-scheme="system"]{
-    --gs-900:#ffffff;
-    --gs-700:#e5e5e5;
-    --gs-500:#929292;
-    --gs-300:#666666;
-    --gs-200:#3a3a3a;
-    --gs-100:#1e1e1e;
-    --gs-000:#161616;
-  }
-}
-
 *{box-sizing:border-box;margin:0;padding:0}
 
 html, body{
@@ -60,102 +49,12 @@ html, body{
   line-height: 1.5;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ============================================================
-   BANDEAU "RÉPUBLIQUE FRANÇAISE" — Style officiel DSFR
+   EN-TÊTE PERSONNALISÉ (après le header DSFR)
    ============================================================ */
-.bandeau-rf{
-  background: var(--gs-000);
-  border-bottom: 1px solid var(--gs-200);
-  padding: 8px 24px;
-  font-size: .75rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.bandeau-rf .bloc-marque{
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.bandeau-rf .logo-rf{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: var(--gs-900);
-}
-
-.bandeau-rf .logo-rf svg.marianne-complet{
-  height: 68px;
-  width: auto;
-  flex-shrink: 0;
-}
-
-.bandeau-rf .logo-rf .texte-rf{
-  display: flex;
-  flex-direction: column;
-  line-height: 1.15;
-}
-
-.bandeau-rf .logo-rf .texte-rf .rf-ligne-1{
-  font-weight: 700;
-  font-size: .875rem;
-  letter-spacing: .5px;
-  color: var(--gs-900);
-}
-
-.bandeau-rf .logo-rf .texte-rf .rf-ligne-2{
-  font-size: .6875rem;
-  color: var(--gs-500);
-  font-style: italic;
-  letter-spacing: .3px;
-  margin-top: 1px;
-}
-
-.bandeau-rf .bloc-droite{
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-}
-
-.bandeau-rf .bloc-droite .ministere{
-  font-size: .75rem;
-  font-weight: 700;
-  color: var(--gs-700);
-  letter-spacing: .5px;
-}
-
-.bandeau-rf .bloc-droite .devise{
-  font-size: .6875rem;
-  color: var(--gs-500);
-  font-style: italic;
-  letter-spacing: .3px;
-}
-
-@media(max-width:768px){
-  .bandeau-rf{
-    padding: 8px 16px;
-  }
-  .bandeau-rf .bloc-droite{
-    display: none;
-  }
-  .bandeau-rf .logo-rf svg.marianne-complet{
-    height: 52px;
-  }
-}
-
-/* ============================================================
-   EN-TÊTE PRINCIPAL
-   ============================================================ */
-header{
+.header-custom{
   background: var(--gs-000);
   border-bottom: 2px solid var(--gs-200);
   padding: 16px 24px;
@@ -170,7 +69,7 @@ header{
   box-shadow: 0 2px 6px rgba(0,0,0,.04);
 }
 
-header::before{
+.header-custom::before{
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -181,41 +80,35 @@ header::before{
     var(--rm-500) 66.66%, var(--rm-500) 100%);
 }
 
-header h1{
+.header-custom h1{
   color: var(--gs-900);
   font-size: 1.25rem;
   font-weight: 700;
   margin-top: 6px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
 }
 
-header h1 .titre-principal{
-  display: flex;
-  flex-direction: column;
-}
-
-header h1 .titre-principal .ligne-1{
+.header-custom h1 .ligne-1{
   color: var(--bf-500);
   font-size: 1.25rem;
   font-weight: 700;
+  display: block;
 }
 
-header h1 .titre-principal .ligne-2{
+.header-custom h1 .ligne-2{
   color: var(--gs-500);
   font-size: .75rem;
   font-weight: 400;
   margin-top: 2px;
   letter-spacing: .3px;
+  display: block;
 }
 
 /* ============================================================
-   BOUTONS — Style DSFR
+   BOUTONS CUSTOM
    ============================================================ */
 .actions{display:flex;gap:8px;flex-wrap:wrap}
 
-.btn{
+.btn-custom{
   padding: 8px 16px;
   border: 1px solid transparent;
   border-radius: 0;
@@ -232,31 +125,12 @@ header h1 .titre-principal .ligne-2{
   letter-spacing: .2px;
 }
 
-.btn:hover{background: var(--bf-100)}
-
-.btn--primary{
-  background: var(--bf-500);
-  color: var(--gs-000);
-}
-.btn--primary:hover{background: var(--bf-900)}
-
-.btn--secondary{
-  background: var(--gs-000);
-  border-color: var(--gs-300);
-  color: var(--gs-900);
-}
-.btn--secondary:hover{background: var(--gs-100)}
-
-.btn--danger{
-  background: var(--rm-500);
-  color: var(--gs-000);
-}
-.btn--danger:hover{background: var(--rm-600)}
-
-.btn--sm{
-  padding: 6px 12px;
-  font-size: .8125rem;
-}
+.btn-custom:hover{background: var(--bf-100)}
+.btn-custom.primary{background: var(--bf-500); color: var(--gs-000)}
+.btn-custom.primary:hover{background: var(--bf-900)}
+.btn-custom.secondary{background: var(--gs-000); border-color: var(--gs-300); color: var(--gs-900)}
+.btn-custom.secondary:hover{background: var(--gs-100)}
+.btn-custom.sm{padding: 6px 12px; font-size: .8125rem}
 
 /* ============================================================
    FILTRES ACTIFS
@@ -290,16 +164,13 @@ header h1 .titre-principal .ligne-2{
   font-weight: 700;
   opacity: .6;
   margin-left: 4px;
-  padding: 0 2px;
 }
 .filtres-actifs .chip .x:hover{opacity:1}
-
 .filtres-actifs .chip.rouge{
   background: var(--rm-100);
   color: var(--rm-500);
   border-color: var(--rm-500);
 }
-
 .filtres-actifs .vide{
   color: var(--gs-500);
   font-size: .875rem;
@@ -406,12 +277,7 @@ header h1 .titre-principal .ligne-2{
 }
 
 .tabs button:hover{color: var(--bf-500); background: var(--gs-100)}
-
-.tabs button.actif{
-  color: var(--bf-500);
-  border-bottom-color: var(--bf-500);
-  font-weight: 700;
-}
+.tabs button.actif{color: var(--bf-500); border-bottom-color: var(--bf-500); font-weight: 700}
 
 /* ============================================================
    MAIN
@@ -672,11 +538,7 @@ tbody tr:hover{background: var(--bf-100)}
   font-size: .875rem;
 }
 
-.no-data .ic{
-  font-size: 2.5rem;
-  margin-bottom: 8px;
-  opacity: .5;
-}
+.no-data .ic{font-size: 2.5rem; margin-bottom: 8px; opacity: .5}
 
 /* ============================================================
    PANNEAU DÉTAIL
@@ -790,82 +652,44 @@ tbody tr:hover{background: var(--bf-100)}
 }
 
 /* ============================================================
-   FOOTER — Avec devise et logo Marianne
+   BANDEAU COOKIES
    ============================================================ */
-footer{
-  text-align: center;
-  padding: 32px 24px 16px;
-  font-size: .8125rem;
-  color: var(--gs-500);
-  margin-top: 40px;
+.bandeau-cookies{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background: var(--gs-000);
   border-top: 1px solid var(--gs-200);
-  position: relative;
-}
-
-footer::before{
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(to right,
-    var(--bf-500) 0%, var(--bf-500) 33.33%,
-    var(--gs-000) 33.33%, var(--gs-000) 66.66%,
-    var(--rm-500) 66.66%, var(--rm-500) 100%);
-}
-
-footer .footer-bloc{
+  padding: 16px 24px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.1);
+  z-index: 300;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-footer .footer-logo{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 700;
-  color: var(--gs-900);
-  font-size: .875rem;
-  text-decoration: none;
-}
-
-footer .footer-logo svg{
-  height: 52px;
-  width: auto;
-}
-
-footer .devise-footer{
-  font-style: italic;
-  color: var(--gs-500);
-  font-size: .75rem;
-  letter-spacing: .5px;
-  margin-top: 4px;
-}
-
-footer .footer-liens{
-  display: flex;
-  justify-content: center;
   gap: 16px;
-  flex-wrap: wrap;
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--gs-200);
-  font-size: .75rem;
+  transform: translateY(100%);
+  transition: transform .3s ease;
 }
 
-footer .footer-liens a{
+.bandeau-cookies.visible{transform: translateY(0)}
+
+.bandeau-cookies .texte{
+  flex: 1;
+  font-size: .875rem;
   color: var(--gs-700);
-  text-decoration: none;
-  padding: 4px 8px;
+  min-width: 280px;
 }
 
-footer .footer-liens a:hover{
+.bandeau-cookies .texte strong{
   color: var(--bf-500);
-  text-decoration: underline;
+}
+
+.bandeau-cookies .actions{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* ============================================================
@@ -874,100 +698,130 @@ footer .footer-liens a:hover{
 @media(max-width:768px){
   .detail-panel{width: 100%}
   main{padding: 16px}
-  header{padding: 12px 16px}
+  .header-custom{padding: 12px 16px}
   .tabs, .kpis, .filtres-actifs, .slider-zone{padding-left: 16px; padding-right: 16px}
   .grille{grid-template-columns: 1fr}
+  .bandeau-cookies{flex-direction: column; align-items: flex-start}
 }
 </style>
 </head>
 <body>
 
 <!-- ============================================================
-     BANDEAU RÉPUBLIQUE FRANÇAISE — Avec vrai logo Marianne
+     1. EN-TÊTE DSFR OFFICIEL (composant fr-header)
      ============================================================ -->
-<div class="bandeau-rf">
-  <div class="bloc-marque">
-    <a href="https://www.gouvernement.fr" target="_blank" class="logo-rf" title="République Française">
-      <!-- ✅ Vrai logo Marianne officiel (SVG complet) -->
-      <svg class="marianne-complet" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" aria-label="République Française">
-        <!-- Bandes tricolores verticales -->
-        <rect x="0" y="0" width="333.33" height="1000" fill="#000091"/>
-        <rect x="333.33" y="0" width="333.33" height="1000" fill="#ffffff"/>
-        <rect x="666.66" y="0" width="333.33" height="1000" fill="#e1000f"/>
-        
-        <!-- Profil Marianne stylisé (blanc sur bleu) - silhouette officielle -->
-        <g fill="#ffffff">
-          <!-- Visage et cheveux -->
-          <path d="M 150 300 
-                   Q 180 250 220 240 
-                   Q 260 230 290 260 
-                   Q 320 290 315 340 
-                   L 315 420 
-                   Q 310 480 280 520 
-                   L 180 520 
-                   Q 150 480 150 420 Z"/>
-          
-          <!-- Cheveux arrière -->
-          <path d="M 130 280 
-                   Q 140 200 200 170 
-                   Q 260 140 310 180 
-                   Q 340 210 340 260 
-                   Q 320 240 300 250 
-                   Q 270 220 220 230 
-                   Q 180 240 160 280 Z"/>
-          
-          <!-- Épaule et buste -->
-          <path d="M 90 640 
-                   Q 100 550 180 520 
-                   L 280 520 
-                   Q 360 550 370 640 
-                   L 370 720 
-                   L 90 720 Z"/>
-          
-          <!-- Détail du cou -->
-          <path d="M 200 490 Q 230 520 260 490 L 260 530 Q 230 555 200 530 Z"/>
-          
-          <!-- Étoile stylisée sur le front (détail Marianne) -->
-          <circle cx="225" cy="290" r="8"/>
-          
-          <!-- Petit éclat lumineux -->
-          <path d="M 195 350 Q 200 345 205 350 Q 200 355 195 350 Z" fill="#000091"/>
-        </g>
-        
-        <!-- Branche d'olivier (élément traditionnel) -->
-        <g fill="#ffffff" opacity="0.85">
-          <path d="M 240 680 Q 250 650 240 620 Q 255 635 260 660 Q 270 640 275 615 Q 280 645 275 670 Q 290 655 300 635 Q 295 665 280 685 Z"/>
-        </g>
-      </svg>
-      <div class="texte-rf">
-        <div class="rf-ligne-1">RÉPUBLIQUE FRANÇAISE</div>
-        <div class="rf-ligne-2">Liberté · Égalité · Fraternité</div>
+<header role="banner" class="fr-header">
+  <div class="fr-header__body">
+    <div class="fr-container">
+      <div class="fr-header__body-row">
+        <div class="fr-header__brand fr-enlarge-link">
+          <div class="fr-header__brand-top">
+            <div class="fr-header__logo">
+              <p class="fr-logo">
+                RÉPUBLIQUE
+                <br>FRANÇAISE
+              </p>
+            </div>
+            <div class="fr-header__navbar">
+              <button class="fr-btn--menu fr-btn" data-fr-opened="false" aria-controls="modal-menu" aria-haspopup="menu" title="Menu">
+                Menu
+              </button>
+            </div>
+          </div>
+          <div class="fr-header__service">
+            <a href="/" title="Accueil — BUMIDOM Dashboard">
+              <p class="fr-header__service-title">BUMIDOM — Dashboard</p>
+            </a>
+            <p class="fr-header__service-tagline">
+              Analyse budgétaire et parlementaire · 1963-1988
+            </p>
+          </div>
+        </div>
+        <div class="fr-header__tools">
+          <div class="fr-header__tools-links">
+            <ul class="fr-btns-group">
+              <li>
+                <button class="fr-btn fr-icon-download-line" onclick="exportVueCSV()">
+                  Export CSV
+                </button>
+              </li>
+              <li>
+                <button class="fr-btn fr-icon-printer-line" onclick="imprimerVue()">
+                  Imprimer
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </a>
-  </div>
-  <div class="bloc-droite">
-    <div class="ministere">MINISTÈRE CHARGÉ DES OUTRE-MER</div>
-    <div class="devise">BUMIDOM · 1963-1988</div>
-  </div>
-</div>
-
-<!-- ============================================================
-     EN-TÊTE PRINCIPAL
-     ============================================================ -->
-<header>
-  <h1>
-    <div class="titre-principal">
-      <span class="ligne-1">BUMIDOM — Dashboard Interactif</span>
-      <span class="ligne-2">Analyse budgétaire et parlementaire · 1963-1988</span>
     </div>
-  </h1>
-  <div class="actions">
-    <button class="btn btn--secondary btn--sm" onclick="exportVueCSV()">📥 Export CSV</button>
-    <button class="btn btn--secondary btn--sm" onclick="exportVueJSON()">📄 Export JSON</button>
-    <button class="btn btn--secondary btn--sm" onclick="imprimerVue()">🖨️ Imprimer</button>
-    <button class="btn btn--primary btn--sm" onclick="reinitialiser()">🔄 Réinitialiser</button>
+  </div>
+  <div class="fr-header__menu fr-modal" id="modal-menu" aria-labelledby="button-menu">
+    <div class="fr-container">
+      <button class="fr-btn--close fr-btn" aria-controls="modal-menu" title="Fermer">
+        Fermer
+      </button>
+      <div class="fr-header__menu-links"></div>
+      <nav class="fr-nav" id="navigation-main" role="navigation" aria-label="Menu principal">
+        <ul class="fr-nav__list">
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="#synthese" onclick="activerOnglet('synthese')">Synthèse</a>
+          </li>
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="#budget" onclick="activerOnglet('budget')">Budget</a>
+          </li>
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="#chiffres" onclick="activerOnglet('chiffres')">Chiffres clés</a>
+          </li>
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="#orateurs" onclick="activerOnglet('orateurs')">Orateurs</a>
+          </li>
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="#themes" onclick="activerOnglet('themes')">Thèmes</a>
+          </li>
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="#chrono" onclick="activerOnglet('chrono')">Chronologie</a>
+          </li>
+          <li class="fr-nav__item">
+            <a class="fr-nav__link" href="#docs" onclick="activerOnglet('docs')">Documents</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
 </header>
+
+<!-- ============================================================
+     2. EN-TÊTE CUSTOM (avec sélecteur de langue)
+     ============================================================ -->
+<div class="header-custom">
+  <h1>
+    <span class="ligne-1">BUMIDOM — Dashboard Interactif</span>
+    <span class="ligne-2">Analyse budgétaire et parlementaire · 1963-1988</span>
+  </h1>
+  <div class="actions">
+    <button class="btn-custom secondary sm" onclick="exportVueCSV()">📥 Export CSV</button>
+    <button class="btn-custom secondary sm" onclick="exportVueJSON()">📄 Export JSON</button>
+    <button class="btn-custom secondary sm" onclick="imprimerVue()">🖨️ Imprimer</button>
+    <button class="btn-custom primary sm" onclick="reinitialiser()">🔄 Réinitialiser</button>
+    
+    <!-- ✅ SÉLECTEUR DE LANGUE -->
+    <div class="fr-translate fr-nav" style="display:inline-block;margin-left:8px">
+      <div class="fr-nav__item">
+        <button class="fr-translate__btn fr-btn" aria-controls="translate-menu" aria-expanded="false" title="Sélectionner une langue">
+          FR<span class="fr-hidden-lg"> — Français</span>
+        </button>
+        <div class="fr-collapse fr-translate__menu fr-menu" id="translate-menu">
+          <ul class="fr-menu__list">
+            <li><a class="fr-translate__language fr-nav__link" href="#" hreflang="fr" lang="fr" onclick="changerLangue('fr')">FR — Français</a></li>
+            <li><a class="fr-translate__language fr-nav__link" href="#" hreflang="en" lang="en" onclick="changerLangue('en')">EN — English</a></li>
+            <li><a class="fr-translate__language fr-nav__link" href="#" hreflang="es" lang="es" onclick="changerLangue('es')">ES — Español</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="filtres-actifs" id="filtres-actifs"></div>
 
@@ -981,7 +835,7 @@ footer .footer-liens a:hover{
     <span>—</span>
     <input type="range" id="annee-max" min="1960" max="1995" value="1995">
     <span id="annee-max-label">1995</span>
-    <button class="btn btn--secondary btn--sm" onclick="resetAnnees()">Reset</button>
+    <button class="btn-custom secondary sm" onclick="resetAnnees()">Reset</button>
   </div>
 </div>
 
@@ -1110,40 +964,87 @@ footer .footer-liens a:hover{
 </main>
 
 <!-- ============================================================
-     FOOTER — Style institutionnel avec devise et liens
+     3. FOOTER DSFR OFFICIEL (composant fr-footer)
      ============================================================ -->
-<footer>
-  <div class="footer-bloc">
-    <a href="https://www.gouvernement.fr" target="_blank" class="footer-logo">
-      <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" aria-label="République Française">
-        <rect x="0" y="0" width="333.33" height="1000" fill="#000091"/>
-        <rect x="333.33" y="0" width="333.33" height="1000" fill="#ffffff"/>
-        <rect x="666.66" y="0" width="333.33" height="1000" fill="#e1000f"/>
-        <g fill="#ffffff">
-          <path d="M 150 300 Q 180 250 220 240 Q 260 230 290 260 Q 320 290 315 340 L 315 420 Q 310 480 280 520 L 180 520 Q 150 480 150 420 Z"/>
-          <path d="M 130 280 Q 140 200 200 170 Q 260 140 310 180 Q 340 210 340 260 Q 320 240 300 250 Q 270 220 220 230 Q 180 240 160 280 Z"/>
-          <path d="M 90 640 Q 100 550 180 520 L 280 520 Q 360 550 370 640 L 370 720 L 90 720 Z"/>
-          <path d="M 200 490 Q 230 520 260 490 L 260 530 Q 230 555 200 530 Z"/>
-          <circle cx="225" cy="290" r="8"/>
-        </g>
-      </svg>
-      <span>RÉPUBLIQUE FRANÇAISE</span>
-    </a>
-  </div>
-  <div class="devise-footer">Liberté · Égalité · Fraternité</div>
-  <div style="margin-top: 12px; color: var(--gs-500); font-size: .75rem">
-    Dashboard BUMIDOM · <span id="horodatage"></span>
-  </div>
-  
-  <!-- ✅ Liens officiels -->
-  <div class="footer-liens">
-    <a href="https://www.gouvernement.fr" target="_blank">gouvernement.fr</a>
-    <a href="https://www.outre-mer.gouv.fr" target="_blank">outre-mer.gouv.fr</a>
-    <a href="https://www.vie-publique.fr" target="_blank">vie-publique.fr</a>
-    <a href="https://www.assemblee-nationale.fr" target="_blank">assemblee-nationale.fr</a>
-    <a href="https://www.senat.fr" target="_blank">senat.fr</a>
+<footer class="fr-footer" role="contentinfo" id="footer">
+  <div class="fr-container">
+    <div class="fr-footer__body">
+      <div class="fr-footer__brand fr-enlarge-link">
+        <a href="/" title="Retour à l'accueil">
+          <p class="fr-logo">
+            RÉPUBLIQUE
+            <br>FRANÇAISE
+          </p>
+        </a>
+      </div>
+      <div class="fr-footer__content">
+        <p class="fr-footer__content-desc">
+          Dashboard BUMIDOM — Analyse budgétaire et parlementaire du Bureau pour le développement 
+          des migrations intéressant les départements d'outre-mer (1963-1988).
+          <br><em>Liberté · Égalité · Fraternité</em>
+        </p>
+        <ul class="fr-footer__content-list">
+          <li class="fr-footer__content-item">
+            <a class="fr-footer__content-link" href="https://www.gouvernement.fr" target="_blank">gouvernement.fr</a>
+          </li>
+          <li class="fr-footer__content-item">
+            <a class="fr-footer__content-link" href="https://www.outre-mer.gouv.fr" target="_blank">outre-mer.gouv.fr</a>
+          </li>
+          <li class="fr-footer__content-item">
+            <a class="fr-footer__content-link" href="https://www.vie-publique.fr" target="_blank">vie-publique.fr</a>
+          </li>
+          <li class="fr-footer__content-item">
+            <a class="fr-footer__content-link" href="https://www.assemblee-nationale.fr" target="_blank">assemblee-nationale.fr</a>
+          </li>
+          <li class="fr-footer__content-item">
+            <a class="fr-footer__content-link" href="https://www.senat.fr" target="_blank">senat.fr</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="fr-footer__bottom">
+      <ul class="fr-footer__bottom-list">
+        <li class="fr-footer__bottom-item">
+          <a class="fr-footer__bottom-link" href="#">Plan du site</a>
+        </li>
+        <li class="fr-footer__bottom-item">
+          <a class="fr-footer__bottom-link" href="#">Accessibilité : partiellement conforme</a>
+        </li>
+        <li class="fr-footer__bottom-item">
+          <a class="fr-footer__bottom-link" href="#">Mentions légales</a>
+        </li>
+        <li class="fr-footer__bottom-item">
+          <a class="fr-footer__bottom-link" href="#">Données personnelles</a>
+        </li>
+        <li class="fr-footer__bottom-item">
+          <a class="fr-footer__bottom-link" href="#">Gestion des cookies</a>
+        </li>
+      </ul>
+      <div class="fr-footer__bottom-copy">
+        <p>
+          Sauf mention contraire, tous les contenus de ce site sont sous 
+          <a href="https://github.com/etalab/licence-ouverte/blob/master/LO.md" target="_blank">licence etalab-2.0</a>
+          · Dashboard BUMIDOM · <span id="horodatage"></span>
+        </p>
+      </div>
+    </div>
   </div>
 </footer>
+
+<!-- ============================================================
+     4. BANDEAU COOKIES RGPD
+     ============================================================ -->
+<div class="bandeau-cookies" id="bandeau-cookies">
+  <div class="texte">
+    <strong>🍪 Gestion des cookies</strong><br>
+    Ce site utilise uniquement des cookies techniques nécessaires à son fonctionnement. 
+    Aucune donnée personnelle n'est collectée ni transmise à des tiers.
+  </div>
+  <div class="actions">
+    <button class="btn-custom secondary sm" onclick="refuserCookies()">Tout refuser</button>
+    <button class="btn-custom primary sm" onclick="accepterCookies()">Tout accepter</button>
+  </div>
+</div>
 
 <div class="overlay" id="overlay" onclick="fermerDetail()"></div>
 <aside class="detail-panel" id="detail-panel">
@@ -1155,6 +1056,45 @@ footer .footer-liens a:hover{
 </aside>
 
 <script>
+// ============================================================
+// GESTION COOKIES
+// ============================================================
+function verifierCookies(){
+  const choix = localStorage.getItem('bumidom_cookies');
+  if (!choix){
+    setTimeout(()=>{
+      document.getElementById('bandeau-cookies').classList.add('visible');
+    }, 1000);
+  }
+}
+
+function accepterCookies(){
+  localStorage.setItem('bumidom_cookies', 'accepted');
+  document.getElementById('bandeau-cookies').classList.remove('visible');
+}
+
+function refuserCookies(){
+  localStorage.setItem('bumidom_cookies', 'refused');
+  document.getElementById('bandeau-cookies').classList.remove('visible');
+}
+
+// ============================================================
+// GESTION LANGUE
+// ============================================================
+function changerLangue(lang){
+  const url = new URL(window.location);
+  url.searchParams.set('lang', lang);
+  window.location.href = url.toString();
+}
+
+// ============================================================
+// NAVIGATION DSFR
+// ============================================================
+function activerOnglet(nomOnglet){
+  const btn = document.querySelector(`.tabs button[data-tab="${nomOnglet}"]`);
+  if (btn) btn.click();
+}
+
 // ============================================================
 // ÉTAT GLOBAL
 // ============================================================
@@ -1180,6 +1120,7 @@ let FILTRES = {
 let TRI = { col: 'score', ordre: 'desc' };
 
 document.getElementById('horodatage').textContent = new Date().toLocaleString('fr-FR');
+verifierCookies();
 
 // ============================================================
 // UTILITAIRES
@@ -1404,7 +1345,7 @@ function dessinerOngletActif(){
 }
 
 // ============================================================
-// LAYOUT PLOTLY — Palette DSFR
+// LAYOUT PLOTLY
 // ============================================================
 const COULEURS_DSFR = {
   bleu: '#000091',
@@ -1421,57 +1362,31 @@ const COULEURS_DSFR = {
 const LAYOUT = {
   paper_bgcolor: 'rgba(0,0,0,0)',
   plot_bgcolor: 'rgba(0,0,0,0)',
-  font: {
-    family: "'Marianne', system-ui, -apple-system, sans-serif",
-    color: '#1e1e1e',
-    size: 12
-  },
+  font: {family: "'Marianne', system-ui, -apple-system, sans-serif", color: '#1e1e1e', size: 12},
   margin: {t: 30, r: 20, b: 60, l: 60},
   autosize: true,
   showlegend: false,
-  hoverlabel: {
-    bgcolor: '#ffffff',
-    bordercolor: '#000091',
-    font: {color: '#1e1e1e', size: 12, family: "'Marianne', system-ui, sans-serif"}
-  }
+  hoverlabel: {bgcolor: '#ffffff', bordercolor: '#000091', font: {color: '#1e1e1e', size: 12}}
 };
 
-const CONFIG = {
-  responsive: true,
-  displayModeBar: true,
-  displaylogo: false,
-  modeBarButtonsToRemove: ['lasso2d','select2d']
-};
+const CONFIG = {responsive: true, displayModeBar: true, displaylogo: false, modeBarButtonsToRemove: ['lasso2d','select2d']};
 
-// ============================================================
-// SAFE PLOT
-// ============================================================
 function safePlot(id, data, layout, customConfig){
   const el = document.getElementById(id);
   if(!el) return;
-  if(typeof Plotly === 'undefined') {
-    el.innerHTML = '<div class="no-data">Plotly non chargé</div>';
-    return;
-  }
+  if(typeof Plotly === 'undefined') { el.innerHTML = '<div class="no-data">Plotly non chargé</div>'; return; }
   
   const hauteurCSS = el.clientHeight || el.offsetHeight || 400;
-  
-  const finalLayout = Object.assign({}, LAYOUT, layout, {
-    height: hauteurCSS,
-    autosize: true
-  });
+  const finalLayout = Object.assign({}, LAYOUT, layout, {height: hauteurCSS, autosize: true});
   
   try {
     Plotly.newPlot(id, data, finalLayout, customConfig || CONFIG).then(() => {
       [50, 200, 500].forEach(delay => {
-        setTimeout(() => {
-          try { Plotly.Plots.resize(id); } catch(e) {}
-        }, delay);
+        setTimeout(() => { try { Plotly.Plots.resize(id); } catch(e) {} }, delay);
       });
     });
   } catch(e) {
     el.innerHTML = '<p style="color:#E1000F;padding:20px">Erreur : '+e.message+'</p>';
-    console.error(e);
   }
 }
 
@@ -1482,50 +1397,30 @@ function dessinerSynthese(){
   const parPeriode = {};
   DOCS.forEach(d=>{
     const m = d.fichier.match(/(\d{4})-(\d{4})/);
-    if(m){
-      const k = m[1]+'-'+m[2];
-      parPeriode[k] = (parPeriode[k]||0) + d.nb_mentions;
-    }
+    if(m){ const k = m[1]+'-'+m[2]; parPeriode[k] = (parPeriode[k]||0) + d.nb_mentions; }
   });
   const periodes = Object.keys(parPeriode).sort();
-  safePlot('viz-periodes', [{
-    x: periodes, y: periodes.map(p=>parPeriode[p]),
-    type:'bar', marker:{color: COULEURS_DSFR.bleu},
-    hovertemplate:'<b>%{x}</b><br>%{y} mentions<extra></extra>'
-  }], {...LAYOUT, xaxis:{tickangle:-30}});
+  safePlot('viz-periodes', [{x: periodes, y: periodes.map(p=>parPeriode[p]), type:'bar', marker:{color: COULEURS_DSFR.bleu}, hovertemplate:'<b>%{x}</b><br>%{y} mentions<extra></extra>'}], {...LAYOUT, xaxis:{tickangle:-30}});
   document.getElementById('c-periode').textContent = periodes.length + ' périodes';
 
   const types = {};
   DOCS.forEach(d=>{
-    const t = d.fichier.includes('_qst_') ? 'Question écrite' :
-              d.fichier.includes('_cri_') ? 'Compte rendu' : 'Autre';
+    const t = d.fichier.includes('_qst_') ? 'Question écrite' : d.fichier.includes('_cri_') ? 'Compte rendu' : 'Autre';
     types[t] = (types[t]||0) + 1;
   });
-  safePlot('viz-types', [{
-    values: Object.values(types), labels: Object.keys(types),
-    type:'pie', hole:0.5,
-    marker:{colors:[COULEURS_DSFR.bleu, COULEURS_DSFR.rouge, COULEURS_DSFR.grisClair]},
-  }], {...LAYOUT, showlegend:true});
+  safePlot('viz-types', [{values: Object.values(types), labels: Object.keys(types), type:'pie', hole:0.5, marker:{colors:[COULEURS_DSFR.bleu, COULEURS_DSFR.rouge, COULEURS_DSFR.grisClair]}}], {...LAYOUT, showlegend:true});
   document.getElementById('c-types').textContent = Object.keys(types).length + ' types';
 
   const aggO = {};
   DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>aggO[o.nom]=(aggO[o.nom]||0)+o.occurrences));
   const topO = Object.entries(aggO).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  safePlot('viz-orateurs', [{
-    x: topO.map(o=>o[1]), y: topO.map(o=>o[0]),
-    type:'bar', orientation:'h',
-    marker:{color:topO.map((_,i)=>i<3?COULEURS_DSFR.rouge:COULEURS_DSFR.bleu)},
-  }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:20,b:40,l:180}});
+  safePlot('viz-orateurs', [{x: topO.map(o=>o[1]), y: topO.map(o=>o[0]), type:'bar', orientation:'h', marker:{color:topO.map((_,i)=>i<3?COULEURS_DSFR.rouge:COULEURS_DSFR.bleu)}}], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:20,b:40,l:180}});
   document.getElementById('c-orateurs').textContent = topO.length + ' orateurs';
 
   const aggTh = {};
   DOCS.forEach(d=>Object.entries(d.themes||{}).forEach(([t,n])=>aggTh[t]=(aggTh[t]||0)+n));
   const topTh = Object.entries(aggTh).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  safePlot('viz-themes', [{
-    values: topTh.map(t=>t[1]), labels: topTh.map(t=>t[0]),
-    type:'pie', hole:0.5,
-    marker:{colors:[COULEURS_DSFR.rouge, COULEURS_DSFR.bleu, COULEURS_DSFR.bleuClair, '#ff6b6b', COULEURS_DSFR.gris, '#4a4a8a', '#b8000c', COULEURS_DSFR.orange, COULEURS_DSFR.vert, '#7b1fa2']},
-  }], {...LAYOUT, showlegend:true});
+  safePlot('viz-themes', [{values: topTh.map(t=>t[1]), labels: topTh.map(t=>t[0]), type:'pie', hole:0.5, marker:{colors:[COULEURS_DSFR.rouge, COULEURS_DSFR.bleu, COULEURS_DSFR.bleuClair, '#ff6b6b', COULEURS_DSFR.gris, '#4a4a8a', '#b8000c', COULEURS_DSFR.orange, COULEURS_DSFR.vert, '#7b1fa2']}}], {...LAYOUT, showlegend:true});
   document.getElementById('c-themes').textContent = topTh.length + ' thèmes';
 }
 
@@ -1538,10 +1433,7 @@ function filtrerMontantsBudget(){
     if (score < BUDGET_FILTRES.scoreMin) return false;
     if (BUDGET_FILTRES.confiance && m.confiance !== BUDGET_FILTRES.confiance) return false;
     if (num(m.valeur_francs) < BUDGET_FILTRES.montantMin) return false;
-    if (BUDGET_FILTRES.fourchette){
-      const v = num(m.valeur_francs);
-      if (v < 5e6 || v > 5e8) return false;
-    }
+    if (BUDGET_FILTRES.fourchette){ const v = num(m.valeur_francs); if (v < 5e6 || v > 5e8) return false; }
     if (BUDGET_FILTRES.recherche){
       const blob = (m.fichier + ' ' + m.annee + ' ' + m.contexte).toLowerCase();
       if (!blob.includes(BUDGET_FILTRES.recherche)) return false;
@@ -1552,7 +1444,6 @@ function filtrerMontantsBudget(){
 
 function dessinerBudget(){
   const montants = filtrerMontantsBudget();
-
   const total = montants.length;
   const maxMontant = montants.length ? Math.max(...montants.map(m=>num(m.valeur_francs))) : 0;
   const scoreMax = montants.length ? Math.max(...montants.map(m=>+m.score)) : 0;
@@ -1560,26 +1451,11 @@ function dessinerBudget(){
   const confStrict = montants.filter(m=>m.confiance === 'strict').length;
 
   document.getElementById('budget-kpis').innerHTML = `
-    <div class="budget-kpi">
-      <div class="v">${total}</div>
-      <div class="l">Montants filtrés</div>
-    </div>
-    <div class="budget-kpi or">
-      <div class="v">${fmtM(maxMontant)} F</div>
-      <div class="l">Montant max</div>
-    </div>
-    <div class="budget-kpi rouge">
-      <div class="v">${scoreMax}/13</div>
-      <div class="l">Score max</div>
-    </div>
-    <div class="budget-kpi vert">
-      <div class="v">${scoreMoyen}</div>
-      <div class="l">Score moyen</div>
-    </div>
-    <div class="budget-kpi">
-      <div class="v">${confStrict}</div>
-      <div class="l">Confiance stricte</div>
-    </div>
+    <div class="budget-kpi"><div class="v">${total}</div><div class="l">Montants filtrés</div></div>
+    <div class="budget-kpi or"><div class="v">${fmtM(maxMontant)} F</div><div class="l">Montant max</div></div>
+    <div class="budget-kpi rouge"><div class="v">${scoreMax}/13</div><div class="l">Score max</div></div>
+    <div class="budget-kpi vert"><div class="v">${scoreMoyen}</div><div class="l">Score moyen</div></div>
+    <div class="budget-kpi"><div class="v">${confStrict}</div><div class="l">Confiance stricte</div></div>
   `;
 
   const annees = BUDGET_BUDGETS.map(b=>+b.annee).filter(Boolean).sort((a,b)=>a-b);
@@ -1587,26 +1463,12 @@ function dessinerBudget(){
 
   if (BUDGET_BUDGETS.length > 0){
     safePlot('viz-budget-evolution', [{
-      x: annees,
-      y: BUDGET_BUDGETS.map(b=>+b.budget_francs / 1e6),
-      type: 'bar',
-      marker: {
-        color: BUDGET_BUDGETS.map(b=>{
-          const s = +b.score || 0;
-          if (s >= 10) return COULEURS_DSFR.vert;
-          if (s >= 8) return '#2f9e44';
-          if (s >= 7) return COULEURS_DSFR.jaune;
-          return COULEURS_DSFR.grisClair;
-        }),
-      },
-      text: BUDGET_BUDGETS.map(b=>fmtM(+b.budget_francs) + ' F'),
-      textposition: 'outside',
-      hovertemplate: '<b>%{x}</b><br>Budget : %{text}<br>Score : %{customdata}<extra></extra>',
-      customdata: scoresB,
+      x: annees, y: BUDGET_BUDGETS.map(b=>+b.budget_francs / 1e6), type: 'bar',
+      marker: {color: BUDGET_BUDGETS.map(b=>{const s = +b.score || 0; if (s >= 10) return COULEURS_DSFR.vert; if (s >= 8) return '#2f9e44'; if (s >= 7) return COULEURS_DSFR.jaune; return COULEURS_DSFR.grisClair;})},
+      text: BUDGET_BUDGETS.map(b=>fmtM(+b.budget_francs) + ' F'), textposition: 'outside',
+      hovertemplate: '<b>%{x}</b><br>Budget : %{text}<br>Score : %{customdata}<extra></extra>', customdata: scoresB,
     }], {...LAYOUT, xaxis:{title:'Année'}, yaxis:{title:'Budget (MF)'}});
-  } else {
-    document.getElementById('viz-budget-evolution').innerHTML = '<div class="no-data">Pas de données</div>';
-  }
+  } else { document.getElementById('viz-budget-evolution').innerHTML = '<div class="no-data">Pas de données</div>'; }
   document.getElementById('c-budget-evol').textContent = annees.length + ' années';
 
   const scoreCounts = {};
@@ -1615,62 +1477,31 @@ function dessinerBudget(){
   const scores = Object.keys(scoreCounts).map(Number).sort((a,b)=>a-b);
 
   safePlot('viz-budget-scores', [{
-    x: scores.map(s=>'Score ' + s),
-    y: scores.map(s=>scoreCounts[s]),
-    type: 'bar',
-    marker: {
-      color: scores.map(s=>{
-        if (s >= 10) return COULEURS_DSFR.vert;
-        if (s >= 8) return '#2f9e44';
-        if (s >= 7) return COULEURS_DSFR.jaune;
-        if (s >= 5) return '#e0a800';
-        return COULEURS_DSFR.grisClair;
-      }),
-    },
+    x: scores.map(s=>'Score ' + s), y: scores.map(s=>scoreCounts[s]), type: 'bar',
+    marker: {color: scores.map(s=>{if (s >= 10) return COULEURS_DSFR.vert; if (s >= 8) return '#2f9e44'; if (s >= 7) return COULEURS_DSFR.jaune; if (s >= 5) return '#e0a800'; return COULEURS_DSFR.grisClair;})},
     hovertemplate: '<b>%{x}</b><br>%{y} montants<extra></extra>',
   }], {...LAYOUT});
-
   document.getElementById('c-budget-scores').textContent = montants.length + ' montants';
 
   const top = [...montants].sort((a,b)=>num(b.valeur_francs) - num(a.valeur_francs)).slice(0, 30);
-
   if (top.length > 0){
     safePlot('viz-budget-top', [{
-      x: top.map(m=>num(m.valeur_francs) / 1e6),
-      y: top.map(m=>m.fichier.substring(0,30) + ' (' + m.annee + ')'),
-      type: 'bar',
-      orientation: 'h',
-      marker: {
-        color: top.map(m=>{
-          const s = +m.score;
-          if (s >= 10) return COULEURS_DSFR.vert;
-          if (s >= 8) return '#2f9e44';
-          if (s >= 7) return COULEURS_DSFR.jaune;
-          return COULEURS_DSFR.grisClair;
-        }),
-      },
-      text: top.map(m=>fmtM(num(m.valeur_francs)) + ' F'),
-      textposition: 'outside',
-      hovertemplate: '<b>%{y}</b><br>%{text}<br>Score : %{customdata}<extra></extra>',
-      customdata: top.map(m=>m.score),
+      x: top.map(m=>num(m.valeur_francs) / 1e6), y: top.map(m=>m.fichier.substring(0,30) + ' (' + m.annee + ')'),
+      type: 'bar', orientation: 'h',
+      marker: {color: top.map(m=>{const s = +m.score; if (s >= 10) return COULEURS_DSFR.vert; if (s >= 8) return '#2f9e44'; if (s >= 7) return COULEURS_DSFR.jaune; return COULEURS_DSFR.grisClair;})},
+      text: top.map(m=>fmtM(num(m.valeur_francs)) + ' F'), textposition: 'outside',
+      hovertemplate: '<b>%{y}</b><br>%{text}<br>Score : %{customdata}<extra></extra>', customdata: top.map(m=>m.score),
     }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:100,b:40,l:280}});
-  } else {
-    document.getElementById('viz-budget-top').innerHTML = '<div class="no-data">Aucun montant</div>';
-  }
+  } else { document.getElementById('viz-budget-top').innerHTML = '<div class="no-data">Aucun montant</div>'; }
   document.getElementById('c-budget-top').textContent = top.length + ' montants';
 
   const confCounts = { strict:0, proche:0, moyen:0, large:0 };
   montants.forEach(m=>{ if (m.confiance in confCounts) confCounts[m.confiance]++; });
-
   safePlot('viz-budget-confiance', [{
-    values: Object.values(confCounts),
-    labels: Object.keys(confCounts).map(c=>c.charAt(0).toUpperCase()+c.slice(1)),
-    type: 'pie',
-    hole: 0.5,
-    marker: { colors: [COULEURS_DSFR.vert, '#2f9e44', COULEURS_DSFR.jaune, COULEURS_DSFR.grisClair] },
+    values: Object.values(confCounts), labels: Object.keys(confCounts).map(c=>c.charAt(0).toUpperCase()+c.slice(1)),
+    type: 'pie', hole: 0.5, marker: { colors: [COULEURS_DSFR.vert, '#2f9e44', COULEURS_DSFR.jaune, COULEURS_DSFR.grisClair] },
     hovertemplate: '<b>%{label}</b><br>%{value} montants (%{percent})<extra></extra>',
   }], {...LAYOUT, showlegend:true});
-
   document.getElementById('c-budget-conf').textContent = montants.length + ' montants';
 
   dessinerTableauBudget(montants);
@@ -1678,24 +1509,15 @@ function dessinerBudget(){
 
 function dessinerTableauBudget(montants){
   const wrap = document.getElementById('budget-table-wrap');
-
-  const col = TRI.col;
-  const ordre = TRI.ordre;
+  const col = TRI.col, ordre = TRI.ordre;
   const data = [...montants].sort((a,b)=>{
     let va = a[col], vb = b[col];
-    if (col === 'valeur_francs' || col === 'score' || col === 'annee'){
-      va = +va || 0; vb = +vb || 0;
-      return ordre === 'desc' ? vb - va : va - vb;
-    }
+    if (col === 'valeur_francs' || col === 'score' || col === 'annee'){ va = +va || 0; vb = +vb || 0; return ordre === 'desc' ? vb - va : va - vb; }
     va = String(va); vb = String(vb);
     return ordre === 'desc' ? vb.localeCompare(va) : va.localeCompare(vb);
   });
 
-  if (data.length === 0){
-    wrap.innerHTML = '<div class="no-data"><div class="ic">📭</div>Aucun montant ne correspond aux filtres</div>';
-    document.getElementById('c-budget-table').textContent = '0 résultats';
-    return;
-  }
+  if (data.length === 0){ wrap.innerHTML = '<div class="no-data"><div class="ic">📭</div>Aucun montant ne correspond aux filtres</div>'; document.getElementById('c-budget-table').textContent = '0 résultats'; return; }
 
   let html = '<table><thead><tr>';
   html += `<th data-key="fichier" class="${col==='fichier'?'tri-'+ordre:''}">Fichier</th>`;
@@ -1703,8 +1525,7 @@ function dessinerTableauBudget(montants){
   html += `<th data-key="valeur_francs" class="${col==='valeur_francs'?'tri-'+ordre:''}">Montant</th>`;
   html += `<th data-key="score" class="${col==='score'?'tri-'+ordre:''}">Score</th>`;
   html += `<th data-key="confiance" class="${col==='confiance'?'tri-'+ordre:''}">Confiance</th>`;
-  html += `<th>Contexte</th>`;
-  html += '</tr></thead><tbody>';
+  html += `<th>Contexte</th></tr></thead><tbody>`;
 
   data.slice(0, 500).forEach(m=>{
     html += '<tr>';
@@ -1717,9 +1538,7 @@ function dessinerTableauBudget(montants){
     html += '</tr>';
   });
   html += '</tbody></table>';
-  if (data.length > 500){
-    html += `<p style="text-align:center;padding:10px;color:#999;font-size:.85rem">… et ${data.length - 500} autres montants (affinez les filtres)</p>`;
-  }
+  if (data.length > 500){ html += `<p style="text-align:center;padding:10px;color:#999;font-size:.85rem">… et ${data.length - 500} autres montants</p>`; }
   wrap.innerHTML = html;
 
   wrap.querySelectorAll('th[data-key]').forEach(th=>{
@@ -1730,7 +1549,6 @@ function dessinerTableauBudget(montants){
       dessinerTableauBudget(montants);
     });
   });
-
   document.getElementById('c-budget-table').textContent = data.length + ' résultats';
 }
 
@@ -1742,73 +1560,35 @@ function dessinerChiffres(){
     fetch('expertise_BUMIDOM/BUMIDOM_effectifs.csv').then(r=>r.ok?r.text():'').then(t=>t?parseCSV(t):[]).catch(()=>[]),
     fetch('expertise_BUMIDOM/BUMIDOM_montants.csv').then(r=>r.ok?r.text():'').then(t=>t?parseCSV(t):[]).catch(()=>[]),
   ]).then(([effectifs, montants])=>{
-    const topBudget = [...BUDGET_MONTANTS]
-      .filter(m=>+m.score >= 7)
-      .sort((a,b)=>+b.valeur_francs - +a.valeur_francs)
-      .slice(0, 15);
-
+    const topBudget = [...BUDGET_MONTANTS].filter(m=>+m.score >= 7).sort((a,b)=>+b.valeur_francs - +a.valeur_francs).slice(0, 15);
     if (topBudget.length > 0){
-      safePlot('viz-budget', [{
-        x: topBudget.map(m=>m.annee),
-        y: topBudget.map(m=>+m.valeur_francs / 1e6),
-        type: 'bar',
-        marker: { color: COULEURS_DSFR.rouge },
-        hovertemplate: '<b>%{x}</b><br>%{y:.1f} MF<br>%{customdata}<extra></extra>',
-        customdata: topBudget.map(m=>m.fichier.substring(0, 30))
-      }], {...LAYOUT, yaxis:{title:'Millions F'}});
-    } else {
-      document.getElementById('viz-budget').innerHTML = '<div class="no-data">Pas de données</div>';
-    }
+      safePlot('viz-budget', [{x: topBudget.map(m=>m.annee), y: topBudget.map(m=>+m.valeur_francs / 1e6), type: 'bar', marker: { color: COULEURS_DSFR.rouge }, hovertemplate: '<b>%{x}</b><br>%{y:.1f} MF<br>%{customdata}<extra></extra>', customdata: topBudget.map(m=>m.fichier.substring(0, 30))}], {...LAYOUT, yaxis:{title:'Millions F'}});
+    } else { document.getElementById('viz-budget').innerHTML = '<div class="no-data">Pas de données</div>'; }
 
     if (effectifs.length > 0){
-      const topEff = effectifs
-        .filter(e=>+e.valeur > 0 && +e.valeur < 500000)
-        .sort((a,b)=>+b.valeur - +a.valeur)
-        .slice(0, 15);
-
-      if (topEff.length > 0){
-        safePlot('viz-flux', [{
-          x: topEff.map(e=>e.fichier.substring(0,20)),
-          y: topEff.map(e=>+e.valeur),
-          type: 'bar',
-          marker: { color: COULEURS_DSFR.bleu },
-          hovertemplate: '<b>%{x}</b><br>%{y:,} personnes<extra></extra>'
-        }], {...LAYOUT, xaxis:{tickangle:-45, tickfont:{size:9}}});
-      } else {
-        document.getElementById('viz-flux').innerHTML = '<div class="no-data">Pas de flux valides</div>';
-      }
+      const topEff = effectifs.filter(e=>+e.valeur > 0 && +e.valeur < 500000).sort((a,b)=>+b.valeur - +a.valeur).slice(0, 15);
+      if (topEff.length > 0){ safePlot('viz-flux', [{x: topEff.map(e=>e.fichier.substring(0,20)), y: topEff.map(e=>+e.valeur), type: 'bar', marker: { color: COULEURS_DSFR.bleu }, hovertemplate: '<b>%{x}</b><br>%{y:,} personnes<extra></extra>'}], {...LAYOUT, xaxis:{tickangle:-45, tickfont:{size:9}}}); }
+      else { document.getElementById('viz-flux').innerHTML = '<div class="no-data">Pas de flux valides</div>'; }
 
       let html = '<table><thead><tr><th>Nombre</th><th>Unité</th><th>Fichier</th><th>Contexte</th></tr></thead><tbody>';
       effectifs.slice(0, 50).forEach(e=>{
-        html += `<tr>
-          <td class="nb">${fmt(+e.valeur)}</td>
-          <td>${esc(e.unite || '')}</td>
-          <td>${esc((e.fichier || '').substring(0, 35))}</td>
-          <td><span class="ctx">${esc((e.contexte || '').substring(0, 80))}</span></td>
-        </tr>`;
+        html += `<tr><td class="nb">${fmt(+e.valeur)}</td><td>${esc(e.unite || '')}</td><td>${esc((e.fichier || '').substring(0, 35))}</td><td><span class="ctx">${esc((e.contexte || '').substring(0, 80))}</span></td></tr>`;
       });
       html += '</tbody></table>';
       document.getElementById('tab-effectifs').innerHTML = html;
     } else {
-      document.getElementById('viz-flux').innerHTML = '<div class="no-data">Fichier BUMIDOM_effectifs.csv absent</div>';
+      document.getElementById('viz-flux').innerHTML = '<div class="no-data">Fichier absent</div>';
       document.getElementById('tab-effectifs').innerHTML = '<div class="no-data">Pas de données</div>';
     }
 
     if (montants.length > 0){
       let html = '<table><thead><tr><th>Montant</th><th>Unité</th><th>Fichier</th><th>Contexte</th></tr></thead><tbody>';
       montants.slice(0, 50).forEach(m=>{
-        html += `<tr>
-          <td class="nb">${fmt(+m.valeur)}</td>
-          <td>${esc(m.unite || 'F')}</td>
-          <td>${esc((m.fichier || '').substring(0, 35))}</td>
-          <td><span class="ctx">${esc((m.contexte || '').substring(0, 80))}</span></td>
-        </tr>`;
+        html += `<tr><td class="nb">${fmt(+m.valeur)}</td><td>${esc(m.unite || 'F')}</td><td>${esc((m.fichier || '').substring(0, 35))}</td><td><span class="ctx">${esc((m.contexte || '').substring(0, 80))}</span></td></tr>`;
       });
       html += '</tbody></table>';
       document.getElementById('tab-montants').innerHTML = html;
-    } else {
-      document.getElementById('tab-montants').innerHTML = '<div class="no-data">Pas de données</div>';
-    }
+    } else { document.getElementById('tab-montants').innerHTML = '<div class="no-data">Pas de données</div>'; }
 
     const chiffres = [
       ['💰 Budget BUMIDOM 1981', '279 600 000 F'],
@@ -1823,11 +1603,8 @@ function dessinerChiffres(){
       ['🏠 Logements 1968', '234 logements'],
     ];
     document.getElementById('chiffres-cles').innerHTML = chiffres.map((c,i)=>`
-      <div style="display:flex;justify-content:space-between;padding:10px 14px;margin:5px 0;
-                  background:${i<3?'#ffe9e9':'#f6f6f6'};
-                  border-left:4px solid ${i<3?'#e1000f':'#000091'}">
-        <span>${c[0]}</span>
-        <strong style="color:${i<3?'#e1000f':'#000091'}">${c[1]}</strong>
+      <div style="display:flex;justify-content:space-between;padding:10px 14px;margin:5px 0;background:${i<3?'#ffe9e9':'#f6f6f6'};border-left:4px solid ${i<3?'#e1000f':'#000091'}">
+        <span>${c[0]}</span><strong style="color:${i<3?'#e1000f':'#000091'}">${c[1]}</strong>
       </div>
     `).join('');
     document.getElementById('c-chiffres').textContent = chiffres.length + ' chiffres';
@@ -1841,40 +1618,19 @@ function dessinerOrateurs(){
   const agg = {};
   DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>agg[o.nom]=(agg[o.nom]||0)+o.occurrences));
   const top = Object.entries(agg).sort((a,b)=>b[1]-a[1]).slice(0,30);
+  if (top.length === 0){ document.getElementById('viz-orateurs-bar').innerHTML = '<div class="no-data">Pas d\'orateurs</div>'; document.getElementById('liste-orateurs').innerHTML = '<div class="no-data">Pas de données</div>'; return; }
 
-  if (top.length === 0){
-    document.getElementById('viz-orateurs-bar').innerHTML = '<div class="no-data">Pas d\'orateurs (resultats_enrichis.json manquant ?)</div>';
-    document.getElementById('liste-orateurs').innerHTML = '<div class="no-data">Pas de données</div>';
-    return;
-  }
-
-  safePlot('viz-orateurs-bar', [{
-    x: top.map(o=>o[1]), y: top.map(o=>o[0]),
-    type:'bar', orientation:'h',
-    marker:{color:top.map((_,i)=>i<3?COULEURS_DSFR.rouge:COULEURS_DSFR.bleu)},
-  }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:30,b:40,l:220}});
+  safePlot('viz-orateurs-bar', [{x: top.map(o=>o[1]), y: top.map(o=>o[0]), type:'bar', orientation:'h', marker:{color:top.map((_,i)=>i<3?COULEURS_DSFR.rouge:COULEURS_DSFR.bleu)}}], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:30,b:40,l:220}});
 
   const container = document.getElementById('liste-orateurs');
   container.innerHTML = `
     <p style="margin-bottom:12px;color:#666;font-size:.85rem">${top.length} orateurs (top 30)</p>
-    <table>
-      <thead><tr>
-        <th>Rang</th><th>Orateur</th><th>Mentions</th><th>Documents</th>
-      </tr></thead>
-      <tbody>
-        ${top.map(([nom, total], i) => {
-          const docs = DOCS.filter(d=>(d.orateurs||[]).some(o=>o.nom === nom));
-          return `
-            <tr onclick="toggleFiltre('orateurs', '${esc(nom).replace(/'/g, "\\'")}')">
-              <td>${i+1}</td>
-              <td><strong>${esc(nom)}</strong></td>
-              <td class="nb">${total}</td>
-              <td>${docs.length}</td>
-            </tr>
-          `;
-        }).join('')}
-      </tbody>
-    </table>
+    <table><thead><tr><th>Rang</th><th>Orateur</th><th>Mentions</th><th>Documents</th></tr></thead><tbody>
+      ${top.map(([nom, total], i) => {
+        const docs = DOCS.filter(d=>(d.orateurs||[]).some(o=>o.nom === nom));
+        return `<tr onclick="toggleFiltre('orateurs', '${esc(nom).replace(/'/g, "\\'")}')"><td>${i+1}</td><td><strong>${esc(nom)}</strong></td><td class="nb">${total}</td><td>${docs.length}</td></tr>`;
+      }).join('')}
+    </tbody></table>
   `;
 }
 
@@ -1885,49 +1641,21 @@ function dessinerThemes(){
   const agg = {};
   DOCS.forEach(d=>Object.entries(d.themes||{}).forEach(([t,n])=>agg[t]=(agg[t]||0)+n));
   const entries = Object.entries(agg).sort((a,b)=>b[1]-a[1]);
+  if (entries.length === 0){ document.getElementById('viz-radar').innerHTML = '<div class="no-data">Pas de thèmes</div>'; document.getElementById('viz-themes-bar').innerHTML = '<div class="no-data">Pas de thèmes</div>'; document.getElementById('liste-themes').innerHTML = '<div class="no-data">Pas de données</div>'; return; }
 
-  if (entries.length === 0){
-    document.getElementById('viz-radar').innerHTML = '<div class="no-data">Pas de thèmes</div>';
-    document.getElementById('viz-themes-bar').innerHTML = '<div class="no-data">Pas de thèmes</div>';
-    document.getElementById('liste-themes').innerHTML = '<div class="no-data">Pas de données</div>';
-    return;
-  }
-
-  safePlot('viz-radar', [{
-    type:'scatterpolar',
-    r:[...entries.slice(0,10).map(e=>e[1]), entries[0][1]],
-    theta:[...entries.slice(0,10).map(e=>e[0]), entries[0][0]],
-    fill:'toself', marker:{color:COULEURS_DSFR.rouge}, line:{color:COULEURS_DSFR.rouge},
-  }], {...LAYOUT, polar:{bgcolor:'rgba(0,0,0,0)'}});
-
-  safePlot('viz-themes-bar', [{
-    x: entries.slice(0,15).map(e=>e[0]),
-    y: entries.slice(0,15).map(e=>e[1]),
-    type:'bar', marker:{color:COULEURS_DSFR.bleu},
-  }], {...LAYOUT, xaxis:{tickangle:-45}});
+  safePlot('viz-radar', [{type:'scatterpolar', r:[...entries.slice(0,10).map(e=>e[1]), entries[0][1]], theta:[...entries.slice(0,10).map(e=>e[0]), entries[0][0]], fill:'toself', marker:{color:COULEURS_DSFR.rouge}, line:{color:COULEURS_DSFR.rouge}}], {...LAYOUT, polar:{bgcolor:'rgba(0,0,0,0)'}});
+  safePlot('viz-themes-bar', [{x: entries.slice(0,15).map(e=>e[0]), y: entries.slice(0,15).map(e=>e[1]), type:'bar', marker:{color:COULEURS_DSFR.bleu}}], {...LAYOUT, xaxis:{tickangle:-45}});
 
   const container = document.getElementById('liste-themes');
   container.innerHTML = `
     <p style="margin-bottom:12px;color:#666;font-size:.85rem">${entries.length} thèmes</p>
-    <table>
-      <thead><tr>
-        <th>Thème</th><th>Occurrences</th><th>Documents</th><th>Fichiers</th>
-      </tr></thead>
-      <tbody>
-        ${entries.map(([theme, total]) => {
-          const docs = DOCS.filter(d=>d.themes && d.themes[theme]);
-          const fichiers = docs.slice(0, 3).map(d=>d.fichier.substring(0, 25)).join(', ');
-          return `
-            <tr onclick="toggleFiltre('themes', '${esc(theme).replace(/'/g, "\\'")}')">
-              <td><strong>${esc(theme)}</strong></td>
-              <td class="nb">${total}</td>
-              <td>${docs.length}</td>
-              <td><span class="ctx">${esc(fichiers)}${docs.length > 3 ? '…' : ''}</span></td>
-            </tr>
-          `;
-        }).join('')}
-      </tbody>
-    </table>
+    <table><thead><tr><th>Thème</th><th>Occurrences</th><th>Documents</th><th>Fichiers</th></tr></thead><tbody>
+      ${entries.map(([theme, total]) => {
+        const docs = DOCS.filter(d=>d.themes && d.themes[theme]);
+        const fichiers = docs.slice(0, 3).map(d=>d.fichier.substring(0, 25)).join(', ');
+        return `<tr onclick="toggleFiltre('themes', '${esc(theme).replace(/'/g, "\\'")}')"><td><strong>${esc(theme)}</strong></td><td class="nb">${total}</td><td>${docs.length}</td><td><span class="ctx">${esc(fichiers)}${docs.length > 3 ? '…' : ''}</span></td></tr>`;
+      }).join('')}
+    </tbody></table>
   `;
 }
 
@@ -1936,39 +1664,18 @@ function dessinerThemes(){
 // ============================================================
 function dessinerChrono(){
   const sorted = [...DOCS].sort((a,b)=>a.fichier.localeCompare(b.fichier));
-  
-  if (sorted.length > 0){
-    safePlot('viz-chrono', [{
-      x: sorted.map(d=>d.fichier.replace('.txt','').substring(0,30)),
-      y: sorted.map(d=>d.nb_mentions),
-      type:'bar',
-      marker:{color:sorted.map(d=>d.nb_mentions>5?COULEURS_DSFR.rouge:COULEURS_DSFR.bleu)},
-    }], {...LAYOUT, xaxis:{tickangle:-60, tickfont:{size:8}}});
-  } else {
-    document.getElementById('viz-chrono').innerHTML = '<div class="no-data">Pas de documents</div>';
-  }
+  if (sorted.length > 0){ safePlot('viz-chrono', [{x: sorted.map(d=>d.fichier.replace('.txt','').substring(0,30)), y: sorted.map(d=>d.nb_mentions), type:'bar', marker:{color:sorted.map(d=>d.nb_mentions>5?COULEURS_DSFR.rouge:COULEURS_DSFR.bleu)}}], {...LAYOUT, xaxis:{tickangle:-60, tickfont:{size:8}}}); }
+  else { document.getElementById('viz-chrono').innerHTML = '<div class="no-data">Pas de documents</div>'; }
 
   const parAnnee = {};
   DOCS.forEach(d=>{
     const m = d.fichier.match(/(\d{4})/g);
     if (m) m.forEach(y=>parAnnee[y] = (parAnnee[y]||0) + 1);
-    if (d.statistiques && d.statistiques.annees){
-      d.statistiques.annees.forEach(a=>parAnnee[a] = (parAnnee[a]||0) + 1);
-    }
+    if (d.statistiques && d.statistiques.annees){ d.statistiques.annees.forEach(a=>parAnnee[a] = (parAnnee[a]||0) + 1); }
   });
   const annees = Object.keys(parAnnee).sort();
-  
-  if (annees.length > 0){
-    safePlot('viz-annees', [{
-      x: annees,
-      y: annees.map(a=>parAnnee[a]),
-      type: 'bar',
-      marker: { color: COULEURS_DSFR.bleuClair },
-      hovertemplate: '<b>%{x}</b><br>%{y} documents<extra></extra>'
-    }], {...LAYOUT});
-  } else {
-    document.getElementById('viz-annees').innerHTML = '<div class="no-data">Pas d\'années détectées</div>';
-  }
+  if (annees.length > 0){ safePlot('viz-annees', [{x: annees, y: annees.map(a=>parAnnee[a]), type: 'bar', marker: { color: COULEURS_DSFR.bleuClair }, hovertemplate: '<b>%{x}</b><br>%{y} documents<extra></extra>'}], {...LAYOUT}); }
+  else { document.getElementById('viz-annees').innerHTML = '<div class="no-data">Pas d\'années détectées</div>'; }
 }
 
 // ============================================================
@@ -1977,26 +1684,14 @@ function dessinerChrono(){
 function dessinerDocs(){
   let docs = [...DOCS];
   const container = document.getElementById('liste-docs');
-  if(!docs.length){
-    container.innerHTML = '<div class="no-data"><div class="ic">🔍</div>Aucun document</div>';
-    return;
-  }
+  if(!docs.length){ container.innerHTML = '<div class="no-data"><div class="ic">🔍</div>Aucun document</div>'; return; }
 
   container.innerHTML = `
     <p style="margin-bottom:12px;color:#666;font-size:.9rem">${docs.length} document(s)</p>
     ${docs.slice(0, 200).map(d=>{
-      const t = d.fichier.includes('_qst_') ? 'Question écrite' :
-                d.fichier.includes('_cri_') ? 'Compte rendu' : 'Autre';
+      const t = d.fichier.includes('_qst_') ? 'Question écrite' : d.fichier.includes('_cri_') ? 'Compte rendu' : 'Autre';
       const badge = t === 'Compte rendu' ? 'cri' : t === 'Question écrite' ? 'qst' : 'def';
-      return `
-        <div class="doc">
-          <div class="doc-header">
-            <span class="badge badge-${badge}">${t}</span>
-            <span class="titre">${esc(d.fichier.replace('.txt',''))}</span>
-            <span class="mentions">💬 ${d.nb_mentions}</span>
-          </div>
-        </div>
-      `;
+      return `<div class="doc"><div class="doc-header"><span class="badge badge-${badge}">${t}</span><span class="titre">${esc(d.fichier.replace('.txt',''))}</span><span class="mentions">💬 ${d.nb_mentions}</span></div></div>`;
     }).join('')}
   `;
 }
@@ -2006,18 +1701,12 @@ function dessinerDocs(){
 // ============================================================
 function exportVueCSV(){
   const lignes = ['fichier;annee;valeur_francs;score;confiance'];
-  filtrerMontantsBudget().forEach(m=>{
-    lignes.push([m.fichier, m.annee, m.valeur_francs, m.score, m.confiance].join(';'));
-  });
+  filtrerMontantsBudget().forEach(m=>{ lignes.push([m.fichier, m.annee, m.valeur_francs, m.score, m.confiance].join(';')); });
   telecharger(lignes.join('\n'), 'bumidom_budget.csv', 'text/csv;charset=utf-8');
 }
 
 function exportVueJSON(){
-  const data = {
-    filtres: BUDGET_FILTRES,
-    total: filtrerMontantsBudget().length,
-    montants: filtrerMontantsBudget().slice(0, 500)
-  };
+  const data = { filtres: BUDGET_FILTRES, total: filtrerMontantsBudget().length, montants: filtrerMontantsBudget().slice(0, 500) };
   telecharger(JSON.stringify(data, null, 2), 'bumidom_budget.json', 'application/json');
 }
 
@@ -2034,13 +1723,7 @@ function telecharger(contenu, nom, mime){
 }
 
 function reinitialiser(){
-  BUDGET_FILTRES = {
-    scoreMin: 7,
-    confiance: '',
-    montantMin: 1000000,
-    fourchette: true,
-    recherche: ''
-  };
+  BUDGET_FILTRES = { scoreMin: 7, confiance: '', montantMin: 1000000, fourchette: true, recherche: '' };
   document.getElementById('budget-score').value = 7;
   document.getElementById('budget-score-valeur').textContent = '7';
   document.getElementById('budget-confiance').value = '';
@@ -2056,17 +1739,8 @@ function toggleFiltre(type, valeur){
   majVue();
 }
 
-// ============================================================
-// RACCOURCIS CLAVIER
-// ============================================================
-document.addEventListener('keydown', e=>{
-  if(e.key === 'Escape') fermerDetail();
-});
-
-function fermerDetail(){
-  document.getElementById('detail-panel').classList.remove('ouvert');
-  document.getElementById('overlay').classList.remove('actif');
-}
+document.addEventListener('keydown', e=>{ if(e.key === 'Escape') fermerDetail(); });
+function fermerDetail(){ document.getElementById('detail-panel').classList.remove('ouvert'); document.getElementById('overlay').classList.remove('actif'); }
 </script>
 </body>
 </html>
