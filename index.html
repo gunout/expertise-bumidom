@@ -63,7 +63,14 @@
     border-bottom:2px solid var(--rouge);padding-bottom:8px;
     display:flex;justify-content:space-between;align-items:center}
   .carte h2 .compteur{font-size:.75rem;color:#888;font-weight:400;text-transform:none;letter-spacing:0}
-  .viz{height:400px;min-height:400px;width:100%}
+  .viz{height:400px;min-height:400px;width:100%;position:relative}
+  .viz.tall{height:650px;min-height:650px}
+  .viz.reseau{height:700px;min-height:700px}
+  
+  /* ✅ FIX : Plotly doit respecter la taille du conteneur */
+  .js-plotly-plot{height:100%!important;width:100%!important}
+  .js-plotly-plot .plot-container{height:100%!important}
+  .js-plotly-plot .svg-container{height:100%!important}
   .viz.tall{height:650px;min-height:650px}
   .viz.reseau{height:700px;min-height:700px}
 
