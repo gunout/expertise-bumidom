@@ -3,21 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BUMIDOM — Dashboard Interactif</title>
-<link rel="stylesheet" href="https://unpkg.com/@gouvfr/dsfr@1.11.2/dist/dsfr.min.css">
-<link rel="stylesheet" href="https://unpkg.com/@gouvfr/dsfr@1.11.2/dist/utility/utility.min.css">
+<title>BUMIDOM — Analyse budgétaire et parlementaire</title>
+
+<!-- ✅ DSFR officiel (Système de Design de l'État) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.11.2/dist/dsfr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.11.2/dist/utility/utility.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.11.2/dist/component/component.min.css">
+
+<!-- ✅ Police Marianne officielle -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.11.2/dist/core/core.min.css">
+
 <script src="plotly.min.js"></script>
+
 <style>
 /* ============================================================
-   SYSTÈME DE DESIGN DE L'ÉTAT (DSFR) — ADAPTATIONS
+   ADAPTATIONS AU DSFR — Corrections et compléments
    ============================================================ */
 :root{
-  /* Couleurs DSFR officielles */
-  --bf-500:#000091;  /* Bleu France */
+  /* Palette DSFR complète */
+  --bf-500:#000091;
   --bf-600:#1212ff;
   --bf-100:#e3e3fd;
   --bf-900:#2323b4;
-  --rm-500:#e1000f;  /* Rouge Marianne */
+  --rm-500:#e1000f;
   --rm-600:#c9191e;
   --rm-100:#ffe9e9;
   --gs-900:#1e1e1e;
@@ -27,45 +35,110 @@
   --gs-200:#e5e5e5;
   --gs-100:#f6f6f6;
   --gs-000:#ffffff;
-  --vert-500:#18753c; /* Succès */
-  --orange-500:#b34000; /* Attention */
-  --jaune-500:#d8a800; /* Or */
+  --vert-500:#18753c;
+  --jaune-500:#d8a800;
+  --orange-500:#b34000;
   
-  /* Typographie */
-  --font: 'Marianne', 'system-ui', -apple-system, sans-serif;
-  
-  /* Grille 8px DSFR */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --space-7: 48px;
-  
-  /* Rayon DSFR : très peu arrondi */
-  --radius: 4px;
-  --radius-lg: 8px;
+  --font-marianne: 'Marianne', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 
-body{
-  font-family: var(--font);
+html, body{
+  font-family: var(--font-marianne);
   background: var(--gs-100);
   color: var(--gs-900);
   line-height: 1.5;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ============================================================
-   EN-TÊTE — Style "Marianne" institutionnel
+   BANDEAU "RÉPUBLIQUE FRANÇAISE" — Comme les sites .gouv.fr
+   ============================================================ */
+.bandeau-rf{
+  background: var(--gs-000);
+  border-bottom: 1px solid var(--gs-200);
+  padding: 8px 24px;
+  font-size: .75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.bandeau-rf .bloc-marque{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bandeau-rf .logo-rf{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--gs-900);
+}
+
+.bandeau-rf .logo-rf .marianne-svg{
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.bandeau-rf .logo-rf .texte-rf{
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.bandeau-rf .logo-rf .texte-rf .rf-ligne-1{
+  font-weight: 700;
+  font-size: .8125rem;
+  letter-spacing: .5px;
+  color: var(--gs-900);
+}
+
+.bandeau-rf .logo-rf .texte-rf .rf-ligne-2{
+  font-size: .6875rem;
+  color: var(--gs-500);
+  font-style: italic;
+  letter-spacing: .3px;
+}
+
+.bandeau-rf .devise{
+  font-size: .6875rem;
+  color: var(--gs-500);
+  font-style: italic;
+  letter-spacing: .3px;
+}
+
+.bandeau-rf .devise strong{
+  color: var(--gs-700);
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: .5px;
+}
+
+@media(max-width:768px){
+  .bandeau-rf{
+    padding: 8px 16px;
+  }
+  .bandeau-rf .devise{
+    display: none;
+  }
+}
+
+/* ============================================================
+   EN-TÊTE PRINCIPAL
    ============================================================ */
 header{
   background: var(--gs-000);
   border-bottom: 2px solid var(--gs-200);
-  padding: var(--space-4) var(--space-6);
+  padding: 16px 24px;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -73,14 +146,15 @@ header{
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--space-4);
+  gap: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.04);
 }
 
 header::before{
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 4px;
+  height: 3px;
   background: linear-gradient(to right,
     var(--bf-500) 0%, var(--bf-500) 33.33%,
     var(--gs-000) 33.33%, var(--gs-000) 66.66%,
@@ -91,56 +165,54 @@ header h1{
   color: var(--gs-900);
   font-size: 1.25rem;
   font-weight: 700;
+  margin-top: 6px;
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  margin-top: 4px;
+  gap: 12px;
 }
 
-header h1 .marianne{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: var(--bf-500);
-  color: var(--gs-000);
-  font-weight: 800;
-  font-size: 1rem;
-  border-radius: var(--radius);
-  letter-spacing: -0.5px;
+header h1 .titre-principal{
+  display: flex;
+  flex-direction: column;
 }
 
-header h1 .sous-titre{
-  display: block;
-  font-size: .75rem;
+header h1 .titre-principal .ligne-1{
+  color: var(--bf-500);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+header h1 .titre-principal .ligne-2{
   color: var(--gs-500);
+  font-size: .75rem;
   font-weight: 400;
   margin-top: 2px;
+  letter-spacing: .3px;
 }
 
 /* ============================================================
    BOUTONS — Style DSFR
    ============================================================ */
-.actions{display:flex;gap:var(--space-2);flex-wrap:wrap}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
 
 .btn{
-  padding: var(--space-2) var(--space-4);
+  padding: 8px 16px;
   border: 1px solid transparent;
-  border-radius: var(--radius);
+  border-radius: 0;
   cursor: pointer;
   font-weight: 500;
   font-size: .875rem;
-  font-family: var(--font);
+  font-family: var(--font-marianne);
   transition: background-color .2s;
   background: transparent;
   color: var(--bf-500);
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 8px;
+  letter-spacing: .2px;
 }
 
-.btn:hover{background: var(--bf-100);}
+.btn:hover{background: var(--bf-100)}
 
 .btn--primary{
   background: var(--bf-500);
@@ -168,19 +240,19 @@ header h1 .sous-titre{
 }
 
 .btn--sm{
-  padding: var(--space-1) var(--space-3);
-  font-size: .75rem;
+  padding: 6px 12px;
+  font-size: .8125rem;
 }
 
 /* ============================================================
    FILTRES ACTIFS
    ============================================================ */
 .filtres-actifs{
-  padding: var(--space-3) var(--space-6);
+  padding: 12px 24px;
   background: var(--gs-000);
   border-bottom: 1px solid var(--gs-200);
   display: flex;
-  gap: var(--space-2);
+  gap: 8px;
   flex-wrap: wrap;
   align-items: center;
   min-height: 44px;
@@ -189,26 +261,29 @@ header h1 .sous-titre{
 .filtres-actifs .chip{
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 8px;
   background: var(--bf-100);
   color: var(--bf-500);
-  padding: 4px 10px;
-  border-radius: var(--radius);
+  padding: 4px 12px;
+  border-radius: 16px;
   font-size: .75rem;
   font-weight: 500;
+  border: 1px solid var(--bf-500);
 }
 
 .filtres-actifs .chip .x{
   cursor: pointer;
   font-weight: 700;
   opacity: .6;
-  margin-left: var(--space-1);
+  margin-left: 4px;
+  padding: 0 2px;
 }
 .filtres-actifs .chip .x:hover{opacity:1}
 
 .filtres-actifs .chip.rouge{
   background: var(--rm-100);
   color: var(--rm-500);
+  border-color: var(--rm-500);
 }
 
 .filtres-actifs .vide{
@@ -218,21 +293,20 @@ header h1 .sous-titre{
 }
 
 /* ============================================================
-   KPIs — Cartes sobres
+   KPIs
    ============================================================ */
 .kpis{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: var(--space-3);
-  padding: var(--space-4) var(--space-6) 0;
+  gap: 12px;
+  padding: 16px 24px 0;
 }
 
 .kpi{
   background: var(--gs-000);
   border: 1px solid var(--gs-200);
-  border-radius: var(--radius);
-  padding: var(--space-4);
   border-top: 3px solid var(--bf-500);
+  padding: 16px;
   transition: box-shadow .2s;
 }
 
@@ -260,7 +334,7 @@ header h1 .sous-titre{
   color: var(--gs-500);
   text-transform: uppercase;
   letter-spacing: .5px;
-  margin-top: var(--space-1);
+  margin-top: 4px;
 }
 
 /* ============================================================
@@ -268,7 +342,7 @@ header h1 .sous-titre{
    ============================================================ */
 .slider-zone{
   background: var(--gs-000);
-  padding: var(--space-4) var(--space-6);
+  padding: 16px 24px;
   border-bottom: 1px solid var(--gs-200);
 }
 
@@ -278,13 +352,13 @@ header h1 .sous-titre{
   color: var(--gs-700);
   text-transform: uppercase;
   display: block;
-  margin-bottom: var(--space-2);
+  margin-bottom: 8px;
   letter-spacing: .5px;
 }
 
 .slider-zone .rangée{
   display: flex;
-  gap: var(--space-3);
+  gap: 12px;
   align-items: center;
   font-size: .875rem;
   color: var(--gs-500);
@@ -296,25 +370,25 @@ header h1 .sous-titre{
 }
 
 /* ============================================================
-   ONGLETS — Style DSFR "tabs"
+   ONGLETS
    ============================================================ */
 .tabs{
   display: flex;
   gap: 0;
-  padding: 0 var(--space-6);
+  padding: 0 24px;
   border-bottom: 2px solid var(--gs-200);
-  margin-top: var(--space-4);
+  margin-top: 16px;
   overflow-x: auto;
   background: var(--gs-000);
 }
 
 .tabs button{
-  padding: var(--space-3) var(--space-4);
+  padding: 12px 16px;
   border: none;
   background: transparent;
   font-size: .875rem;
   font-weight: 500;
-  font-family: var(--font);
+  font-family: var(--font-marianne);
   color: var(--gs-500);
   cursor: pointer;
   border-bottom: 3px solid transparent;
@@ -338,7 +412,7 @@ header h1 .sous-titre{
    MAIN
    ============================================================ */
 main{
-  padding: var(--space-5) var(--space-6);
+  padding: 24px;
   max-width: 1700px;
   margin: 0 auto;
 }
@@ -346,16 +420,15 @@ main{
 .grille{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: var(--space-5);
-  margin-bottom: var(--space-5);
+  gap: 24px;
+  margin-bottom: 24px;
 }
 
 .carte{
   background: var(--gs-000);
   border: 1px solid var(--gs-200);
-  border-radius: var(--radius);
-  padding: var(--space-4);
-  margin-bottom: var(--space-5);
+  padding: 16px;
+  margin-bottom: 24px;
   overflow: hidden;
 }
 
@@ -363,8 +436,8 @@ main{
   color: var(--bf-500);
   font-size: 1rem;
   font-weight: 700;
-  margin-bottom: var(--space-4);
-  padding-bottom: var(--space-2);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--gs-200);
   display: flex;
   justify-content: space-between;
@@ -380,12 +453,7 @@ main{
 }
 
 /* ✅ FIX Plotly */
-.viz{
-  height: 400px;
-  min-height: 400px;
-  width: 100%;
-  position: relative;
-}
+.viz{height: 400px; min-height: 400px; width: 100%; position: relative;}
 .viz.tall{height: 650px; min-height: 650px}
 .viz.reseau{height: 700px; min-height: 700px}
 
@@ -403,7 +471,7 @@ table{
 }
 
 th, td{
-  padding: var(--space-2) var(--space-3);
+  padding: 8px 12px;
   text-align: left;
   border-bottom: 1px solid var(--gs-200);
 }
@@ -427,7 +495,7 @@ th:hover{
   color: var(--bf-500);
 }
 
-th::after{content:''; margin-left: var(--space-1); opacity: .3; font-size: .65rem}
+th::after{content:''; margin-left: 4px; opacity: .3; font-size: .65rem}
 th.tri-asc::after{content:'▲'; opacity: 1; color: var(--bf-500)}
 th.tri-desc::after{content:'▼'; opacity: 1; color: var(--bf-500)}
 
@@ -456,12 +524,11 @@ tbody tr:hover{background: var(--bf-100)}
 }
 
 /* ============================================================
-   BADGES — Style DSFR
+   BADGES
    ============================================================ */
 .score-badge, .confiance-badge{
   display: inline-block;
   padding: 2px 8px;
-  border-radius: var(--radius);
   font-weight: 700;
   font-size: .7rem;
   font-variant-numeric: tabular-nums;
@@ -483,16 +550,16 @@ tbody tr:hover{background: var(--bf-100)}
    ============================================================ */
 .recherche-wrap{
   position: relative;
-  margin-bottom: var(--space-3);
+  margin-bottom: 12px;
 }
 
 .recherche-wrap input{
   width: 100%;
-  padding: var(--space-3);
+  padding: 12px;
   border: 1px solid var(--gs-300);
-  border-radius: var(--radius);
+  border-radius: 0;
   font-size: .875rem;
-  font-family: var(--font);
+  font-family: var(--font-marianne);
   background: var(--gs-000);
 }
 
@@ -508,16 +575,15 @@ tbody tr:hover{background: var(--bf-100)}
 .budget-kpis{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: var(--space-3);
-  margin-bottom: var(--space-4);
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .budget-kpi{
   background: var(--gs-000);
   border: 1px solid var(--gs-200);
   border-left: 4px solid var(--bf-500);
-  border-radius: var(--radius);
-  padding: var(--space-4);
+  padding: 16px;
 }
 
 .budget-kpi.or{border-left-color: var(--jaune-500)}
@@ -540,17 +606,16 @@ tbody tr:hover{background: var(--bf-100)}
   color: var(--gs-500);
   text-transform: uppercase;
   letter-spacing: .5px;
-  margin-top: var(--space-1);
+  margin-top: 4px;
 }
 
 .filtres-budget{
   background: var(--gs-000);
   border: 1px solid var(--gs-200);
-  border-radius: var(--radius);
-  padding: var(--space-4);
-  margin-bottom: var(--space-5);
+  padding: 16px;
+  margin-bottom: 24px;
   display: flex;
-  gap: var(--space-4);
+  gap: 16px;
   flex-wrap: wrap;
   align-items: center;
 }
@@ -561,7 +626,7 @@ tbody tr:hover{background: var(--bf-100)}
   color: var(--gs-700);
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 8px;
 }
 
 .filtres-budget input[type=range]{
@@ -572,18 +637,16 @@ tbody tr:hover{background: var(--bf-100)}
 .filtres-budget input[type=number]{
   padding: 5px 10px;
   border: 1px solid var(--gs-300);
-  border-radius: var(--radius);
   width: 130px;
   font-size: .8125rem;
-  font-family: var(--font);
+  font-family: var(--font-marianne);
 }
 
 .filtres-budget select{
   padding: 5px 10px;
   border: 1px solid var(--gs-300);
-  border-radius: var(--radius);
   font-size: .8125rem;
-  font-family: var(--font);
+  font-family: var(--font-marianne);
   background: var(--gs-000);
 }
 
@@ -599,9 +662,8 @@ tbody tr:hover{background: var(--bf-100)}
    MESSAGES
    ============================================================ */
 .message{
-  padding: var(--space-4);
-  border-radius: var(--radius);
-  margin: var(--space-4) var(--space-6);
+  padding: 16px;
+  margin: 16px 24px;
   font-weight: 500;
   background: var(--bf-100);
   color: var(--bf-500);
@@ -618,7 +680,7 @@ tbody tr:hover{background: var(--bf-100)}
    NO DATA
    ============================================================ */
 .no-data{
-  padding: var(--space-7) var(--space-4);
+  padding: 48px 16px;
   text-align: center;
   color: var(--gs-500);
   font-size: .875rem;
@@ -626,7 +688,7 @@ tbody tr:hover{background: var(--bf-100)}
 
 .no-data .ic{
   font-size: 2.5rem;
-  margin-bottom: var(--space-2);
+  margin-bottom: 8px;
   opacity: .5;
 }
 
@@ -652,7 +714,7 @@ tbody tr:hover{background: var(--bf-100)}
 .detail-panel .entete{
   background: var(--bf-500);
   color: var(--gs-000);
-  padding: var(--space-4) var(--space-5);
+  padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -676,10 +738,10 @@ tbody tr:hover{background: var(--bf-100)}
 
 .detail-panel .entete .fermer:hover{opacity: 1}
 
-.detail-panel .corps{padding: var(--space-5); flex: 1}
+.detail-panel .corps{padding: 24px; flex: 1}
 
 .detail-panel .corps p{
-  margin: var(--space-2) 0;
+  margin: 8px 0;
   font-size: .875rem;
 }
 
@@ -706,7 +768,6 @@ tbody tr:hover{background: var(--bf-100)}
 #budget-table-wrap, #tab-effectifs, #tab-montants{
   max-height: 600px;
   overflow-y: auto;
-  border-radius: var(--radius);
   border: 1px solid var(--gs-200);
 }
 
@@ -716,15 +777,14 @@ tbody tr:hover{background: var(--bf-100)}
 }
 
 /* ============================================================
-   DOCUMENTS LIST
+   DOCUMENTS
    ============================================================ */
 .doc{
   background: var(--gs-000);
   border: 1px solid var(--gs-200);
   border-left: 4px solid var(--bf-500);
-  border-radius: var(--radius);
-  padding: var(--space-3) var(--space-4);
-  margin-bottom: var(--space-2);
+  padding: 12px 16px;
+  margin-bottom: 8px;
   cursor: pointer;
   transition: box-shadow .2s;
 }
@@ -736,7 +796,7 @@ tbody tr:hover{background: var(--bf-100)}
 .doc-header{
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 12px;
 }
 
 .doc-header .badge{
@@ -744,7 +804,6 @@ tbody tr:hover{background: var(--bf-100)}
   font-weight: 700;
   text-transform: uppercase;
   padding: 3px 8px;
-  border-radius: var(--radius);
   letter-spacing: .5px;
 }
 
@@ -764,32 +823,61 @@ tbody tr:hover{background: var(--bf-100)}
   font-weight: 700;
   background: var(--rm-100);
   padding: 2px 9px;
-  border-radius: var(--radius);
 }
 
 /* ============================================================
-   FOOTER
+   FOOTER — Avec devise et bandeau tricolore
    ============================================================ */
 footer{
   text-align: center;
-  padding: var(--space-5);
+  padding: 32px 24px 16px;
   font-size: .8125rem;
   color: var(--gs-500);
-  margin-top: var(--space-6);
-  border-top: 2px solid var(--gs-200);
+  margin-top: 40px;
   background: var(--gs-000);
+  border-top: 1px solid var(--gs-200);
+  position: relative;
 }
 
-footer::after{
+footer::before{
   content: '';
-  display: block;
-  margin: var(--space-4) auto 0;
-  width: 60px;
+  position: absolute;
+  top: 0; left: 0; right: 0;
   height: 3px;
   background: linear-gradient(to right,
-    var(--bf-500) 33.33%,
+    var(--bf-500) 0%, var(--bf-500) 33.33%,
     var(--gs-000) 33.33%, var(--gs-000) 66.66%,
-    var(--rm-500) 66.66%);
+    var(--rm-500) 66.66%, var(--rm-500) 100%);
+}
+
+footer .footer-bloc{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+footer .footer-logo{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--gs-900);
+  font-size: .875rem;
+}
+
+footer .footer-logo svg{
+  width: 28px;
+  height: 28px;
+}
+
+footer .devise-footer{
+  font-style: italic;
+  color: var(--gs-500);
+  font-size: .75rem;
+  letter-spacing: .5px;
 }
 
 /* ============================================================
@@ -797,21 +885,57 @@ footer::after{
    ============================================================ */
 @media(max-width:768px){
   .detail-panel{width: 100%}
-  main{padding: var(--space-4)}
-  header{padding: var(--space-3) var(--space-4)}
-  .tabs, .kpis, .filtres-actifs, .slider-zone{padding-left: var(--space-4); padding-right: var(--space-4)}
+  main{padding: 16px}
+  header{padding: 12px 16px}
+  .tabs, .kpis, .filtres-actifs, .slider-zone{padding-left: 16px; padding-right: 16px}
   .grille{grid-template-columns: 1fr}
 }
 </style>
 </head>
 <body>
 
+<!-- ============================================================
+     BANDEAU RÉPUBLIQUE FRANÇAISE (comme les sites .gouv.fr)
+     ============================================================ -->
+<div class="bandeau-rf">
+  <div class="bloc-marque">
+    <a href="https://www.gouvernement.fr" target="_blank" class="logo-rf" title="République Française">
+      <!-- ✅ Logo Marianne officiel simplifié (SVG) -->
+      <svg class="marianne-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- Bande bleue -->
+        <rect x="0" y="0" width="66.66" height="200" fill="#000091"/>
+        <!-- Bande blanche -->
+        <rect x="66.66" y="0" width="66.66" height="200" fill="#ffffff"/>
+        <!-- Bande rouge -->
+        <rect x="133.33" y="0" width="66.66" height="200" fill="#e1000f"/>
+        <!-- Profil Marianne stylisé (blanc sur bleu) -->
+        <g transform="translate(30, 40)" fill="#ffffff">
+          <ellipse cx="40" cy="55" rx="22" ry="28"/>
+          <ellipse cx="20" cy="80" rx="18" ry="22"/>
+          <path d="M 15 60 Q 20 40 40 45 Q 55 50 55 70 Q 55 90 45 100 L 15 100 Q 10 80 15 60 Z"/>
+          <circle cx="40" cy="30" r="12"/>
+          <path d="M 25 25 Q 40 15 55 25 L 55 30 Q 40 22 25 30 Z"/>
+        </g>
+      </svg>
+      <div class="texte-rf">
+        <div class="rf-ligne-1">RÉPUBLIQUE FRANÇAISE</div>
+        <div class="rf-ligne-2">Liberté · Égalité · Fraternité</div>
+      </div>
+    </a>
+  </div>
+  <div class="devise">
+    <strong>MINISTÈRE</strong> CHARGÉ DES OUTRE-MER
+  </div>
+</div>
+
+<!-- ============================================================
+     EN-TÊTE PRINCIPAL
+     ============================================================ -->
 <header>
   <h1>
-    <span class="marianne">RF</span>
-    <div>
-      BUMIDOM — Dashboard Interactif
-      <span class="sous-titre">République Française · Analyse budgétaire et parlementaire</span>
+    <div class="titre-principal">
+      <span class="ligne-1">BUMIDOM — Dashboard Interactif</span>
+      <span class="ligne-2">Analyse budgétaire et parlementaire · 1963-1988</span>
     </div>
   </h1>
   <div class="actions">
@@ -962,9 +1086,24 @@ footer::after{
 
 </main>
 
+<!-- ============================================================
+     FOOTER — Style institutionnel avec devise
+     ============================================================ -->
 <footer>
-  <strong>République Française</strong> · Dashboard BUMIDOM interactif<br>
-  <span id="horodatage"></span>
+  <div class="footer-bloc">
+    <div class="footer-logo">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="66.66" height="200" fill="#000091"/>
+        <rect x="66.66" y="0" width="66.66" height="200" fill="#ffffff"/>
+        <rect x="133.33" y="0" width="66.66" height="200" fill="#e1000f"/>
+      </svg>
+      <span>RÉPUBLIQUE FRANÇAISE</span>
+    </div>
+  </div>
+  <div class="devise-footer">Liberté · Égalité · Fraternité</div>
+  <div style="margin-top: 12px; color: var(--gs-500); font-size: .75rem">
+    Dashboard BUMIDOM · <span id="horodatage"></span>
+  </div>
 </footer>
 
 <div class="overlay" id="overlay" onclick="fermerDetail()"></div>
@@ -1646,7 +1785,7 @@ function dessinerChiffres(){
     ];
     document.getElementById('chiffres-cles').innerHTML = chiffres.map((c,i)=>`
       <div style="display:flex;justify-content:space-between;padding:10px 14px;margin:5px 0;
-                  background:${i<3?'#ffe9e9':'#f6f6f6'};border-radius:4px;
+                  background:${i<3?'#ffe9e9':'#f6f6f6'};
                   border-left:4px solid ${i<3?'#e1000f':'#000091'}">
         <span>${c[0]}</span>
         <strong style="color:${i<3?'#e1000f':'#000091'}">${c[1]}</strong>
