@@ -6,7 +6,7 @@
 <title>Dashboard BUMIDOM — Interactif</title>
 <script src="plotly.min.js"></script>
 <style>
-  :root{--bleu:#000091;--rouge:#E1000F;--gris:#f5f5f7;--vert:#1b7a2e}
+  :root{--bleu:#000091;--rouge:#E1000F;--gris:#f5f5f7;--vert:#1b7a2e;--or:#d4af37}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:system-ui,-apple-system,sans-serif;background:var(--gris);color:#1a1a2e;line-height:1.5}
   header{background:#fff;border-bottom:4px solid;
@@ -24,7 +24,6 @@
   .actions button.primary{background:var(--bleu);color:#fff}
   .actions button.primary:hover{background:var(--rouge)}
 
-  /* Bandeau de filtres actifs */
   .filtres-actifs{padding:12px 28px;background:#fff;border-bottom:1px solid #eee;
     display:flex;gap:10px;flex-wrap:wrap;align-items:center;min-height:44px}
   .filtres-actifs .chip{display:inline-flex;align-items:center;gap:6px;
@@ -32,6 +31,7 @@
   .filtres-actifs .chip .x{cursor:pointer;font-weight:700;opacity:.7;margin-left:4px}
   .filtres-actifs .chip .x:hover{opacity:1}
   .filtres-actifs .chip.rouge{background:var(--rouge)}
+  .filtres-actifs .chip.or{background:var(--or);color:#000}
   .filtres-actifs .vider{background:#eee;color:#666;border:none;padding:5px 12px;
     border-radius:16px;font-size:.8rem;cursor:pointer;font-weight:600}
   .filtres-actifs .vide{color:#999;font-size:.85rem;font-style:italic}
@@ -42,9 +42,11 @@
   .kpi:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,145,.15)}
   .kpi.rouge{border-top-color:var(--rouge)}
   .kpi.vert{border-top-color:var(--vert)}
+  .kpi.or{border-top-color:var(--or)}
   .kpi .v{font-size:1.6rem;font-weight:700;color:var(--bleu)}
   .kpi.rouge .v{color:var(--rouge)}
   .kpi.vert .v{color:var(--vert)}
+  .kpi.or .v{color:#b8860b}
   .kpi .l{font-size:.7rem;color:#666;text-transform:uppercase;letter-spacing:.5px}
 
   .slider-zone{background:#fff;padding:16px 28px;border-bottom:1px solid #eee}
@@ -68,7 +70,7 @@
   table{width:100%;border-collapse:collapse;font-size:.83rem}
   th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee}
   th{background:var(--bleu);color:#fff;font-size:.7rem;text-transform:uppercase;
-    letter-spacing:.5px;cursor:pointer;user-select:none;position:sticky;top:0}
+    letter-spacing:.5px;cursor:pointer;user-select:none;position:sticky;top:0;z-index:2}
   th:hover{background:var(--rouge)}
   th::after{content:'';margin-left:4px;opacity:.4;font-size:.65rem}
   th.tri-asc::after{content:'▲';opacity:1}
@@ -79,44 +81,23 @@
   .nb{text-align:right;font-weight:700;color:var(--rouge);font-variant-numeric:tabular-nums}
   .ctx{font-size:.75rem;color:#666;font-style:italic;max-width:400px;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .score-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-weight:700;font-size:.7rem}
+  .score-12,.score-11{background:#1b7a2e;color:#fff}
+  .score-10,.score-9{background:#4a9d3a;color:#fff}
+  .score-8,.score-7{background:var(--or);color:#000}
+  .score-6,.score-5{background:#e0a800;color:#000}
+  .score-4,.score-3,.score-2,.score-1,.score-0{background:#ccc;color:#333}
+
+  .confiance-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:600}
+  .confiance-strict{background:#1b7a2e;color:#fff}
+  .confiance-proche{background:#4a9d3a;color:#fff}
+  .confiance-moyen{background:var(--or);color:#000}
+  .confiance-large{background:#ccc;color:#333}
 
   .recherche-wrap{position:relative;margin-bottom:12px}
   .recherche-wrap input{width:100%;padding:10px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:.9rem}
   .recherche-wrap input:focus{outline:none;border-color:var(--bleu)}
 
-  /* Liste documents interactive */
-  .doc{background:#fff;border-radius:10px;margin-bottom:8px;
-    box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:5px solid var(--bleu);
-    overflow:hidden;transition:.2s;cursor:pointer}
-  .doc:hover{box-shadow:0 4px 16px rgba(0,0,145,.15);transform:translateX(3px)}
-  .doc.selectionne{border-left-color:var(--rouge);background:#fff9f9}
-  .doc-header{padding:12px 16px;display:flex;align-items:center;gap:10px}
-  .doc-header .badge{font-size:.65rem;font-weight:700;text-transform:uppercase;padding:3px 8px;
-    border-radius:12px;letter-spacing:.5px;white-space:nowrap}
-  .badge-cri{background:#e5e9ff;color:var(--bleu)}
-  .badge-qst{background:#e8f5e9;color:var(--vert)}
-  .badge-jo{background:#fff3e0;color:#b26a00}
-  .badge-tab{background:#f3e5f5;color:#7b1fa2}
-  .badge-def{background:#eee;color:#555}
-  .doc-header .titre{flex:1;font-weight:600;font-size:.9rem}
-  .doc-header .mentions{font-size:.75rem;color:var(--rouge);font-weight:700;background:#ffe5e5;
-    padding:2px 9px;border-radius:12px;white-space:nowrap}
-  .doc-body{display:none;padding:12px 16px;border-top:1px solid #f0f0f0;background:#fafafa}
-  .doc-body.open{display:block}
-  .doc-body .extrait{background:#fff;border-left:3px solid var(--rouge);padding:9px 12px;
-    margin:7px 0;font-size:.85rem;border-radius:0 6px 6px 0}
-  .btn{display:inline-block;background:var(--bleu);color:#fff;text-decoration:none;
-    padding:7px 14px;border-radius:6px;font-weight:600;font-size:.8rem;
-    border:none;cursor:pointer;margin:4px 6px 0 0;transition:.2s}
-  .btn:hover{background:var(--rouge)}
-  .btn.gris{background:#888}
-  .tag{display:inline-block;background:var(--bleu);color:#fff;padding:2px 9px;border-radius:12px;
-    font-size:.7rem;margin:2px 3px 2px 0;cursor:pointer;transition:.2s}
-  .tag:hover{background:var(--rouge)}
-  .tag.rouge{background:var(--rouge)}
-  .tag.rouge:hover{background:var(--bleu)}
-
-  /* Panneau latéral */
   .detail-panel{position:fixed;right:0;top:0;bottom:0;width:500px;background:#fff;
     box-shadow:-4px 0 20px rgba(0,0,0,.15);z-index:200;overflow-y:auto;
     transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column}
@@ -161,6 +142,29 @@
   kbd{background:#f0f0f5;padding:2px 6px;border-radius:4px;font-size:.75rem;
     border:1px solid #ddd;font-family:monospace}
 
+  /* ✅ NOUVEAU : Styles pour l'onglet Budget */
+  .budget-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+  .budget-kpi{background:linear-gradient(135deg,#fff,#f8f9fa);border-radius:10px;padding:16px;
+    border-left:5px solid var(--bleu);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .budget-kpi.or{border-left-color:var(--or)}
+  .budget-kpi.rouge{border-left-color:var(--rouge)}
+  .budget-kpi.vert{border-left-color:var(--vert)}
+  .budget-kpi .v{font-size:1.5rem;font-weight:800;color:var(--bleu);line-height:1.1}
+  .budget-kpi.or .v{color:#b8860b}
+  .budget-kpi.rouge .v{color:var(--rouge)}
+  .budget-kpi.vert .v{color:var(--vert)}
+  .budget-kpi .l{font-size:.72rem;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+
+  .filtres-budget{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,.06);display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+  .filtres-budget label{font-size:.8rem;font-weight:600;color:var(--bleu);display:flex;
+    align-items:center;gap:8px}
+  .filtres-budget input[type=range]{width:200px;accent-color:var(--rouge)}
+  .filtres-budget input[type=number]{padding:5px 10px;border:1px solid #ddd;border-radius:6px;
+    width:120px;font-size:.85rem}
+  .filtres-budget select{padding:5px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem}
+  .filtres-budget .valeur-score{font-weight:800;color:var(--rouge);font-size:1.1rem;min-width:30px}
+
   @media(max-width:768px){
     .detail-panel{width:100%}
     main{padding:16px}
@@ -198,13 +202,11 @@
 
 <div class="tabs" id="tabs">
   <button class="actif" data-tab="synthese">📊 Synthèse</button>
+  <button data-tab="budget">💰 Budget</button>
   <button data-tab="chiffres">🎯 Chiffres clés</button>
   <button data-tab="orateurs">👤 Orateurs</button>
   <button data-tab="themes">🏷️ Thèmes</button>
   <button data-tab="chrono">🕐 Chronologie</button>
-  <button data-tab="sentiment">😊 Sentiment</button>
-  <button data-tab="reseau">🕸️ Réseau</button>
-  <button data-tab="nlp">🔬 NLP</button>
   <button data-tab="docs">📄 Documents</button>
 </div>
 
@@ -221,12 +223,75 @@
     </div>
   </section>
 
+  <!-- ✅ NOUVEAU : Onglet BUDGET -->
+  <section class="panneau" id="tab-budget">
+    <!-- KPIs budgétaires -->
+    <div class="budget-kpis" id="budget-kpis"></div>
+
+    <!-- Filtres budgétaires -->
+    <div class="filtres-budget">
+      <label>
+        Score minimum :
+        <input type="range" id="budget-score" min="0" max="13" value="7" step="1">
+        <span class="valeur-score" id="budget-score-valeur">7</span>
+      </label>
+      <label>
+        Confiance :
+        <select id="budget-confiance">
+          <option value="">Toutes</option>
+          <option value="strict">Strict</option>
+          <option value="proche">Proche</option>
+          <option value="moyen">Moyen</option>
+          <option value="large">Large</option>
+        </select>
+      </label>
+      <label>
+        Montant min (F) :
+        <input type="number" id="budget-min" value="1000000" step="1000000">
+      </label>
+      <label>
+        <input type="checkbox" id="budget-fourchette" checked>
+        Fourchette BUMIDOM (5M-500M)
+      </label>
+    </div>
+
+    <!-- Graphiques budgétaires -->
+    <div class="grille">
+      <div class="carte">
+        <h2>📊 Évolution du budget BUMIDOM <span class="compteur" id="c-budget-evol"></span></h2>
+        <div id="viz-budget-evolution" class="viz tall"></div>
+      </div>
+      <div class="carte">
+        <h2>📈 Distribution des scores <span class="compteur" id="c-budget-scores"></span></h2>
+        <div id="viz-budget-scores" class="viz"></div>
+      </div>
+    </div>
+
+    <div class="carte">
+      <h2>💰 Top 30 montants (filtrés) <span class="compteur" id="c-budget-top"></span></h2>
+      <div id="viz-budget-top" class="viz tall"></div>
+    </div>
+
+    <div class="carte">
+      <h2>💸 Répartition par confiance <span class="compteur" id="c-budget-conf"></span></h2>
+      <div id="viz-budget-confiance" class="viz"></div>
+    </div>
+
+    <div class="carte">
+      <h2>📋 Tableau des montants <span class="compteur" id="c-budget-table"></span></h2>
+      <div class="recherche-wrap">
+        <input type="text" id="recherche-budget" placeholder="🔍 Rechercher dans les montants (fichier, année, contexte...)">
+      </div>
+      <div id="budget-table-wrap"></div>
+    </div>
+  </section>
+
   <section class="panneau" id="tab-chiffres">
     <div class="grille">
       <div class="carte"><h2>💰 Budget BUMIDOM</h2><div id="viz-budget" class="viz"></div></div>
       <div class="carte"><h2>📈 Flux migratoires</h2><div id="viz-flux" class="viz"></div></div>
     </div>
-    <div class="carte"><h2>🎯 Chiffres clés (cliquez pour filtrer) <span class="compteur" id="c-chiffres"></span></h2>
+    <div class="carte"><h2>🎯 Chiffres clés <span class="compteur" id="c-chiffres"></span></h2>
       <div id="chiffres-cles"></div>
     </div>
     <div class="carte"><h2>👥 Effectifs cités</h2><div id="tab-effectifs"></div></div>
@@ -252,24 +317,6 @@
     <div class="carte"><h2>📅 Années citées</h2><div id="viz-annees" class="viz"></div></div>
   </section>
 
-  <section class="panneau" id="tab-sentiment">
-    <div class="carte"><h2>😊 Tonalité par année (positif/négatif)</h2><div id="viz-sentiment" class="viz"></div></div>
-    <div class="carte"><h2>Détail par année</h2><div id="tab-sentiment-detail"></div></div>
-  </section>
-
-  <section class="panneau" id="tab-reseau">
-    <div class="carte"><h2>🕸️ Réseau des orateurs (zoom + clic)</h2><div id="viz-reseau" class="viz reseau"></div></div>
-  </section>
-
-  <section class="panneau" id="tab-nlp">
-    <div class="grille">
-      <div class="carte"><h2>👥 Personnes citées</h2><div id="nlp-pers" class="liste-nlp"></div></div>
-      <div class="carte"><h2>🌍 Lieux cités</h2><div id="nlp-lieux" class="liste-nlp"></div></div>
-      <div class="carte"><h2>🏛️ Organisations</h2><div id="nlp-org" class="liste-nlp"></div></div>
-      <div class="carte"><h2>📝 Mots fréquents (cliquez pour filtrer)</h2><div id="nlp-mots" class="liste-nlp"></div></div>
-    </div>
-  </section>
-
   <section class="panneau" id="tab-docs">
     <div class="recherche-wrap">
       <input type="text" id="recherche" placeholder="🔍 Rechercher (Debré, formation, 1975...)">
@@ -281,7 +328,6 @@
 
 <footer>Dashboard BUMIDOM interactif · <span id="horodatage"></span></footer>
 
-<!-- Panneau latéral détail -->
 <div class="overlay" id="overlay" onclick="fermerDetail()"></div>
 <aside class="detail-panel" id="detail-panel">
   <div class="entete">
@@ -297,19 +343,24 @@
 // ============================================================
 let DOCS = [];
 let ALL_DOCS = [];
-let NLP = null;
-let CSV = {};
+let BUDGET_MONTANTS = [];
+let BUDGET_BUDGETS = [];
+let BUDGET_FILTRES = {
+  scoreMin: 7,
+  confiance: '',
+  montantMin: 1000000,
+  fourchette: true,
+  recherche: ''
+};
 let FILTRES = {
   types: new Set(),
   themes: new Set(),
   orateurs: new Set(),
-  legis: new Set(),
   anneeMin: 1960,
   anneeMax: 1995,
   recherche: ''
 };
-let TRI = { col: 'mentions', ordre: 'desc' };
-let SELECTION = new Set();  // ids des documents sélectionnés
+let TRI = { col: 'score', ordre: 'desc' };
 
 document.getElementById('horodatage').textContent = new Date().toLocaleString('fr-FR');
 
@@ -318,56 +369,55 @@ document.getElementById('horodatage').textContent = new Date().toLocaleString('f
 // ============================================================
 function num(v){ const n = parseFloat(String(v||'0').replace(/[^\d.,-]/g,'').replace(',','.')); return isNaN(n)?0:n; }
 function fmt(n){ return Math.round(n).toLocaleString('fr-FR').replace(/\u202f|\u00a0/g,' '); }
+function fmtM(n){ 
+  if (n >= 1e9) return (n/1e9).toFixed(2) + ' Md';
+  if (n >= 1e6) return (n/1e6).toFixed(1) + ' M';
+  if (n >= 1e3) return (n/1e3).toFixed(0) + ' k';
+  return n.toString();
+}
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-function parseCSV(text){
+function parseCSV(text, sep){
+  sep = sep || ';';
   const lignes = text.trim().split(/\r?\n/);
-  const sep = lignes[0].includes(';') ? ';' : ',';
   const headers = lignes[0].split(sep).map(h => h.replace(/^"|"$/g,'').trim());
   return lignes.slice(1).filter(l=>l.trim()).map(l=>{
-    const vals = l.split(sep).map(v=>v.replace(/^"|"$/g,'').trim());
+    // Parse robuste : gère les guillemets
+    const vals = [];
+    let cur = '';
+    let inQuote = false;
+    for (let i = 0; i < l.length; i++){
+      const c = l[i];
+      if (c === '"'){
+        if (inQuote && l[i+1] === '"'){ cur += '"'; i++; }
+        else inQuote = !inQuote;
+      } else if (c === sep && !inQuote){
+        vals.push(cur); cur = '';
+      } else {
+        cur += c;
+      }
+    }
+    vals.push(cur);
     const obj = {};
     headers.forEach((h,i)=>obj[h]=vals[i]||'');
     return obj;
   });
 }
 
-function anneeDeDoc(d){
-  const m1 = d.fichier.match(/(\d{4})-\d{2}-\d{2}/);
-  if(m1) return parseInt(m1[1]);
-  const m2 = d.fichier.match(/(\d{4})-(\d{4})/);
-  if(m2) return parseInt(m2[1]);
-  return null;
-}
-
-function typeDeFichier(f){
-  if(f.includes('_qst_')) return 'Question écrite';
-  if(f.includes('_cri_')) return 'Compte rendu';
-  if(f.includes('tanalytique')) return 'Table analytique';
-  if(f.includes('tnominative')) return 'Table nominative';
-  return 'Autre';
-}
-
 // ============================================================
 // CHARGEMENT
 // ============================================================
 Promise.all([
-  fetch('resultats_enrichis.json').then(r=>r.ok?r.json():null),
-  fetch('nlp_results.json').then(r=>r.ok?r.json():null).catch(()=>null),
-  fetch('analyse_chrono.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
-  fetch('analyse_cooccurrences.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
-  fetch('analyse_sentiment.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
-  fetch('analyse_reseau.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
-  fetch('expertise_BUMIDOM/SYNTHESE_CHRONOLOGIQUE.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
-  fetch('expertise_BUMIDOM/BUMIDOM_effectifs.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
-  fetch('expertise_BUMIDOM/BUMIDOM_montants.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
-]).then(([data, nlp, chrono, cooc, senti, reseau, chronoExp, effectifs, montants])=>{
-  if(!data){ throw new Error('resultats_enrichis.json introuvable'); }
-  ALL_DOCS = data.results || [];
-  DOCS = ALL_DOCS;
-  NLP = nlp;
-  CSV = { chrono: chrono||[], cooc: cooc||[], senti: senti||[], reseau: reseau||[],
-          chronoExp: chronoExp||[], effectifs: effectifs||[], montants: montants||[] };
+  fetch('resultats_enrichis.json').then(r=>r.ok?r.json():null).catch(()=>null),
+  fetch('expertise_BUMIDOM/BUDGET_montants.csv').then(r=>r.ok?r.text():'').then(t=>t?parseCSV(t):[]).catch(()=>[]),
+  fetch('expertise_BUMIDOM/BUDGET_budget_annuel_estime.csv').then(r=>r.ok?r.text():'').then(t=>t?parseCSV(t):[]).catch(()=>[]),
+]).then(([data, montants, budgets])=>{
+  if (data && data.results){
+    ALL_DOCS = data.results;
+    DOCS = ALL_DOCS;
+  }
+  BUDGET_MONTANTS = montants;
+  BUDGET_BUDGETS = budgets;
 
   document.getElementById('message').style.display='none';
   document.getElementById('app').style.display='block';
@@ -375,10 +425,12 @@ Promise.all([
   initSlider();
   initOnglets();
   initRecherche();
+  initBudgetFiltres();
   majVue();
 }).catch(e=>{
   document.getElementById('message').className='message err';
-  document.getElementById('message').innerHTML='❌ '+e.message;
+  document.getElementById('message').innerHTML='❌ Erreur : '+e.message;
+  console.error(e);
 });
 
 // ============================================================
@@ -427,114 +479,61 @@ function initOnglets(){
 }
 
 // ============================================================
-// RECHERCHE (avec debounce)
+// RECHERCHE
 // ============================================================
 let rechercheTimer;
 function initRecherche(){
-  document.getElementById('recherche').addEventListener('input', e=>{
+  const el = document.getElementById('recherche');
+  if (el) el.addEventListener('input', e=>{
     clearTimeout(rechercheTimer);
     rechercheTimer = setTimeout(()=>{
       FILTRES.recherche = e.target.value.trim().toLowerCase();
       majVue();
     }, 250);
   });
-}
 
-// ============================================================
-// FILTRAGE
-// ============================================================
-function appliquerFiltres(){
-  DOCS = ALL_DOCS.filter(d=>{
-    // Année
-    const a = anneeDeDoc(d);
-    if(a && (a < FILTRES.anneeMin || a > FILTRES.anneeMax)) return false;
-
-    // Type
-    if(FILTRES.types.size > 0){
-      if(!FILTRES.types.has(typeDeFichier(d.fichier))) return false;
-    }
-    // Thèmes (au moins un doit matcher)
-    if(FILTRES.themes.size > 0){
-      const docThemes = Object.keys(d.themes||{});
-      if(!docThemes.some(t=>FILTRES.themes.has(t))) return false;
-    }
-    // Orateurs
-    if(FILTRES.orateurs.size > 0){
-      const docOrateurs = (d.orateurs||[]).map(o=>o.nom);
-      if(!docOrateurs.some(o=>FILTRES.orateurs.has(o))) return false;
-    }
-    // Législature
-    if(FILTRES.legis.size > 0){
-      if(!(d.legislatures||[]).some(l=>FILTRES.legis.has(l))) return false;
-    }
-    // Recherche texte
-    if(FILTRES.recherche){
-      const blob = (d.fichier+' '+JSON.stringify(d.extraits)+' '+
-                    JSON.stringify(d.orateurs)+' '+JSON.stringify(d.themes)).toLowerCase();
-      if(!blob.includes(FILTRES.recherche)) return false;
-    }
-    return true;
+  const elB = document.getElementById('recherche-budget');
+  if (elB) elB.addEventListener('input', e=>{
+    clearTimeout(rechercheTimer);
+    rechercheTimer = setTimeout(()=>{
+      BUDGET_FILTRES.recherche = e.target.value.trim().toLowerCase();
+      dessinerBudget();
+    }, 250);
   });
 }
 
 // ============================================================
-// CHIPS DE FILTRES ACTIFS
+// FILTRES BUDGET
 // ============================================================
-function afficherChips(){
-  const wrap = document.getElementById('filtres-actifs');
-  const chips = [];
+function initBudgetFiltres(){
+  const score = document.getElementById('budget-score');
+  const scoreVal = document.getElementById('budget-score-valeur');
+  score.addEventListener('input', ()=>{
+    BUDGET_FILTRES.scoreMin = +score.value;
+    scoreVal.textContent = score.value;
+    dessinerBudget();
+  });
 
-  FILTRES.types.forEach(t=>chips.push({k:'types',v:t,c:'bleu'}));
-  FILTRES.themes.forEach(t=>chips.push({k:'themes',v:t,c:'rouge'}));
-  FILTRES.orateurs.forEach(t=>chips.push({k:'orateurs',v:t,c:'bleu'}));
-  FILTRES.legis.forEach(t=>chips.push({k:'legis',v:'Lég. '+t,c:'rouge'}));
-  if(FILTRES.recherche) chips.push({k:'recherche',v:'« '+FILTRES.recherche+' »',c:'bleu'});
-  if(FILTRES.anneeMin > 1960 || FILTRES.anneeMax < 1995)
-    chips.push({k:'annees',v:FILTRES.anneeMin+'–'+FILTRES.anneeMax,c:'rouge'});
+  document.getElementById('budget-confiance').addEventListener('change', e=>{
+    BUDGET_FILTRES.confiance = e.target.value;
+    dessinerBudget();
+  });
 
-  if(chips.length === 0){
-    wrap.innerHTML = '<span class="vide">Aucun filtre actif — cliquez sur les graphiques ou la liste pour filtrer</span>';
-    return;
-  }
+  document.getElementById('budget-min').addEventListener('input', e=>{
+    BUDGET_FILTRES.montantMin = +e.target.value;
+    dessinerBudget();
+  });
 
-  wrap.innerHTML = chips.map(ch=>`
-    <span class="chip ${ch.c==='rouge'?'rouge':''}">
-      ${esc(ch.v)}
-      <span class="x" onclick="retirerFiltre('${ch.k}','${esc(ch.v).replace(/'/g,'')}')">✕</span>
-    </span>
-  `).join('') + `<button class="vider" onclick="reinitialiser()">Tout effacer</button>`;
-}
-
-function retirerFiltre(type, valeur){
-  if(type === 'recherche'){ FILTRES.recherche=''; document.getElementById('recherche').value=''; }
-  else if(type === 'annees'){ resetAnnees(); return; }
-  else {
-    const v = valeur.replace('Lég. ','').replace('« ','').replace(' »','');
-    FILTRES[type].delete(v);
-  }
-  majVue();
-}
-
-function toggleFiltre(type, valeur){
-  if(FILTRES[type].has(valeur)) FILTRES[type].delete(valeur);
-  else FILTRES[type].add(valeur);
-  majVue();
-}
-
-function reinitialiser(){
-  FILTRES = { types:new Set(), themes:new Set(), orateurs:new Set(), legis:new Set(),
-              anneeMin:1960, anneeMax:1995, recherche:'' };
-  document.getElementById('recherche').value = '';
-  resetAnnees();
-  majVue();
+  document.getElementById('budget-fourchette').addEventListener('change', e=>{
+    BUDGET_FILTRES.fourchette = e.target.checked;
+    dessinerBudget();
+  });
 }
 
 // ============================================================
 // VUE PRINCIPALE
 // ============================================================
 function majVue(){
-  appliquerFiltres();
-  afficherChips();
   afficherKPIs();
   dessinerOngletActif();
 }
@@ -546,42 +545,30 @@ function afficherKPIs(){
   DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>orateurs.add(o.nom)));
   const themes = new Set();
   DOCS.forEach(d=>Object.keys(d.themes||{}).forEach(t=>themes.add(t)));
-  const annees = DOCS.map(anneeDeDoc).filter(Boolean);
+  const annees = DOCS.map(d=>{
+    const m = d.fichier.match(/(\d{4})/);
+    return m ? +m[1] : null;
+  }).filter(Boolean);
 
   document.getElementById('kpis').innerHTML = `
-    <div class="kpi" onclick="toggleFiltreParKpi('docs')">
-      <div class="v">${total}</div><div class="l">Documents</div>
-    </div>
+    <div class="kpi"><div class="v">${total}</div><div class="l">Documents</div></div>
     <div class="kpi rouge"><div class="v">${mentions}</div><div class="l">Mentions</div></div>
-    <div class="kpi" onclick="toggleFiltreParKpi('orateurs')">
-      <div class="v">${orateurs.size}</div><div class="l">Orateurs uniques</div>
-    </div>
-    <div class="kpi rouge" onclick="toggleFiltreParKpi('themes')">
-      <div class="v">${themes.size}</div><div class="l">Thèmes</div>
-    </div>
+    <div class="kpi"><div class="v">${orateurs.size}</div><div class="l">Orateurs</div></div>
+    <div class="kpi rouge"><div class="v">${themes.size}</div><div class="l">Thèmes</div></div>
     <div class="kpi vert"><div class="v">${annees.length ? Math.min(...annees)+'–'+Math.max(...annees) : '—'}</div><div class="l">Période</div></div>
+    <div class="kpi or"><div class="v">${BUDGET_MONTANTS.length}</div><div class="l">Montants budget</div></div>
   `;
 }
 
-function toggleFiltreParKpi(type){
-  // Affiche un message dans la console
-  console.log('Filtre KPIs :', type);
-}
-
-// ============================================================
-// DESSIN DE L'ONGLET ACTIF
-// ============================================================
 function dessinerOngletActif(){
   const actif = document.querySelector('.tabs button.actif').dataset.tab;
   try {
     if(actif === 'synthese') dessinerSynthese();
+    if(actif === 'budget') dessinerBudget();
     if(actif === 'chiffres') dessinerChiffres();
     if(actif === 'orateurs') dessinerOrateurs();
     if(actif === 'themes') dessinerThemes();
     if(actif === 'chrono') dessinerChrono();
-    if(actif === 'sentiment') dessinerSentiment();
-    if(actif === 'reseau') dessinerReseau();
-    if(actif === 'nlp') dessinerNLP();
     if(actif === 'docs') dessinerDocs();
   } catch(e) {
     console.error('Erreur dessin:', e);
@@ -608,7 +595,6 @@ function safePlot(id, data, layout, customConfig){
     Plotly.newPlot(id, data, layout, customConfig || CONFIG);
   } catch(e) {
     el.innerHTML = '<p style="color:#E1000F;padding:20px">Erreur : '+e.message+'</p>';
-    console.error(e);
   }
 }
 
@@ -626,238 +612,265 @@ function dessinerSynthese(){
     }
   });
   const periodes = Object.keys(parPeriode).sort();
-  const traceP = {
+  safePlot('viz-periodes', [{
     x: periodes, y: periodes.map(p=>parPeriode[p]),
     type:'bar', marker:{color:'#000091'},
     hovertemplate:'<b>%{x}</b><br>%{y} mentions<extra></extra>'
-  };
-  safePlot('viz-periodes', [traceP], {...LAYOUT, xaxis:{tickangle:-30}}, 
-    {...CONFIG, modeBarButtonsToRemove:[]});
-  document.getElementById('viz-periodes').on('plotly_click', e=>{
-    const p = e.points[0].x;
-    // Filtre par période
-    FILTRES.anneeMin = parseInt(p.split('-')[0]);
-    FILTRES.anneeMax = parseInt(p.split('-')[1]);
-    document.getElementById('annee-min').value = FILTRES.anneeMin;
-    document.getElementById('annee-max').value = FILTRES.anneeMax;
-    document.getElementById('annee-min-label').textContent = FILTRES.anneeMin;
-    document.getElementById('annee-max-label').textContent = FILTRES.anneeMax;
-    majVue();
-  });
+  }], {...LAYOUT, xaxis:{tickangle:-30}});
+  document.getElementById('c-periode').textContent = periodes.length + ' périodes';
 
   // Types
   const types = {};
   DOCS.forEach(d=>{
-    const t = typeDeFichier(d.fichier);
+    const t = d.fichier.includes('_qst_') ? 'Question écrite' :
+              d.fichier.includes('_cri_') ? 'Compte rendu' : 'Autre';
     types[t] = (types[t]||0) + 1;
   });
-  const traceT = {
+  safePlot('viz-types', [{
     values: Object.values(types), labels: Object.keys(types),
     type:'pie', hole:0.45,
-    marker:{colors:['#000091','#E1000F','#1212ff','#ff6b6b','#888']},
-    hovertemplate:'<b>%{label}</b><br>%{value} documents<br>%{percent}<extra></extra>'
-  };
-  safePlot('viz-types', [traceT], {...LAYOUT, showlegend:true});
-  document.getElementById('viz-types').on('plotly_click', e=>{
-    toggleFiltre('types', e.points[0].label);
-  });
+    marker:{colors:['#000091','#E1000F','#888']},
+  }], {...LAYOUT, showlegend:true});
+  document.getElementById('c-types').textContent = Object.keys(types).length + ' types';
 
   // Top orateurs
   const aggO = {};
   DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>aggO[o.nom]=(aggO[o.nom]||0)+o.occurrences));
   const topO = Object.entries(aggO).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  const traceO = {
+  safePlot('viz-orateurs', [{
     x: topO.map(o=>o[1]), y: topO.map(o=>o[0]),
     type:'bar', orientation:'h',
     marker:{color:topO.map((_,i)=>i<3?'#E1000F':'#000091')},
-    hovertemplate:'<b>%{y}</b><br>%{x} mentions<extra></extra>'
-  };
-  safePlot('viz-orateurs', [traceO], {...LAYOUT, yaxis:{autorange:'reversed'},
-    margin:{t:20,r:20,b:40,l:180}});
-  document.getElementById('viz-orateurs').on('plotly_click', e=>{
-    toggleFiltre('orateurs', e.points[0].y);
-  });
+  }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:20,b:40,l:180}});
+  document.getElementById('c-orateurs').textContent = topO.length + ' orateurs';
 
   // Top thèmes
   const aggTh = {};
   DOCS.forEach(d=>Object.entries(d.themes||{}).forEach(([t,n])=>aggTh[t]=(aggTh[t]||0)+n));
   const topTh = Object.entries(aggTh).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  const traceTh = {
+  safePlot('viz-themes', [{
     values: topTh.map(t=>t[1]), labels: topTh.map(t=>t[0]),
     type:'pie', hole:0.45,
     marker:{colors:['#E1000F','#000091','#1212ff','#ff6b6b','#888','#4a4a8a','#b8000c','#ffa500','#2e7d32','#7b1fa2']},
-    hovertemplate:'<b>%{label}</b><br>%{value} occurrences<br>%{percent}<extra></extra>'
-  };
-  safePlot('viz-themes', [traceTh], {...LAYOUT, showlegend:true});
-  document.getElementById('viz-themes').on('plotly_click', e=>{
-    toggleFiltre('themes', e.points[0].label);
-  });
-
-  // Compteurs
-  document.getElementById('c-periode').textContent = periodes.length + ' périodes';
-  document.getElementById('c-types').textContent = Object.keys(types).length + ' types';
-  document.getElementById('c-orateurs').textContent = topO.length + ' orateurs';
+  }], {...LAYOUT, showlegend:true});
   document.getElementById('c-themes').textContent = topTh.length + ' thèmes';
 }
 
 // ============================================================
-// CHIFFRES CLÉS
+// ✅ NOUVEAU : BUDGET
+// ============================================================
+function filtrerMontantsBudget(){
+  return BUDGET_MONTANTS.filter(m=>{
+    const score = +m.score || 0;
+    if (score < BUDGET_FILTRES.scoreMin) return false;
+    if (BUDGET_FILTRES.confiance && m.confiance !== BUDGET_FILTRES.confiance) return false;
+    if (num(m.valeur_francs) < BUDGET_FILTRES.montantMin) return false;
+    if (BUDGET_FILTRES.fourchette){
+      const v = num(m.valeur_francs);
+      if (v < 5e6 || v > 5e8) return false;
+    }
+    if (BUDGET_FILTRES.recherche){
+      const blob = (m.fichier + ' ' + m.annee + ' ' + m.contexte).toLowerCase();
+      if (!blob.includes(BUDGET_FILTRES.recherche)) return false;
+    }
+    return true;
+  });
+}
+
+function dessinerBudget(){
+  const montants = filtrerMontantsBudget();
+
+  // ---- KPIs ----
+  const total = montants.length;
+  const maxMontant = montants.length ? Math.max(...montants.map(m=>num(m.valeur_francs))) : 0;
+  const scoreMax = montants.length ? Math.max(...montants.map(m=>+m.score)) : 0;
+  const scoreMoyen = montants.length ? (montants.reduce((s,m)=>s+ +m.score, 0) / montants.length).toFixed(1) : 0;
+  const confStrict = montants.filter(m=>m.confiance === 'strict').length;
+
+  document.getElementById('budget-kpis').innerHTML = `
+    <div class="budget-kpi">
+      <div class="v">${total}</div>
+      <div class="l">Montants filtrés</div>
+    </div>
+    <div class="budget-kpi or">
+      <div class="v">${fmtM(maxMontant)} F</div>
+      <div class="l">Montant max</div>
+    </div>
+    <div class="budget-kpi rouge">
+      <div class="v">${scoreMax}/13</div>
+      <div class="l">Score max</div>
+    </div>
+    <div class="budget-kpi vert">
+      <div class="v">${scoreMoyen}</div>
+      <div class="l">Score moyen</div>
+    </div>
+    <div class="budget-kpi">
+      <div class="v">${confStrict}</div>
+      <div class="l">Confiance stricte</div>
+    </div>
+  `;
+
+  // ---- Évolution du budget annuel ----
+  const annees = BUDGET_BUDGETS.map(b=>+b.annee).filter(Boolean).sort((a,b)=>a-b);
+  const budgets = BUDGET_BUDGETS.map(b=>+b.budget_francs || +b.budget_francs || 0);
+  const scoresB = BUDGET_BUDGETS.map(b=>+b.score || 0);
+
+  safePlot('viz-budget-evolution', [{
+    x: annees,
+    y: BUDGET_BUDGETS.map(b=>+b.budget_francs / 1e6),
+    type: 'bar',
+    marker: {
+      color: BUDGET_BUDGETS.map(b=>{
+        const s = +b.score || 0;
+        if (s >= 10) return '#1b7a2e';
+        if (s >= 8) return '#4a9d3a';
+        if (s >= 7) return '#d4af37';
+        return '#ccc';
+      }),
+    },
+    text: BUDGET_BUDGETS.map(b=>fmtM(+b.budget_francs) + ' F'),
+    textposition: 'outside',
+    hovertemplate: '<b>%{x}</b><br>Budget : %{text}<br>Score : %{customdata}<extra></extra>',
+    customdata: scoresB,
+  }], {...LAYOUT, height: 600, xaxis:{title:'Année'}, yaxis:{title:'Budget (MF)'}});
+
+  document.getElementById('c-budget-evol').textContent = annees.length + ' années';
+
+  // ---- Distribution des scores ----
+  const scoreCounts = {};
+  for (let i = 0; i <= 13; i++) scoreCounts[i] = 0;
+  montants.forEach(m=>{ scoreCounts[+m.score || 0]++; });
+  const scores = Object.keys(scoreCounts).map(Number).sort((a,b)=>a-b);
+
+  safePlot('viz-budget-scores', [{
+    x: scores.map(s=>'Score ' + s),
+    y: scores.map(s=>scoreCounts[s]),
+    type: 'bar',
+    marker: {
+      color: scores.map(s=>{
+        if (s >= 10) return '#1b7a2e';
+        if (s >= 8) return '#4a9d3a';
+        if (s >= 7) return '#d4af37';
+        if (s >= 5) return '#e0a800';
+        return '#ccc';
+      }),
+    },
+    hovertemplate: '<b>%{x}</b><br>%{y} montants<extra></extra>',
+  }], {...LAYOUT});
+
+  document.getElementById('c-budget-scores').textContent = montants.length + ' montants';
+
+  // ---- Top 30 montants ----
+  const top = [...montants].sort((a,b)=>num(b.valeur_francs) - num(a.valeur_francs)).slice(0, 30);
+
+  safePlot('viz-budget-top', [{
+    x: top.map(m=>num(m.valeur_francs) / 1e6),
+    y: top.map(m=>m.fichier.substring(0,30) + ' (' + m.annee + ')'),
+    type: 'bar',
+    orientation: 'h',
+    marker: {
+      color: top.map(m=>{
+        const s = +m.score;
+        if (s >= 10) return '#1b7a2e';
+        if (s >= 8) return '#4a9d3a';
+        if (s >= 7) return '#d4af37';
+        return '#ccc';
+      }),
+    },
+    text: top.map(m=>fmtM(num(m.valeur_francs)) + ' F'),
+    textposition: 'outside',
+    hovertemplate: '<b>%{y}</b><br>%{text}<br>Score : %{customdata}<extra></extra>',
+    customdata: top.map(m=>m.score),
+  }], {...LAYOUT, height: 800, yaxis:{autorange:'reversed'}, margin:{t:20,r:100,b:40,l:280}});
+
+  document.getElementById('c-budget-top').textContent = top.length + ' montants';
+
+  // ---- Répartition par confiance ----
+  const confCounts = { strict:0, proche:0, moyen:0, large:0 };
+  montants.forEach(m=>{ if (m.confiance in confCounts) confCounts[m.confiance]++; });
+
+  safePlot('viz-budget-confiance', [{
+    values: Object.values(confCounts),
+    labels: Object.keys(confCounts).map(c=>c.charAt(0).toUpperCase()+c.slice(1)),
+    type: 'pie',
+    hole: 0.5,
+    marker: { colors: ['#1b7a2e','#4a9d3a','#d4af37','#ccc'] },
+    hovertemplate: '<b>%{label}</b><br>%{value} montants (%{percent})<extra></extra>',
+  }], {...LAYOUT, showlegend:true});
+
+  document.getElementById('c-budget-conf').textContent = montants.length + ' montants';
+
+  // ---- Tableau interactif ----
+  dessinerTableauBudget(montants);
+}
+
+function dessinerTableauBudget(montants){
+  const wrap = document.getElementById('budget-table-wrap');
+  const cols = ['fichier','annee','valeur_francs','score','confiance','contexte'];
+
+  // Tri
+  const col = TRI.col;
+  const ordre = TRI.ordre;
+  const data = [...montants].sort((a,b)=>{
+    let va = a[col], vb = b[col];
+    if (col === 'valeur_francs' || col === 'score' || col === 'annee'){
+      va = +va || 0; vb = +vb || 0;
+      return ordre === 'desc' ? vb - va : va - vb;
+    }
+    va = String(va); vb = String(vb);
+    return ordre === 'desc' ? vb.localeCompare(va) : va.localeCompare(vb);
+  });
+
+  if (data.length === 0){
+    wrap.innerHTML = '<div class="no-data"><div class="ic">📭</div>Aucun montant ne correspond aux filtres</div>';
+    document.getElementById('c-budget-table').textContent = '0 résultats';
+    return;
+  }
+
+  let html = '<table><thead><tr>';
+  html += `<th data-key="fichier" class="${col==='fichier'?'tri-'+ordre:''}">Fichier</th>`;
+  html += `<th data-key="annee" class="${col==='annee'?'tri-'+ordre:''}">Année</th>`;
+  html += `<th data-key="valeur_francs" class="${col==='valeur_francs'?'tri-'+ordre:''}">Montant</th>`;
+  html += `<th data-key="score" class="${col==='score'?'tri-'+ordre:''}">Score</th>`;
+  html += `<th data-key="confiance" class="${col==='confiance'?'tri-'+ordre:''}">Confiance</th>`;
+  html += `<th>Contexte</th>`;
+  html += '</tr></thead><tbody>';
+
+  data.slice(0, 500).forEach(m=>{
+    html += '<tr>';
+    html += `<td>${esc(m.fichier.substring(0,35))}</td>`;
+    html += `<td>${esc(m.annee)}</td>`;
+    html += `<td class="nb">${fmt(num(m.valeur_francs))} F</td>`;
+    html += `<td><span class="score-badge score-${m.score}">${m.score}</span></td>`;
+    html += `<td><span class="confiance-badge confiance-${m.confiance}">${m.confiance}</span></td>`;
+    html += `<td><span class="ctx" title="${esc(m.contexte)}">${esc(m.contexte.substring(0,80))}</span></td>`;
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  if (data.length > 500){
+    html += `<p style="text-align:center;padding:10px;color:#999;font-size:.85rem">… et ${data.length - 500} autres montants (affinez les filtres)</p>`;
+  }
+  wrap.innerHTML = html;
+
+  // Tri au clic
+  wrap.querySelectorAll('th[data-key]').forEach(th=>{
+    th.addEventListener('click', ()=>{
+      const k = th.dataset.key;
+      if (TRI.col === k) TRI.ordre = TRI.ordre === 'desc' ? 'asc' : 'desc';
+      else { TRI.col = k; TRI.ordre = 'desc'; }
+      dessinerTableauBudget(montants);
+    });
+  });
+
+  document.getElementById('c-budget-table').textContent = data.length + ' résultats';
+}
+
+// ============================================================
+// CHIFFRES CLÉS (version simplifiée)
 // ============================================================
 function dessinerChiffres(){
-  // Graph budget (Plotly interactif depuis les données CSV)
-  const m = CSV.montants.filter(x=>+x.valeur > 0).slice(0,30);
-  safePlot('viz-budget', [{
-    x: m.map(x=>x.fichier.substring(0,20)),
-    y: m.map(x=>num(x.valeur)/1e6),
-    type:'bar', marker:{color:'#000091'},
-    hovertemplate:'<b>%{x}</b><br>%{y:.1f} M F<extra></extra>'
-  }], {...LAYOUT, yaxis:{title:'Millions de francs'}, xaxis:{tickangle:-45, tickfont:{size:9}}});
-
-  // Flux (effectifs)
-  const e = CSV.effectifs.filter(x=>num(x.valeur) > 0 && num(x.valeur) < 500000).slice(0,30);
-  safePlot('viz-flux', [{
-    x: e.map(x=>x.fichier.substring(0,20)),
-    y: e.map(x=>num(x.valeur)),
-    type:'bar', marker:{color:'#E1000F'},
-    hovertemplate:'<b>%{x}</b><br>%{y:,} personnes<extra></extra>'
-  }], {...LAYOUT, yaxis:{title:'Personnes'}, xaxis:{tickangle:-45, tickfont:{size:9}}});
-
-  // Chiffres clés
-  const chiffres = [
-    ['💰 Budget BUMIDOM 1981','279 600 000 F',null],
-    ['👥 Migrants 1963-1974','94 000 personnes',null],
-    ['🌍 Antillais métropole 1986','500 000',null],
-    ['👥 Population concernée 1981','400 000 personnes',null],
-    ['💰 Budget BUMIDOM 1975','28 353 000 F',null],
-    ['🌍 Réunionnais métropole 1986','120 000',null],
-    ['📈 Flux annuel 1979-80','10 000 personnes/an',null],
-    ['🏠 Capacité accueil 1972','5 547 places',null],
-    ['📈 Flux annuel 1975-76','5 000 personnes/an',null],
-    ['🏠 Logements 1968','234 logements',null],
-  ];
-  document.getElementById('chiffres-cles').innerHTML = chiffres.map((c,i)=>`
-    <div class="chiffre-cle ${i<3?'top':''}"
-      style="display:flex;justify-content:space-between;padding:10px 14px;margin:5px 0;
-             background:${i<3?'#fff5f5':'#f5f5f7'};border-radius:6px;
-             border-left:4px solid ${i<3?'#E1000F':'#000091'};cursor:pointer">
-      <span>${c[0]}</span>
-      <strong style="color:${i<3?'#E1000F':'#000091'}">${c[1]}</strong>
-    </div>
-  `).join('');
-  document.getElementById('c-chiffres').textContent = chiffres.length + ' chiffres';
-
-  // Tableaux
-  tabInteractif('tab-effectifs', CSV.effectifs.slice(0,200), [
-    {k:'valeur',l:'Nombre',num:true},
-    {k:'unite',l:'Unité'},
-    {k:'fichier',l:'Fichier'},
-    {k:'contexte',l:'Contexte',ctx:true}
-  ], 'valeur', d=>ouvrirDocParFichier(d.fichier));
-
-  tabInteractif('tab-montants', CSV.montants.slice(0,200), [
-    {k:'valeur',l:'Montant (F)',num:true},
-    {k:'unite',l:'Unité'},
-    {k:'fichier',l:'Fichier'},
-    {k:'contexte',l:'Contexte',ctx:true}
-  ], 'valeur', d=>ouvrirDocParFichier(d.fichier));
-}
-
-// ============================================================
-// TABLEAU INTERACTIF (tri au clic)
-// ============================================================
-function tabInteractif(id, rows, cols, triDefaut, onLigne){
-  const el = document.getElementById(id);
-  if(!el) return;
-  if(!rows.length){ el.innerHTML='<div class="no-data"><div class="ic">📭</div>Aucune donnée</div>'; return; }
-
-  // Tri par défaut
-  let tri = triDefaut || cols[0].k;
-  let ordre = 'desc';
-  const data = [...rows].sort((a,b)=> ordre==='desc' ? num(b[tri])-num(a[tri]) : num(a[tri])-num(b[tri]));
-
-  function rendre(){
-    let html = '<table><thead><tr>';
-    cols.forEach(c=>{
-      const cls = c.k === tri ? ('tri-'+ordre) : '';
-      html += `<th class="${cls}" data-key="${c.k}">${c.l}</th>`;
-    });
-    html += '</tr></thead><tbody>';
-    data.forEach((r,i)=>{
-      html += `<tr data-idx="${i}">`;
-      cols.forEach(c=>{
-        let v = r[c.k]||'';
-        if(c.num) v = `<span class="nb">${fmt(v)}</span>`;
-        else if(c.ctx) v = `<span class="ctx" title="${esc(v)}">${esc(v.substring(0,80))}</span>`;
-        else v = esc(String(v).substring(0,50));
-        html += `<td>${v}</td>`;
-      });
-      html += '</tr>';
-    });
-    html += '</tbody></table>';
-    el.innerHTML = html;
-
-    el.querySelectorAll('th').forEach(th=>{
-      th.addEventListener('click', ()=>{
-        const k = th.dataset.key;
-        if(tri === k) ordre = ordre === 'desc' ? 'asc' : 'desc';
-        else { tri = k; ordre = 'desc'; }
-        data.sort((a,b)=> ordre==='desc' ? num(b[tri])-num(a[tri]) : num(a[tri])-num(b[tri]));
-        rendre();
-      });
-    });
-    el.querySelectorAll('tbody tr').forEach(tr=>{
-      tr.addEventListener('click', ()=>{
-        const r = data[+tr.dataset.idx];
-        if(onLigne) onLigne(r);
-        else ouvrirDetail(r);
-      });
-    });
-  }
-  rendre();
-}
-
-function ouvrirDocParFichier(fichier){
-  const d = ALL_DOCS.find(x=>x.fichier === fichier);
-  if(d) ouvrirDetail(d);
-}
-
-function ouvrirDetail(obj){
-  const panel = document.getElementById('detail-panel');
-  const corps = document.getElementById('detail-corps');
-  const titre = document.getElementById('detail-titre');
-
-  if(obj.fichier){
-    // Document
-    titre.textContent = obj.fichier;
-    corps.innerHTML = `
-      <p><strong>Mentions BUMIDOM :</strong> ${obj.nb_mentions}</p>
-      <p><strong>Type :</strong> ${typeDeFichier(obj.fichier)}</p>
-      ${obj.url ? `<p><strong>URL :</strong> <a href="${obj.url}" target="_blank">${obj.url}</a></p>` : ''}
-      ${obj.orateurs && obj.orateurs.length ? `<p><strong>Orateurs :</strong> ${
-        obj.orateurs.slice(0,10).map(o=>esc(o.nom)).join(', ')
-      }</p>` : ''}
-      ${Object.keys(obj.themes||{}).length ? `<p><strong>Thèmes :</strong> ${
-        Object.entries(obj.themes).map(([k,v])=>k+' ('+v+')').join(', ')
-      }</p>` : ''}
-      <h4 style="color:#000091;margin-top:16px">Extraits</h4>
-      ${obj.extraits.map((e,i)=>`
-        <div class="extrait"><strong>Extrait ${i+1}</strong> (page ~${e.page_approx})<br>${esc(e.extrait)}</div>
-      `).join('')}
-      ${obj.url ? `<a class="btn" href="${obj.url}" target="_blank">📄 Ouvrir le PDF</a>` : ''}
-    `;
-  } else {
-    // Ligne quelconque
-    titre.textContent = 'Détail';
-    corps.innerHTML = Object.entries(obj).map(([k,v])=>`<p><strong>${esc(k)} :</strong> ${esc(v)}</p>`).join('');
-  }
-
-  panel.classList.add('ouvert');
-  document.getElementById('overlay').classList.add('actif');
-}
-
-function fermerDetail(){
-  document.getElementById('detail-panel').classList.remove('ouvert');
-  document.getElementById('overlay').classList.remove('actif');
+  document.getElementById('viz-budget').innerHTML = '<div class="no-data">Voir l\'onglet Budget</div>';
+  document.getElementById('viz-flux').innerHTML = '<div class="no-data">Voir l\'onglet Documents</div>';
 }
 
 // ============================================================
@@ -868,25 +881,17 @@ function dessinerOrateurs(){
   DOCS.forEach(d=>(d.orateurs||[]).forEach(o=>agg[o.nom]=(agg[o.nom]||0)+o.occurrences));
   const top = Object.entries(agg).sort((a,b)=>b[1]-a[1]).slice(0,30);
 
-  const trace = {
+  safePlot('viz-orateurs-bar', [{
     x: top.map(o=>o[1]), y: top.map(o=>o[0]),
     type:'bar', orientation:'h',
     marker:{color:top.map((_,i)=>i<3?'#E1000F':'#000091')},
-    hovertemplate:'<b>%{y}</b><br>%{x} mentions<extra></extra>'
-  };
-  safePlot('viz-orateurs-bar', [trace], {...LAYOUT, height:880,
-    yaxis:{autorange:'reversed'}, margin:{t:20,r:30,b:40,l:220}});
-  document.getElementById('viz-orateurs-bar').on('plotly_click', e=>{
-    toggleFiltre('orateurs', e.points[0].y);
-  });
+  }], {...LAYOUT, height:880, yaxis:{autorange:'reversed'}, margin:{t:20,r:30,b:40,l:220}});
 
   const container = document.getElementById('liste-orateurs');
   container.innerHTML = top.map(([nom,total])=>{
     const docs = DOCS.filter(d=>(d.orateurs||[]).some(o=>o.nom === nom));
-    const estFiltre = FILTRES.orateurs.has(nom);
     return `
-      <div class="doc" onclick="toggleFiltre('orateurs','${esc(nom)}')"
-           style="${estFiltre?'border-left-color:#E1000F':''}">
+      <div class="doc" style="border-left-color:#000091">
         <div class="doc-header">
           <span class="badge badge-cri">${docs.length} docs</span>
           <span class="titre">${esc(nom)}</span>
@@ -908,34 +913,13 @@ function dessinerThemes(){
     type:'scatterpolar',
     r:[...entries.map(e=>e[1]), entries[0]?.[1]||0],
     theta:[...entries.map(e=>e[0]), entries[0]?.[0]||''],
-    fill:'toself', marker:{color:'#E1000F'}, line:{color:'#E1000F'},
-    hovertemplate:'<b>%{theta}</b><br>%{r} occurrences<extra></extra>'
+    fill:'toself', marker:{color:'#E1000F'},
   }], {...LAYOUT, polar:{bgcolor:'rgba(0,0,0,0)'}});
 
-  const trace = {
+  safePlot('viz-themes-bar', [{
     x: entries.map(e=>e[0]), y: entries.map(e=>e[1]),
     type:'bar', marker:{color:'#000091'},
-    hovertemplate:'<b>%{x}</b><br>%{y} occurrences<extra></extra>'
-  };
-  safePlot('viz-themes-bar', [trace], {...LAYOUT, xaxis:{tickangle:-45}});
-  document.getElementById('viz-themes-bar').on('plotly_click', e=>{
-    toggleFiltre('themes', e.points[0].x);
-  });
-
-  const container = document.getElementById('liste-themes');
-  container.innerHTML = entries.map(([theme,total])=>{
-    const docs = DOCS.filter(d=>d.themes && d.themes[theme]);
-    const estFiltre = FILTRES.themes.has(theme);
-    return `
-      <div class="doc" onclick="toggleFiltre('themes','${esc(theme)}')"
-           style="${estFiltre?'border-left-color:#E1000F':''}">
-        <div class="doc-header">
-          <span class="badge badge-jo">${docs.length} docs</span>
-          <span class="titre">${esc(theme)}</span>
-          <span class="mentions">${total} occurrences</span>
-        </div>
-      </div>`;
-  }).join('');
+  }], {...LAYOUT, xaxis:{tickangle:-45}});
 }
 
 // ============================================================
@@ -943,163 +927,12 @@ function dessinerThemes(){
 // ============================================================
 function dessinerChrono(){
   const sorted = [...DOCS].sort((a,b)=>a.fichier.localeCompare(b.fichier));
-  const trace = {
+  safePlot('viz-chrono', [{
     x: sorted.map(d=>d.fichier.replace('.txt','').substring(0,30)),
     y: sorted.map(d=>d.nb_mentions),
     type:'bar',
     marker:{color:sorted.map(d=>d.nb_mentions>5?'#E1000F':'#000091')},
-    hovertemplate:'<b>%{x}</b><br>%{y} mentions<extra></extra>'
-  };
-  safePlot('viz-chrono', [trace], {...LAYOUT, height:500, xaxis:{tickangle:-60, tickfont:{size:8}}});
-  document.getElementById('viz-chrono').on('plotly_click', e=>{
-    const f = e.points[0].x;
-    const d = ALL_DOCS.find(x=>x.fichier.startsWith(f));
-    if(d) ouvrirDetail(d);
-  });
-
-  const parAnnee = {};
-  DOCS.forEach(d=>((d.statistiques&&d.statistiques.annees)||[]).forEach(a=>parAnnee[a]=(parAnnee[a]||0)+1));
-  const annees = Object.keys(parAnnee).sort();
-  safePlot('viz-annees', [{
-    x: annees, y: annees.map(a=>parAnnee[a]),
-    type:'bar', marker:{color:'#1212ff'},
-    hovertemplate:'<b>%{x}</b><br>%{y} documents<extra></extra>'
-  }], {...LAYOUT});
-}
-
-// ============================================================
-// SENTIMENT
-// ============================================================
-function dessinerSentiment(){
-  if(!CSV.senti.length){
-    document.getElementById('viz-sentiment').innerHTML = '<div class="no-data">Aucune donnée sentiment</div>';
-    return;
-  }
-  const annees = CSV.senti.map(r=>r.annee);
-  const pos = CSV.senti.map(r=>+r.positifs);
-  const neg = CSV.senti.map(r=>+r.negatifs);
-  const scores = CSV.senti.map(r=>+r.score);
-
-  safePlot('viz-sentiment', [
-    {x:annees, y:pos, name:'Positifs', type:'bar', marker:{color:'#1b7a2e'}},
-    {x:annees, y:neg, name:'Négatifs', type:'bar', marker:{color:'#E1000F'}},
-  ], {...LAYOUT, barmode:'group', showlegend:true});
-
-  tabInteractif('tab-sentiment-detail', CSV.senti, [
-    {k:'annee', l:'Année'},
-    {k:'positifs', l:'+', num:true},
-    {k:'negatifs', l:'−', num:true},
-    {k:'neutres', l:'=', num:true},
-    {k:'score', l:'Score', num:true},
-  ], 'annee');
-}
-
-// ============================================================
-// RÉSEAU
-// ============================================================
-function dessinerReseau(){
-  if(!CSV.reseau.length){
-    document.getElementById('viz-reseau').innerHTML = '<div class="no-data">Aucune donnée réseau</div>';
-    return;
-  }
-  // Construire un graphe à partir des cooccurrences
-  const nodes = {};
-  const links = [];
-  CSV.reseau.slice(0,80).forEach(r=>{
-    const a = r.orateur_1, b = r.orateur_2, w = +r.cooccurrences;
-    if(!nodes[a]) nodes[a] = {id:a, deg:0};
-    if(!nodes[b]) nodes[b] = {id:b, deg:0};
-    nodes[a].deg++; nodes[b].deg++;
-    links.push({source:a, target:b, w});
-  });
-  const nodeArr = Object.values(nodes);
-  nodeArr.sort((a,b)=>b.deg-a.deg);
-
-  // Layout simple en cercle
-  const N = nodeArr.length;
-  const positions = {};
-  nodeArr.forEach((n,i)=>{
-    const angle = (i/N) * 2 * Math.PI;
-    positions[n.id] = {x: Math.cos(angle)*10, y: Math.sin(angle)*10};
-  });
-
-  // Edges
-  const edgeX = [], edgeY = [];
-  links.forEach(l=>{
-    const p1 = positions[l.source], p2 = positions[l.target];
-    if(p1 && p2){
-      edgeX.push(p1.x, p2.x, null);
-      edgeY.push(p1.y, p2.y, null);
-    }
-  });
-
-  const traceEdges = {
-    x: edgeX, y: edgeY, mode:'lines',
-    line:{color:'#E1000F', width:0.5}, hoverinfo:'skip', type:'scatter'
-  };
-  const traceNodes = {
-    x: nodeArr.map(n=>positions[n.id].x),
-    y: nodeArr.map(n=>positions[n.id].y),
-    mode:'markers+text',
-    text: nodeArr.map(n=>n.id.substring(0,20)),
-    textposition:'top center',
-    textfont:{size:9, color:'#000091'},
-    marker:{size:nodeArr.map(n=>Math.min(10+n.deg*3, 40)), color:'#000091', line:{color:'#fff', width:1}},
-    type:'scatter',
-    hovertemplate:'<b>%{text}</b><br>Connexions : %{marker.size}<extra></extra>',
-    customdata: nodeArr.map(n=>n.id)
-  };
-
-  safePlot('viz-reseau', [traceEdges, traceNodes], {
-    ...LAYOUT, height:650, showlegend:false,
-    xaxis:{showgrid:false, zeroline:false, showticklabels:false},
-    yaxis:{showgrid:false, zeroline:false, showticklabels:false}
-  });
-  document.getElementById('viz-reseau').on('plotly_click', e=>{
-    if(e.points[0].customdata){
-      toggleFiltre('orateurs', e.points[0].customdata);
-    }
-  });
-}
-
-// ============================================================
-// NLP
-// ============================================================
-function dessinerNLP(){
-  const rendre = (id, data, color) => {
-    const el = document.getElementById(id);
-    if(!el) return;
-    if(!data || !data.length){ el.innerHTML = '<div class="no-data">Aucune donnée</div>'; return; }
-    el.innerHTML = data.slice(0,20).map(([nom,n])=>`
-      <div onclick="toggleFiltre('orateurs','${esc(nom)}')"
-           style="display:flex;justify-content:space-between;padding:8px 12px;margin:3px 0;
-                  background:#f5f5f7;border-radius:6px;border-left:3px solid ${color};
-                  cursor:pointer;transition:.2s"
-           onmouseover="this.style.background='#e5e9ff'"
-           onmouseout="this.style.background='#f5f5f7'">
-        <span>${esc(nom)}</span><strong style="color:${color}">${n}</strong>
-      </div>
-    `).join('');
-  };
-  if(NLP){
-    rendre('nlp-pers', NLP.top_personnes, '#000091');
-    rendre('nlp-lieux', NLP.top_lieux, '#E1000F');
-    rendre('nlp-org', NLP.top_organisations, '#1b7a2e');
-  }
-  // Mots depuis cooccurrences
-  const el = document.getElementById('nlp-mots');
-  if(el && CSV.cooc){
-    el.innerHTML = CSV.cooc.slice(0,20).map(r=>`
-      <div onclick="FILTRES.recherche='${esc(r.mot)}';document.getElementById('recherche').value='${esc(r.mot)}';majVue()"
-           style="display:flex;justify-content:space-between;padding:8px 12px;margin:3px 0;
-                  background:#f5f5f7;border-radius:6px;border-left:3px solid #b26a00;
-                  cursor:pointer;transition:.2s"
-           onmouseover="this.style.background='#fff3e0'"
-           onmouseout="this.style.background='#f5f5f7'">
-        <span>${esc(r.mot)}</span><strong style="color:#b26a00">${r.occurrences}</strong>
-      </div>
-    `).join('');
-  }
+  }], {...LAYOUT, height:500, xaxis:{tickangle:-60, tickfont:{size:8}}});
 }
 
 // ============================================================
@@ -1107,42 +940,24 @@ function dessinerNLP(){
 // ============================================================
 function dessinerDocs(){
   let docs = [...DOCS];
-  // Tri
-  if(TRI.col === 'mentions') docs.sort((a,b)=> TRI.ordre==='desc' ? b.nb_mentions-a.nb_mentions : a.nb_mentions-b.nb_mentions);
-  else if(TRI.col === 'nom') docs.sort((a,b)=> TRI.ordre==='desc' ? b.fichier.localeCompare(a.fichier) : a.fichier.localeCompare(b.fichier));
-
   const container = document.getElementById('liste-docs');
   if(!docs.length){
-    container.innerHTML = '<div class="no-data"><div class="ic">🔍</div>Aucun document ne correspond aux filtres</div>';
+    container.innerHTML = '<div class="no-data"><div class="ic">🔍</div>Aucun document</div>';
     return;
   }
 
   container.innerHTML = `
     <p style="margin-bottom:12px;color:#666;font-size:.9rem">${docs.length} document(s)</p>
-    ${docs.map(d=>{
-      const t = typeDeFichier(d.fichier);
-      const sel = SELECTION.has(d.id) ? 'selectionne' : '';
+    ${docs.slice(0, 200).map(d=>{
+      const t = d.fichier.includes('_qst_') ? 'Question écrite' :
+                d.fichier.includes('_cri_') ? 'Compte rendu' : 'Autre';
+      const badge = t === 'Compte rendu' ? 'cri' : t === 'Question écrite' ? 'qst' : 'def';
       return `
-        <div class="doc ${sel}" data-id="${d.id}">
-          <div class="doc-header" onclick="toggleDoc('${d.id}')">
-            <span class="badge badge-${t==='Compte rendu'?'cri':t==='Question écrite'?'qst':t.includes('Table')?'tab':'def'}">${t}</span>
+        <div class="doc" style="border-left-color:#000091">
+          <div class="doc-header">
+            <span class="badge badge-${badge}">${t}</span>
             <span class="titre">${esc(d.fichier.replace('.txt',''))}</span>
             <span class="mentions">💬 ${d.nb_mentions}</span>
-          </div>
-          <div class="doc-body">
-            ${Object.keys(d.themes||{}).length ? `<div style="margin:10px 0">${
-              Object.entries(d.themes).slice(0,5).map(([k,v])=>`<span class="tag" onclick="event.stopPropagation();toggleFiltre('themes','${esc(k)}')">${esc(k)} (${v})</span>`).join('')
-            }</div>` : ''}
-            ${d.extraits.slice(0,3).map((e,i)=>`
-              <div class="extrait"><strong>Extrait ${i+1}</strong> (page ~${e.page_approx})<br>${esc(e.extrait)}</div>
-            `).join('')}
-            ${d.orateurs && d.orateurs.length ? `<p style="margin-top:10px"><strong>Orateurs :</strong> ${
-              d.orateurs.slice(0,8).map(o=>`<span class="tag rouge" onclick="event.stopPropagation();toggleFiltre('orateurs','${esc(o.nom)}')">${esc(o.nom)} (${o.occurrences})</span>`).join('')
-            }</p>` : ''}
-            <div style="margin-top:12px">
-              <button class="btn" onclick="event.stopPropagation();ouvrirDetail(${JSON.stringify(d).replace(/"/g,'&quot;')})">🔍 Détails</button>
-              ${d.url ? `<a class="btn" href="${d.url}" target="_blank" onclick="event.stopPropagation()">📄 PDF</a>` : ''}
-            </div>
           </div>
         </div>
       `;
@@ -1150,53 +965,27 @@ function dessinerDocs(){
   `;
 }
 
-function toggleDoc(id){
-  const el = document.querySelector(`[data-id="${id}"] .doc-body`);
-  if(el) el.classList.toggle('open');
-}
-
 // ============================================================
 // EXPORTS
 // ============================================================
 function exportVueCSV(){
-  const lignes = ['id;fichier;type;mentions;legislatures;orateurs;themes'];
-  DOCS.forEach(d=>{
-    lignes.push([
-      d.id,
-      d.fichier,
-      typeDeFichier(d.fichier),
-      d.nb_mentions,
-      (d.legislatures||[]).join(','),
-      (d.orateurs||[]).map(o=>o.nom).join(','),
-      Object.keys(d.themes||{}).join(',')
-    ].map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';'));
+  const lignes = ['fichier;annee;valeur_francs;score;confiance'];
+  filtrerMontantsBudget().forEach(m=>{
+    lignes.push([m.fichier, m.annee, m.valeur_francs, m.score, m.confiance].join(';'));
   });
-  telecharger(lignes.join('\n'), 'bumidom_vue.csv', 'text/csv;charset=utf-8');
+  telecharger(lignes.join('\n'), 'bumidom_budget.csv', 'text/csv;charset=utf-8');
 }
 
 function exportVueJSON(){
   const data = {
-    filtres: {
-      types: [...FILTRES.types],
-      themes: [...FILTRES.themes],
-      orateurs: [...FILTRES.orateurs],
-      legis: [...FILTRES.legis],
-      anneeMin: FILTRES.anneeMin,
-      anneeMax: FILTRES.anneeMax,
-      recherche: FILTRES.recherche
-    },
-    total: DOCS.length,
-    documents: DOCS.map(d=>({
-      id:d.id, fichier:d.fichier, mentions:d.nb_mentions,
-      type:typeDeFichier(d.fichier), themes:d.themes, orateurs:d.orateurs, url:d.url
-    }))
+    filtres: BUDGET_FILTRES,
+    total: filtrerMontantsBudget().length,
+    montants: filtrerMontantsBudget().slice(0, 500)
   };
-  telecharger(JSON.stringify(data, null, 2), 'bumidom_vue.json', 'application/json');
+  telecharger(JSON.stringify(data, null, 2), 'bumidom_budget.json', 'application/json');
 }
 
-function imprimerVue(){
-  window.print();
-}
+function imprimerVue(){ window.print(); }
 
 function telecharger(contenu, nom, mime){
   const blob = new Blob([contenu], {type: mime});
@@ -1208,18 +997,34 @@ function telecharger(contenu, nom, mime){
   URL.revokeObjectURL(url);
 }
 
+function reinitialiser(){
+  BUDGET_FILTRES = {
+    scoreMin: 7,
+    confiance: '',
+    montantMin: 1000000,
+    fourchette: true,
+    recherche: ''
+  };
+  document.getElementById('budget-score').value = 7;
+  document.getElementById('budget-score-valeur').textContent = '7';
+  document.getElementById('budget-confiance').value = '';
+  document.getElementById('budget-min').value = 1000000;
+  document.getElementById('budget-fourchette').checked = true;
+  document.getElementById('recherche-budget').value = '';
+  dessinerBudget();
+}
+
 // ============================================================
 // RACCOURCIS CLAVIER
 // ============================================================
 document.addEventListener('keydown', e=>{
   if(e.key === 'Escape') fermerDetail();
-  if(e.key === '/' && e.target.tagName !== 'INPUT'){
-    e.preventDefault();
-    document.getElementById('recherche').focus();
-    // Active l'onglet documents
-    document.querySelector('.tabs button[data-tab="docs"]').click();
-  }
 });
+
+function fermerDetail(){
+  document.getElementById('detail-panel').classList.remove('ouvert');
+  document.getElementById('overlay').classList.remove('actif');
+}
 </script>
 </body>
 </html>
