@@ -547,7 +547,7 @@ Promise.all([
   fetch('resultats_enrichis.json').then(r=>r.ok?r.json():null).catch(()=>null),
   fetch('expertise_BUMIDOM/BUDGET_montants.csv').then(r=>r.ok?r.text():'').then(t=>t?parseCSV(t):[]).catch(()=>[]),
   fetch('expertise_BUMIDOM/BUDGET_budget_annuel_estime.csv').then(r=>r.ok?r.text():'').then(t=>t?parseCSV(t):[]).catch(()=>[]),
-  fetch('themes_consolide.json').then(r=>r.ok?r.json():null).catch(()=>null),
+  fetch('themes_enrichis/themes_consolide.json').then(r=>r.ok?r.json():null).catch(()=>null),
 ]).then(([data, montants, budgets, themes])=>{
   if(data && data.results){ DOCS = data.results; }
   BUDGET_MONTANTS = montants;
