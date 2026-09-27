@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>BUMIDOM — La Réunion</title>
+<script src="plotly.min.js"></script>
+<style>
+  :root{--bleu:#000091;--rouge:#E1000F;--gris:#f5f5f7;--vert:#1b7a2e}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,sans-serif;background:var(--gris);color:#1a1a2e;line-height:1.5}
+  header{background:#fff;border-bottom:4px solid;
+    border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;
+    padding:16px 28px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  header h1{color:var(--bleu);font-size:1.4rem}
+  header p{color:#666;font-size:.85rem;margin-top:4px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;padding:20px 28px 0}
+  .kpi{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 2px 10px rgba(0,0,0,.06);
+    border-top:4px solid var(--bleu)}
+  .kpi.rouge{border-top-color:var(--rouge)}
+  .kpi.vert{border-top-color:var(--vert)}
+  .kpi .v{font-size:1.8rem;font-weight:700;color:var(--bleu)}
+  .kpi.rouge .v{color:var(--rouge)}
+  .kpi.vert .v{color:var(--vert)}
+  .kpi .l{font-size:.72rem;color:#666;text-transform:uppercase;letter-spacing:.5px}
+  nav{padding:16px 28px 0;display:flex;gap:4px;flex-wrap:wrap;border-bottom:2px solid #ddd;margin:0 28px}
+  nav button{padding:9px 16px;border:none;background:transparent;font-size:.85rem;font-weight:600;
+    color:#666;cursor:pointer;border-bottom:3px solid transparent;transition:.2s}
+  nav button.actif{color:var(--bleu);border-bottom-color:var(--rouge)}
+  main{padding:24px 28px;max-width:1600px;margin:0 auto}
+  section{display:none}section.actif{display:block;animation:fade .3s}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px}
+  .carte{background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);margin-bottom:20px}
+  .carte h2{color:var(--bleu);font-size:1rem;margin-bottom:12px;border-bottom:2px solid var(--rouge);padding-bottom:6px}
+  .viz{height:400px;width:100%}
+  table{width:100%;border-collapse:collapse;font-size:.83rem}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee}
+  th{background:var(--bleu);color:#fff;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px}
+  tr:hover{background:#fafaff}
+  .nb{text-align:right;font-weight:700;color:var(--rouge)}
+  .ctx{font-size:.75rem;color:#666;font-style:italic;max-width:400px;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  .extrait{background:#fafafa;border-left:3px solid var(--rouge);padding:10px 14px;margin:8px 0;
+    font-size:.85rem;border-radius:0 6px 6px 0}
+  .doc{background:#fff;border-radius:10px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);
+    border-left:5px solid var(--bleu)}
+  .doc-header{padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:600}
+  .badge{font-size:.65rem;font-weight:700;text-transform:uppercase;padding:3px 8px;border-radius:12px;
+    background:#e5e9ff;color:var(--bleu)}
+  .message{padding:14px 20px;border-radius:8px;margin:16px 28px;background:#e5e9ff;
+    color:var(--bleu);border-left:4px solid var(--bleu)}
+  .message.err{background:#ffe5e5;color:#b8000c;border-left-color:var(--rouge)}
+  footer{text-align:center;padding:20px;font-size:.78rem;color:#999;margin-top:30px;
+    border-top:2px solid;
+    border-image:linear-gradient(to right,var(--bleu) 33.33%,#fff 33.33%,#fff 66.66%,var(--rouge) 66.66%) 1;
+    background:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🏝️ BUMIDOM — Focus La Réunion</h1>
+  <p>Toutes les données extraites des débats parlementaires concernant La Réunion</p>
+</header>
+
+<div id="msg" class="message">⏳ Chargement…</div>
+
+<div id="app" style="display:none">
+  <div class="kpis">
+    <div class="kpi"><div class="v" id="k-docs">—</div><div class="l">Documents</div></div>
+    <div class="kpi rouge"><div class="v" id="k-mentions">—</div><div class="l">Mentions</div></div>
+    <div class="kpi"><div class="v" id="k-chiffres">—</div><div class="l">Chiffres cités</div></div>
+    <div class="kpi vert"><div class="v" id="k-orateurs">—</div><div class="l">Orateurs</div></div>
+    <div class="kpi rouge"><div class="v" id="k-lieux">—</div><div class="l">Lieux</div></div>
+  </div>
+
+  <nav>
+    <button class="actif" data-p="synthese">📊 Synthèse</button>
+    <button data-p="chiffres">💰 Chiffres</button>
+    <button data-p="orateurs">👤 Orateurs</button>
+    <button data-p="lieux">📍 Lieux</button>
+    <button data-p="chrono">📅 Dates</button>
+    <button data-p="docs">📄 Mentions</button>
+  </nav>
+
+  <main>
+    <section class="actif" id="p-synthese">
+      <div class="grille">
+        <div class="carte"><h2>💰 Top chiffres</h2><div id="viz-chiffres" class="viz"></div></div>
+        <div class="carte"><h2>📍 Lieux cités</h2><div id="viz-lieux" class="viz"></div></div>
+        <div class="carte"><h2>👤 Orateurs</h2><div id="viz-orateurs" class="viz"></div></div>
+        <div class="carte"><h2>📅 Dates</h2><div id="viz-dates" class="viz"></div></div>
+      </div>
+    </section>
+
+    <section id="p-chiffres">
+      <div class="carte"><h2>💰 Tous les chiffres cités</h2>
+        <div id="tab-chiffres" style="max-height:700px;overflow:auto"></div>
+      </div>
+    </section>
+
+    <section id="p-orateurs">
+      <div class="carte"><h2>👤 Orateurs détectés</h2>
+        <div id="tab-orateurs"></div>
+      </div>
+    </section>
+
+    <section id="p-lieux">
+      <div class="carte"><h2>📍 Lieux réunionnais cités</h2>
+        <div id="tab-lieux"></div>
+      </div>
+    </section>
+
+    <section id="p-chrono">
+      <div class="carte"><h2>📅 Dates citées</h2>
+        <div id="tab-dates" style="max-height:700px;overflow:auto"></div>
+      </div>
+    </section>
+
+    <section id="p-docs">
+      <div class="carte"><h2>📄 Toutes les mentions de La Réunion</h2>
+        <div id="liste-docs"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer>BUMIDOM — La Réunion · <span id="horodatage"></span></footer>
+
+<script>
+document.getElementById('horodatage').textContent = new Date().toLocaleString('fr-FR');
+
+function parseCSV(text) {
+  const lignes = text.trim().split(/\r?\n/);
+  const sep = lignes[0].includes(';') ? ';' : ',';
+  const headers = lignes[0].split(sep).map(h => h.replace(/^"|"$/g, '').trim());
+  return lignes.slice(1).filter(l => l.trim()).map(l => {
+    const vals = l.split(sep).map(v => v.replace(/^"|"$/g, '').trim());
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = vals[i] || '');
+    return obj;
+  });
+}
+
+function num(v){ const n = parseFloat(String(v||'0').replace(/[^\d.,-]/g,'').replace(',','.')); return isNaN(n)?0:n; }
+function fmt(n){ return Math.round(n).toLocaleString('fr-FR').replace(/\u202f|\u00a0/g,' '); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function tab(id, rows, cols, tri) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(tri) rows.sort((a,b) => num(b[tri]) - num(a[tri]));
+  let html = '<table><thead><tr>';
+  cols.forEach(c => html += `<th>${c.l}</th>`);
+  html += '</tr></thead><tbody>';
+  rows.forEach(r => {
+    html += '<tr>';
+    cols.forEach(c => {
+      let v = r[c.k] || '';
+      if(c.num) v = `<span class="nb">${fmt(v)}</span>`;
+      else if(c.ctx) v = `<span class="ctx" title="${esc(v)}">${esc(v.substring(0,150))}</span>`;
+      else v = esc(String(v).substring(0,80));
+      html += `<td>${v}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+const LAYOUT = {
+  paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
+  font:{family:'system-ui',size:11}, margin:{t:20,r:20,b:60,l:60},
+  height:400, showlegend:false
+};
+const CONFIG = {responsive:true, displayModeBar:false};
+
+function safePlot(id, data, layout){
+  const el = document.getElementById(id);
+  if(!el || typeof Plotly === 'undefined') return;
+  try { Plotly.newPlot(id, data, layout, CONFIG); }
+  catch(e) { el.innerHTML = '<p style="color:#E1000F;padding:20px">Erreur : '+e.message+'</p>'; }
+}
+
+Promise.all([
+  fetch('reunion/reunion.json').then(r => r.ok ? r.json() : Promise.reject('reunion.json introuvable')),
+  fetch('reunion/chiffres_reunion.csv').then(r => r.ok ? r.text() : '').then(parseCSV).catch(()=>[]),
+  fetch('reunion/orateurs_reunion.csv').then(r => r.ok ? r.text() : '').then(parseCSV).catch(()=>[]),
+  fetch('reunion/lieux_reunion.csv').then(r => r.ok ? r.text() : '').then(parseCSV).catch(()=>[]),
+  fetch('reunion/dates_reunion.csv').then(r => r.ok ? r.text() : '').then(parseCSV).catch(()=>[]),
+  fetch('reunion/mentions_reunion.csv').then(r => r.ok ? r.text() : '').then(parseCSV).catch(()=>[])
+]).then(([json, chiffres, orateurs, lieux, dates, mentions]) => {
+  document.getElementById('msg').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+
+  document.getElementById('k-docs').textContent = json.total_documents;
+  document.getElementById('k-mentions').textContent = json.total_mentions;
+  document.getElementById('k-chiffres').textContent = json.total_chiffres;
+  document.getElementById('k-orateurs').textContent = json.top_orateurs.length;
+  document.getElementById('k-lieux').textContent = json.top_lieux.length;
+
+  document.querySelectorAll('nav button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('nav button').forEach(x => x.classList.remove('actif'));
+      document.querySelectorAll('section').forEach(s => s.classList.remove('actif'));
+      b.classList.add('actif');
+      document.getElementById('p-' + b.dataset.p).classList.add('actif');
+    });
+  });
+
+  // Chiffres top 20 (filtre > 100 pour éviter le bruit)
+  const topC = chiffres.filter(c => num(c.valeur) > 100).sort((a,b)=>num(b.valeur)-num(a.valeur)).slice(0,20);
+  safePlot('viz-chiffres', [{
+    x: topC.map(c => num(c.valeur)),
+    y: topC.map(c => c.fichier.substring(0,25)),
+    type: 'bar', orientation: 'h', marker: {color: '#000091'},
+    customdata: topC.map(c => c.unite),
+    hovertemplate: '<b>%{y}</b><br>%{x:,} %{customdata}<extra></extra>'
+  }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:20,b:40,l:200}});
+
+  // Lieux
+  const topL = lieux.slice(0,15);
+  safePlot('viz-lieux', [{
+    x: topL.map(l => num(l.mentions)),
+    y: topL.map(l => l.lieu),
+    type: 'bar', orientation: 'h', marker: {color: '#E1000F'}
+  }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:20,b:40,l:180}});
+
+  // Orateurs
+  const topO = orateurs.slice(0,10);
+  safePlot('viz-orateurs', [{
+    x: topO.map(o => num(o.mentions)),
+    y: topO.map(o => o.orateur),
+    type: 'bar', orientation: 'h', marker: {color: '#1b7a2e'}
+  }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:20,b:40,l:180}});
+
+  // Dates
+  const topD = dates.slice(0,20);
+  safePlot('viz-dates', [{
+    x: topD.map(d => d.date),
+    y: topD.map(d => num(d.mentions)),
+    type: 'bar', marker: {color: '#1212ff'}
+  }], {...LAYOUT, xaxis:{tickangle:-45, tickfont:{size:9}}});
+
+  // Tableaux
+  tab('tab-chiffres', chiffres.slice(0,200), [
+    {k:'valeur', l:'Valeur', num:true},
+    {k:'unite', l:'Unité'},
+    {k:'fichier', l:'Fichier'},
+    {k:'contexte', l:'Contexte', ctx:true}
+  ], 'valeur');
+
+  tab('tab-orateurs', orateurs, [
+    {k:'orateur', l:'Orateur'},
+    {k:'mentions', l:'Mentions', num:true}
+  ], 'mentions');
+
+  tab('tab-lieux', lieux, [
+    {k:'lieu', l:'Lieu'},
+    {k:'mentions', l:'Mentions', num:true}
+  ], 'mentions');
+
+  tab('tab-dates', dates, [
+    {k:'date', l:'Date'},
+    {k:'mentions', l:'Mentions', num:true}
+  ]);
+
+  // Mentions
+  document.getElementById('liste-docs').innerHTML = mentions.slice(0,200).map(m => `
+    <div class="doc">
+      <div class="doc-header">
+        <span class="badge">📄 ${esc(m.fichier.substring(0,30))}</span>
+      </div>
+      <div style="padding:0 16px 12px 16px">
+        <div class="extrait">${esc(m.contexte)}</div>
+      </div>
+    </div>
+  `).join('');
+
+}).catch(e => {
+  document.getElementById('msg').className = 'message err';
+  document.getElementById('msg').innerHTML = '❌ ' + e.message +
+    '<br><small>Lancez d\'abord : ./extract_reunion.sh</small>';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1035 @@
+{
+  "total_documents": 99,
+  "total_mentions": 297,
+  "total_chiffres": 210,
+  "top_orateurs": [
+    [
+      "M. Jean Fontaine",
+      264
+    ],
+    [
+      "M. Michel Debré",
+      231
+    ],
+    [
+      "M. Wilfrid Bertile",
+      36
+    ],
+    [
+      "M. Marcel Cerneau",
+      23
+    ],
+    [
+      "M. Pierre Lagourgue",
+      22
+    ]
+  ],
+  "top_lieux": [
+    [
+      "Saint-Pierre",
+      323
+    ],
+    [
+      "Réunionnais",
+      271
+    ],
+    [
+      "Reunionnais",
+      271
+    ],
+    [
+      "Saint-Denis",
+      226
+    ],
+    [
+      "Le Port",
+      160
+    ],
+    [
+      "Sainte-Marie",
+      71
+    ],
+    [
+      "Saint-Paul",
+      49
+    ],
+    [
+      "Réunionnaise",
+      42
+    ],
+    [
+      "Reunionnaise",
+      42
+    ],
+    [
+      "La Possession",
+      32
+    ],
+    [
+      "Saint-André",
+      8
+    ],
+    [
+      "Cilaos",
+      7
+    ],
+    [
+      "Saint-Benoît",
+      5
+    ],
+    [
+      "Saint Pierre",
+      3
+    ],
+    [
+      "Saint-Joseph",
+      3
+    ],
+    [
+      "Saint-Leu",
+      2
+    ],
+    [
+      "Saint Denis",
+      2
+    ],
+    [
+      "Sainte Marie",
+      2
+    ],
+    [
+      "Le Tampon",
+      1
+    ],
+    [
+      "Entre-Deux",
+      1
+    ]
+  ],
+  "top_dates": [
+    [
+      "25 août 1980",
+      23
+    ],
+    [
+      "7 avril 1967",
+      22
+    ],
+    [
+      "17 novembre 1986",
+      16
+    ],
+    [
+      "9 mai 1967",
+      14
+    ],
+    [
+      "18 février 1980",
+      14
+    ],
+    [
+      "2 avril 1986",
+      14
+    ],
+    [
+      "7 avril 1980",
+      13
+    ],
+    [
+      "8 septembre 1980",
+      13
+    ],
+    [
+      "19 octobre 1981",
+      13
+    ],
+    [
+      "24 février 1979",
+      12
+    ],
+    [
+      "16 juin 1986",
+      12
+    ],
+    [
+      "12 novembre 1974",
+      11
+    ],
+    [
+      "19 NOVEMBRE 1976",
+      11
+    ],
+    [
+      "9 juillet 1977",
+      10
+    ],
+    [
+      "26 NOVEMBRE 1986",
+      8
+    ],
+    [
+      "26 OCTOBRE 1970",
+      7
+    ],
+    [
+      "19 mars 1969",
+      7
+    ],
+    [
+      "15 avril 1969",
+      7
+    ],
+    [
+      "13 NOVEMBRE 1975",
+      7
+    ],
+    [
+      "8 août 1969",
+      6
+    ],
+    [
+      "27 avril 1974",
+      6
+    ],
+    [
+      "3 NOVEMBRE 1977",
+      6
+    ],
+    [
+      "19 janvier 1974",
+      6
+    ],
+    [
+      "11 mai 1981",
+      6
+    ],
+    [
+      "27 NOVEMBRE 1986",
+      6
+    ],
+    [
+      "24 septembre 1967",
+      5
+    ],
+    [
+      "21 juillet 1972",
+      5
+    ],
+    [
+      "19 mars 1946",
+      5
+    ],
+    [
+      "12 mai 1976",
+      5
+    ],
+    [
+      "15 février 1969",
+      4
+    ]
+  ],
+  "chiffres_cles": [
+    {
+      "fichier": "7_cri_1981-1982-ordinaire1_070.txt",
+      "valeur": 90699000.0,
+      "unite": "francs",
+      "contexte": "le 3218 ASSEMBLEE NATIONALE — 2• SEANCE DU 5 NOVEMBRE 1981 TITRE VI. — SUBVENTIONS D ' INVESTISSEMENT ACCORDÉES PAR L'ETAT e Autorisations de programme : 279 600 000 francs ; e Crédits de paiement : 90 699 000 francs . s Sur le titre IV de l'état B, 11IM. Bertile, Jalton et les membres du groupe soc"
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_046.txt",
+      "valeur": 90000000.0,
+      "unite": "francs",
+      "contexte": "u groupe du parti socialiste et des radicaux de gauche et apparentés ont présenté un amendement n° 218 ainsi rédigé : « Au paragraphe II de l'article 37, réduire les mesures nouvelles du titre III de 90 000 000 francs.» La parole est à M. Aumont. M. Robert Aumont. La réduction proposée de 90 million"
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-08-25.txt",
+      "valeur": 89145000.0,
+      "unite": "francs",
+      "contexte": "tation de la Réunion : 549,96 francs, habitant X 486 275 habitants X 110 p. 100 = 294 174 000 francs ; dotations notifiées effecti- vement : 205 029 000 francs . Le manque à gagner en 1980 est égal à 89 145 000 francs, soit 183,32 francs par habitant en 1975. C 'est pour- quoi il souhaite avoir à ce"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 53258000.0,
+      "unite": "francs",
+      "contexte": "AR L ' ETAT Autorisations de programme : 799 000 francs. » TITRE VI . — SUBVENTIONS D ' INVESTISSEMENT ACCORDÉES PAR L'ETAT s Autorisations de programme : 262 693 000 francs ; e Crédits de paiement : 53 258 000 francs. e MM. Alain Vivien, Frêche, Césaire, Jalton, Houteer, Boulay et les membres du gr"
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-08-25.txt",
+      "valeur": 40379000.0,
+      "unite": "francs",
+      "contexte": "7,29 francs seulement (toutes attributions confon- dues) sur la Réunion . Cela correspond à un manque à gagner minimum, uniquement sur 1979, et sans tenir compte des éléments développés plus haut, de 40 379 000 francs, Dans ces conditions: 1\" le manque à gagner en 1979 dont souffre la Réunion en fon"
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-08-25.txt",
+      "valeur": 40379000.0,
+      "unite": "francs",
+      "contexte": "a façon suivante (en prenant comme base l 'attribution moyenne de la France entière) : utilisation des mêmes bases qu 'en métropole: 462 francs/habitant — 377,29 francs/habitant x 476 675 habitants = 40 379 000 francs ; accroissement de population entre 1974 et 1975 (source I . N. S . E . E . : + 9 "
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-08-25.txt",
+      "valeur": 22465005.0,
+      "unite": "francs",
+      "contexte": ". : + 9 600 habitants) 462 francs X 9 600 habi- tants = 4 350 000 francs ; majoration de 10 p . 100 pour tenir compte des coûts spécifiques de la Réunion : 462 francs X 486275 habitants X 10 p- 100 = 22 465 005 francs . Le total du manque à gagner en 1979 est donc de 67279000 francs, soit 138,36 fra"
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "valeur": 16670536.0,
+      "unite": "francs",
+      "contexte": "ecettes. Réponse. — 1\" Les droits d 'entrée perçus par la réunion des musées nationaux . (musée du Louvres, de Versailles, de Fontainebleau et de Compiègne) sont passés de 11 176 919 francs en 1974 à 16 670 536 francs en 1976. Les droits d 'entrée perçus par la caisse nationale des monuments histori"
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-09-08.txt",
+      "valeur": 15532564.0,
+      "unite": "francs",
+      "contexte": "e nouveau plan de financement arrêté qui laissait à la charge du budget municipal une participation de 16,4 p . 100 sur une dépense 3796 ASSEMBLEE NATIONALE QUESTIONS ET REPONSES 8 Septembre 1980 de 15 532 564 francs, soit 2 547 340 francs . Ces chiffres correspon- daient aux éléments donnés par le "
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_057.txt",
+      "valeur": 13300000.0,
+      "unite": "francs",
+      "contexte": "dernier, aux quatre préfets des départements d'outre-mer une somme de 6 485 000 francs qui doit être utilisée pour financer des actions nouvelles . De son côté, M. le ministre du travail va déléguer 13 300 000 francs aux associations de type t association de formation profession- nelle pour adultes "
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 12372113.0,
+      "unite": "francs",
+      "contexte": "aintenant les crédits inscrits à la ligne : s Dépar- tements d'outre-mer e . ETAT B Répa rtition des crédits applicables aux dépenses ordinaires des services civils (mesures nouvelles). r Titre III : 12 372 113 francs ; s Titre IV : 23 177 621 francs . s ETAT C Répartition des autorisations de progr"
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "valeur": 11176919.0,
+      "unite": "francs",
+      "contexte": "caissement de ces diverses recettes. Réponse. — 1\" Les droits d 'entrée perçus par la réunion des musées nationaux . (musée du Louvres, de Versailles, de Fontainebleau et de Compiègne) sont passés de 11 176 919 francs en 1974 à 16 670 536 francs en 1976. Les droits d 'entrée perçus par la caisse nat"
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-09-08.txt",
+      "valeur": 9650000.0,
+      "unite": "francs",
+      "contexte": "- le membre de son cabinet présent lors de la réu- nion précitée. Le préfet du Val-de-Marne informait la municipalité de Limeil-Brévannes que vu ce décret, la subvention ne serait plus que d 'environ 9650000 francs. Elle devait être, suivant les enga- gements pris, de 12985224 francs . Ainsi, la par"
+    },
+    {
+      "fichier": "7_cri_1981-1982-ordinaire1_070.txt",
+      "valeur": 7750000.0,
+      "unite": "francs",
+      "contexte": "its de paiement : 90 699 000 francs . s Sur le titre IV de l'état B, 11IM. Bertile, Jalton et les membres du groupe socialiste ont présenté un amendement, n\" 71, ainsi rédigé s Réduire les crédits de 7 750 000 francs . a La parole est à M . Bertile. M. Wilfrid Bertile . Ainsi que je l'ai souligné da"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_057.txt",
+      "valeur": 6485000.0,
+      "unite": "francs",
+      "contexte": "se sont ajoutés cette année les premiers rem- boursements opérés par le fonds social européen. Ainsi, j'ai délégué, le 22 octobre dernier, aux quatre préfets des départements d'outre-mer une somme de 6 485 000 francs qui doit être utilisée pour financer des actions nouvelles . De son côté, M. le min"
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_048.txt",
+      "valeur": 4505785.0,
+      "unite": "francs",
+      "contexte": "ean-Moulin à Auber- villiers [Seine-Saint-Denisli. 42163. — 15 novembre 1977 . — M. Ratite rappelle à M . le ministre de l'éducation que l'Etat doit à la ville d'Aubervilliers depuis 1972 la somme de 4 505 785 francs au titre de la subvention légale pour l'acquisition du terrain d'assiette du C. E. "
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-08-25.txt",
+      "valeur": 4350000.0,
+      "unite": "francs",
+      "contexte": "tant — 377,29 francs/habitant x 476 675 habitants = 40 379 000 francs ; accroissement de population entre 1974 et 1975 (source I . N. S . E . E . : + 9 600 habitants) 462 francs X 9 600 habi- tants = 4 350 000 francs ; majoration de 10 p . 100 pour tenir compte des coûts spécifiques de la Réunion : "
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-09-08.txt",
+      "valeur": 2547340.0,
+      "unite": "francs",
+      "contexte": "ement arrêté qui laissait à la charge du budget municipal une participation de 16,4 p . 100 sur une dépense 3796 ASSEMBLEE NATIONALE QUESTIONS ET REPONSES 8 Septembre 1980 de 15 532 564 francs, soit 2 547 340 francs . Ces chiffres correspon- daient aux éléments donnés par le préfet. Huit jours après"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 2543819.0,
+      "unite": "francs",
+      "contexte": "tatut des Comores et de Saint-Pierre-et- Miquelon entraîne une économie globale de 34349455 francs. Une augmentation de 500 000 francs fait passer la subvention du budget local de Wallis et Futuna de 2 543 819 francs à plus de 3 millions de francs, soit une hausse supérieure à 20 p . 100. Quant à la"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire2_035.txt",
+      "valeur": 2500000.0,
+      "unite": "francs",
+      "contexte": "ociations locales de jeunesse et d'éducation populaire par la voie de crédits déconcentrés, cette somme étant mise à la disposition des directeurs départementaux de la jeu- nesse et des sports ; pour 2 500 000 francs, au soutien des asso- ciations nationales. (L Cette question est ainsi rédigée : s "
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-02-18.txt",
+      "valeur": 1051095.0,
+      "unite": "francs",
+      "contexte": "terrains Viard (1647 MZ) pour l'extension du L. E. P. Condorcet et l 'implantation d'un lycée technique attenant. La ville a réglé, depuis 1968, le montant de cette acquisition, soit 954 000 francs (1 051 095 francs avec les honoraires de notaire et frais divers). Par lettre du 19 février 1971, M . "
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-02-18.txt",
+      "valeur": 954000.0,
+      "unite": "francs",
+      "contexte": "is) a acquis les terrains Viard (1647 MZ) pour l'extension du L. E. P. Condorcet et l 'implantation d'un lycée technique attenant. La ville a réglé, depuis 1968, le montant de cette acquisition, soit 954 000 francs (1 051 095 francs avec les honoraires de notaire et frais divers). Par lettre du 19 f"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 811750.0,
+      "unite": "francs",
+      "contexte": "outeer, Boulay et les membres du groupe du parti socialiste et des radicaux de gauche et apparentés ont présenté un amendement n\" 271 ainsi rédigé : e Au titre III de l'état B, réduire les crédits de 811 750 francs. La parole est à M. Alain Vivien. M . Alain Vivien. Mes chers collègues, le projet de"
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_058.txt",
+      "valeur": 740000.0,
+      "unite": "francs",
+      "contexte": "nt comprenant 240 adolescents, l'utilisation des transports en comme représente une dépense de 220 000 francs, alors que l 'utilisation des transports collectifs de ramassage constitue une dépense de 740 000 francs . Les dispositions du décret précité dont les intentions sont louables peuvent, si el"
+    },
+    {
+      "fichier": "7_cri_1983-1984-ordinaire2_008.txt",
+      "valeur": 700000.0,
+      "unite": "habitants",
+      "contexte": "in, secrétaire d'Etat. Moi aussi ! M. Michel Debré. . . . dans Faits et chiffres réunionnais, édi- tion de 1984 : sans venue en métropole, dans vingt ans, la population réunionnaise atteindra près de 700 000 habitants ; avec une venue en métropole stabilisée au chiffre de 1981 . elle sera (le l'ordr"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "valeur": 700000.0,
+      "unite": "habitants",
+      "contexte": "e augmentation brutale de la population. Avec l'arrêt de la mobilité, quelles sont les perspectives ? Avant cinq ans : 600 000 habitants : avant dix ans : 650 000 habitants; dans quinze ans : plus de 700 000 habitants . Compte tenu des possibilités de développement économique, c'est le draine certai"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "valeur": 700000.0,
+      "unite": "habitants",
+      "contexte": "'expliquer comment II espère créer des emplois en nombre suffisant et les équipements correspondant aux besoins d 'une population qui, dans ces conditions, risque d'atteindre un chiffre de l'ordre de 700000 habitants aux environs de l'an 2000, selon les estimations disponibles les plus récentes.* AS"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "valeur": 650000.0,
+      "unite": "habitants",
+      "contexte": "es circonstances présentes. Ensuite il y a une augmentation brutale de la population. Avec l'arrêt de la mobilité, quelles sont les perspectives ? Avant cinq ans : 600 000 habitants : avant dix ans : 650 000 habitants; dans quinze ans : plus de 700 000 habitants . Compte tenu des possibilités de dév"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "valeur": 600000.0,
+      "unite": "habitants",
+      "contexte": "e créé dans les conditions et dans les circonstances présentes. Ensuite il y a une augmentation brutale de la population. Avec l'arrêt de la mobilité, quelles sont les perspectives ? Avant cinq ans : 600 000 habitants : avant dix ans : 650 000 habitants; dans quinze ans : plus de 700 000 habitants ."
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_085.txt",
+      "valeur": 600000.0,
+      "unite": "habitants",
+      "contexte": "cemment l'exposition « Réunion an 2000 », qui se tient actuellement à Saint-Denis-de-la-Réunion. On peut y voir un premier graphique qui montre que, sans mobi- lité des Réunionnais, il y aura plus de 600 000 habitants à la Réunion dans quinze ans. Ce nombre n'est supportable ni du point de vue dè la"
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_090.txt",
+      "valeur": 550000.0,
+      "unite": "habitants",
+      "contexte": "e la Réunion . Mais l'auteur de ces propos ne savait pas que j'avais lu son propre journal, celui du parti communiste, Témoignage. avant qu'il vous parle lui-même ce soir. Alors que la Réunion compte 550 000 habitants, 12 000 pétitions ont été déposées hier, et lorsqu'on se rappelle qu'il y a plus d"
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "valeur": 513907.0,
+      "unite": "francs",
+      "contexte": "turelles qu 'elle organise sont passés de 127 681 francs en 1974 à 232082 francs en 1976 . Les recettes nettes des grandes eaux de Versailles ' qui étaient de 350 000 francs en 1974 se sont élevées à 513 907 francs en 1976 ; 2\" les taxes de circulation qui constituent les recettes affectées aux doma"
+    },
+    {
+      "fichier": "7_cri_1983-1984-ordinaire2_008.txt",
+      "valeur": 510000.0,
+      "unite": "habitants",
+      "contexte": "ra près de 700 000 habitants ; avec une venue en métropole stabilisée au chiffre de 1981 . elle sera (le l'ordre de 550 000, et si l'on reprend la politique des deux dernières décennies, elle sera de 510 000 habitants . Ces chiffres sont clairs : l'arrêt de la venue en métropole ne peut que mener à "
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire2_035.txt",
+      "valeur": 500000.0,
+      "unite": "francs",
+      "contexte": "tions, 4 millions de francs figurant à sa réserve prouve à quel point le souci de voir se développer ce secteur apparait aux yeux de tous fondamental. Ces 4 millions de francs ont été affectés : pour 500 000 francs, au budget de l'Office franco-québécois pour la jeunesse, ainsi que le secrétaire d'E"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 500000.0,
+      "unite": "francs",
+      "contexte": "étail de ce chapitre figure à la page 23 du «bleu budgétaire. Le changement de statut des Comores et de Saint-Pierre-et- Miquelon entraîne une économie globale de 34349455 francs. Une augmentation de 500 000 francs fait passer la subvention du budget local de Wallis et Futuna de 2 543 819 francs à p"
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-08-25.txt",
+      "valeur": 486275.0,
+      "unite": "habitants",
+      "contexte": "1975 (source I . N. S . E . E . : + 9 600 habitants) 462 francs X 9 600 habi- tants = 4 350 000 francs ; majoration de 10 p . 100 pour tenir compte des coûts spécifiques de la Réunion : 462 francs X 486275 habitants X 10 p- 100 = 22 465 005 francs . Le total du manque à gagner en 1979 est donc de 67"
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-08-25.txt",
+      "valeur": 486275.0,
+      "unite": "habitants",
+      "contexte": "oit par habitant : 3632 ASSEMBLES NATIONALE — QUESTIONS ET REPONSES 25 Août 1980 462 francs X 1,1904 = 549,96 francs ; app -lication théorique à la dotation de la Réunion : 549,96 francs, habitant X 486 275 habitants X 110 p. 100 = 294 174 000 francs ; dotations notifiées effecti- vement : 205 029 0"
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-08-25.txt",
+      "valeur": 476675.0,
+      "unite": "habitants",
+      "contexte": "rait s 'établir de la façon suivante (en prenant comme base l 'attribution moyenne de la France entière) : utilisation des mêmes bases qu 'en métropole: 462 francs/habitant — 377,29 francs/habitant x 476 675 habitants = 40 379 000 francs ; accroissement de population entre 1974 et 1975 (source I . N"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire2_067.txt",
+      "valeur": 450000.0,
+      "unite": "personnes",
+      "contexte": "ts sta- tistiques dont nous disposons ne brillent pas par leur exactitude. Je souhaite que l'Institut national de la statistique et des études économiques fasse un effort sérieux dans ce domaine. Ces 450000 personnes, tout en étant remarquablement inté- grées dans l'ensemble français auquel elles ap"
+    },
+    {
+      "fichier": "7_cri_1981-1982-ordinaire1_070.txt",
+      "valeur": 400000.0,
+      "unite": "personnes",
+      "contexte": "M, société d'Etat créée en 1963 . 3208 ASSEMBLEE NATIONALE — 2' SEANCE DU 5 NOVEMBRE 1981 Favoriser Pians ; mulon ;!'environ 250 000 personnes, afin que ce territoire attei^ne au total le chiffre de 400000 personnes, tel était l'objectif essentiel de ce plan, qui mettait en oeuvre une colonisation d"
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "valeur": 350000.0,
+      "unite": "francs",
+      "contexte": "r les visites et les mani- festations culturelles qu 'elle organise sont passés de 127 681 francs en 1974 à 232082 francs en 1976 . Les recettes nettes des grandes eaux de Versailles ' qui étaient de 350 000 francs en 1974 se sont élevées à 513 907 francs en 1976 ; 2\" les taxes de circulation qui co"
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_086.txt",
+      "valeur": 328000.0,
+      "unite": "habitants",
+      "contexte": "qui s'imaginaient que• la Nouvelle-Calédonie connaissait un problème foncier avec 19 000 ou 20 000 kilomètres carrés pour 140 000 habitants 1 La Guadeloupe, c'est 1 780 kilomètres carrés pour plus de 328 000 habitants ! On . savait, messieurs, que vous ne saviez pas grand-chose 1 Mais de là à ne mêm"
+    },
+    {
+      "fichier": "7_cri_1981-1982-ordinaire1_070.txt",
+      "valeur": 318000.0,
+      "unite": "habitants",
+      "contexte": "élevé et aux conditions d'exploitation du transport aérien. Cette détérioration de l'économie locale a eu pour consé- quence une situation dramatique de l'emploi. En Guadeloupe, sur une population de 318 000 habitants, comptant 110 C00 actifs, on dénombre plus de 25 p . 100 de chômeurs. Avec ses 27 "
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "valeur": 300000.0,
+      "unite": "francs",
+      "contexte": "yer. En effet, l 'année dernière, la subvention da ministère de l'agriculture devait s'élever à 4 millions, l 'aide du département à 4,7 millions, tandis que le Fidom central intervenait à hsuteur de 300 000 francs. Un programme était donc arrêté et lancé sur la base d 'un financement total de 9 :ni"
+    },
+    {
+      "fichier": "7_cri_1981-1982-ordinaire1_070.txt",
+      "valeur": 250000.0,
+      "unite": "personnes",
+      "contexte": ". La plupart d'entre eux y ont été conduits par l'intermédiaire du BUMIDOM, société d'Etat créée en 1963 . 3208 ASSEMBLEE NATIONALE — 2' SEANCE DU 5 NOVEMBRE 1981 Favoriser Pians ; mulon ;!'environ 250 000 personnes, afin que ce territoire attei^ne au total le chiffre de 400000 personnes, tel était "
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "valeur": 232082.0,
+      "unite": "francs",
+      "contexte": "s en 1976. Les droits d 'entrée perçus par la caisse nationale des monuments historiques pour les visites et les mani- festations culturelles qu 'elle organise sont passés de 127 681 francs en 1974 à 232082 francs en 1976 . Les recettes nettes des grandes eaux de Versailles ' qui étaient de 350 000 "
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_058.txt",
+      "valeur": 220000.0,
+      "unite": "francs",
+      "contexte": "environ le triple de celui des transports en commun . Ainsi, et à titre indicatif, pour un éta- blissement comprenant 240 adolescents, l'utilisation des transports en comme représente une dépense de 220 000 francs, alors que l 'utilisation des transports collectifs de ramassage constitue une dépense"
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-02-18.txt",
+      "valeur": 205875.0,
+      "unite": "francs",
+      "contexte": "095 francs avec les honoraires de notaire et frais divers). Par lettre du 19 février 1971, M . le préfet de la Seine-Saint- Denis informait M . le maire de Montreuil qu 'une subvention déri- soire de 205 875 francs (20 p . 100 du prix d'achat) allait être allouée à la commune . Malgré de nombreuses "
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-04-07.txt",
+      "valeur": 200000.0,
+      "unite": "personne",
+      "contexte": "eu lieu entre le ministère et les organisations concernées en dépit de plusieurs démarches de la C .G.T. Cette fin de non-recevoir est d'autant plus inadmissible que ces questions concernent plus de 200000 personnels des arse- naux et .établissements et leur famille . En conséquence, il lui demande "
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 143000.0,
+      "unite": "francs",
+      "contexte": "de bateaux ; le département, de son côté, prendra des mesures d'incitation pour l'hôtellerie . Quant à la prime d'intempéries, réclamée par M. Gabriel, elle vient d'être accordée et son mon- tant est 143 000 francs. Interpêches a déjà bénéficié d'aides importantes de l'Etat et je suis tout particuli"
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_086.txt",
+      "valeur": 140000.0,
+      "unite": "habitants",
+      "contexte": ". M. Alain Chénard . Camarades ? Pas pour vous ! M. Jean-Claude Martinet. ... qui s'imaginaient que• la Nouvelle-Calédonie connaissait un problème foncier avec 19 000 ou 20 000 kilomètres carrés pour 140 000 habitants 1 La Guadeloupe, c'est 1 780 kilomètres carrés pour plus de 328 000 habitants ! On"
+    },
+    {
+      "fichier": "7_cri_1983-1984-ordinaire2_008.txt",
+      "valeur": 135000.0,
+      "unite": "Réunionnais",
+      "contexte": "nt non seule- ment les travailleurs immigrés de nationalité étrangère mais parfois même des Français originaires des départements d'outre- mer. Aussi une des priorités absolues est de permettre à ces 135 000 Réunionnais de pouvoir s'insérer dam la communauté hexagonale sans difficultés majeures. L'o"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "valeur": 135000.0,
+      "unite": "Réunionnais",
+      "contexte": "t à donner la priorité à un programme de mesures destinées à assurer la meilleure insertion et la promotion des originaires des départe- ments d'outre-mer déjà installés en métropole — il y a environ 135 000 Réunionnais — ou venant s'y installer. L'objectif d'assurer à ces Réunionnais, comme à l'ens"
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "valeur": 127681.0,
+      "unite": "francs",
+      "contexte": "n 1974 à 16 670 536 francs en 1976. Les droits d 'entrée perçus par la caisse nationale des monuments historiques pour les visites et les mani- festations culturelles qu 'elle organise sont passés de 127 681 francs en 1974 à 232082 francs en 1976 . Les recettes nettes des grandes eaux de Versailles "
+    },
+    {
+      "fichier": "5_cri_1974-1975-ordinaire1_047.txt",
+      "valeur": 121000.0,
+      "unite": "personnes",
+      "contexte": "1965, contre 9,4 p. 100 en 1970. Tout' cela se traduit par un intolérable gâchis des forces productives humaines. Le chômage est devenu une plaie béante. En Guadeloupe, d'après l'I. N. S. E. E., sur 121 000 personnes aptes au travail, 30 000 sont au chômage complet, soit 24,8 p. 100, et 47 000 en ét"
+    },
+    {
+      "fichier": "5_qst_5-qst-1975-07-19.txt",
+      "valeur": 120000.0,
+      "unite": "francs",
+      "contexte": "née de fonvtionnement. II lui demande s'il ne croit pas devoir prendre rapidement une décision de nationalisation de ce C.E.S. ou tout au moins le faire bénéficier d 'une subvention exceptionnelle de 120 000 francs. Réponse. — La nationalisation du C .E.S. d 'Aubière (Puy-de-Dôme) est inscrite au pr"
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_090.txt",
+      "valeur": 120000.0,
+      "unite": "Réunionnais",
+      "contexte": "possible de conclure, mon- sieur le député 7 M . Michel Debré . . . . il est plus faible pour les originaires d'outre-mer en métropole que dans leur propre département. Si les 500 000 Antillais et le 120 000 Réunionnais qui sont en métropole étaient restés chez eux, comme vous le vouliez, quel serai"
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-04-07.txt",
+      "valeur": 100000.0,
+      "unite": "habitants",
+      "contexte": "locaux . C 'est vrai d'une manière générale, et ça l'est aussi dans le secteur des trans- ports s . Pour remédier à cette situation il lui demande si les villes moyennes d'une population inférieure à 100 000 habitants pourront enfin bénéficier des ressources du versement transport et plus généraleme"
+    },
+    {
+      "fichier": "7_cri_1981-1982-ordinaire1_070.txt",
+      "valeur": 100000.0,
+      "unite": "Réunionnais",
+      "contexte": "ements d'outre-mer, fixé pour 1982 au même niveau qu'en 1981, année où il y avait 340 millions inscrits au budget primitif et 80 millions au collectif voté en juillet Vous savez également que plus de 100 000 Réunionnais, soit le cinquième de la population de file, vivent en métropole . La plupart d'"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 80000.0,
+      "unite": "Réunionnais",
+      "contexte": "osion démographique qui s'est produite voici quinze ou vingt ans dans ces départements. Par conséquent, la migration répond à l'intérêt des garçons et des filles. Elle est aussi une promotion. Si les 80000 Réunionnais qui vivent maintenant en métropole étaient restés dans leur île, la plu- part (l'e"
+    },
+    {
+      "fichier": "7_cri_1983-1984-ordinaire2_008.txt",
+      "valeur": 75000.0,
+      "unite": "Réunionnais",
+      "contexte": "ou dans un centre de formation professionnelle, soit qu'ils aient obtenu un contrat de travail par les organismes officiels ou simplement par des relations personnelles. Ainsi, en vingt ans, plus de 75000 Réunionnais — chiffre qui comprend non seulement les travailleurs mais leurs familles — sont ve"
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "valeur": 70000.0,
+      "unite": "francs",
+      "contexte": "e de retraite des médecins (C . A . R . M . F .). la cotisation à verser à la caisse est d'un montant invariable quels que soient les revenus de l'assuré et que ces revenus se situent aux environs de 70000 francs ou atteignent 1 million de francs . Ainsi un médecin ayant un revenu de 70000 francs es"
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "valeur": 70000.0,
+      "unite": "francs",
+      "contexte": "est d'un montant invariable quels que soient les revenus de l'assuré et que ces revenus se situent aux environs de 70000 francs ou atteignent 1 million de francs . Ainsi un médecin ayant un revenu de 70000 francs est tenu de payer une cotisation annuelle de 9692 francs, ce qui représente un prélèvem"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 50000.0,
+      "unite": "habitants",
+      "contexte": "on, car il faut que vous sachiez qu'avant que ies Français ne s'y rendent, cette ile était inhabitée. Et si l'on appliquait votre politique en Nouvelle-Calédonie elle ne compte- rait actuellement que 50 000 habitants. Or, que je sache, la popu- lation métropolitaine qui s'y est rendue il y a quatre-"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire2_067.txt",
+      "valeur": 50000.0,
+      "unite": "habitants",
+      "contexte": "le 17 octo- bre 1979, il y a dore huit mois, il attirait son attention sur les dangers de pollution du bassin du Léguer et les menaces que celle-ci faisait peser sur l'alimentation en eau de plus de 50 000 habitants du Nord-Ouest des Côtes-du-Nord et la nom- breuse population touristique. Cette poll"
+    },
+    {
+      "fichier": "7_qst_7-qst-1981-10-19.txt",
+      "valeur": 43720.0,
+      "unite": "francs",
+      "contexte": "ibution de cette revalorisation a la condition que les ressources annuelles des titulaire; de ces rente :: ne dépassent pas un plafond ressué chaque année par arrété ministériel et fixé poux- 1931 ii 43 720 francs, soit un moulant ii igsrenueet supérieur au S .M.I.G. pour unie per- sonne seule . il "
+    },
+    {
+      "fichier": "7_cri_1981-1982-extraordinaire4_014.txt",
+      "valeur": 40000.0,
+      "unite": "Réunionnais",
+      "contexte": "lgré l'écrasante chape de plomb idéolôgique qui pèse sur les moyens officiels d'infor- mation du pouvoir ... M. Henri Emmanuelli, secrétaire d'Etat . Vous avez de l'audace ! M. Didier Julia . ... que 40 000 Réunionnais, ce-qui correspondrait à quatre millions de personnes à Paris, ont manifesté cont"
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-08-25.txt",
+      "valeur": 32500.0,
+      "unite": "habitants",
+      "contexte": "e une priorité et des crédits d'Etat doivent être débloqués d 'urgence pour ces réalisations. Il s'en est fallu de peu pour que les eaux de la rivière des Galets en crue envahissent la ville du Port (32 500 habitants), la zone industrielle et la centrale électrique et causent des dégâts encore plus "
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 30000.0,
+      "unite": "personnes",
+      "contexte": "normal que, dans un département sous-peuplé et qu'on veut enfin développer et révéler à lui-même, on fasse venir de la main-d'oeuvre de métropole, dans des proportions d'ailleurs peu importantes car 30 000 personnes en cinq ans pour un département aussi vaste ce n'est tout de méme pas considé- rable"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 30000.0,
+      "unite": "habitants",
+      "contexte": "our l'information de ceux qui m'écoutent, que le conseil régional de la Réunion — composé, comme l'on sait, du conseil général en totalité, des parlementaires r . des délégués des communes de plus de 30000 habitants — a adopté, dans sa séance du 29 janvier 1976, à l'unanimité, sans aucune abstention"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 17000.0,
+      "unite": "francs",
+      "contexte": "e brute des départements d'outre-nier. Celle-ci atteint 3 600 millions de francs en Guadeloupe, ce qui représente 13 000 francs par habitant ; elle est de 5 200 millions de francs en Martinique, soit 17 000 francs par habitant, et de 6 800 millions de francs à la Réunion, c'est-à-dire 13 500 francs "
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_086.txt",
+      "valeur": 17000.0,
+      "unite": "francs",
+      "contexte": "ort de M. Virapoullé, dont je le félicite encore une fois, elles sont de l'ordre de s 900 à 8 000 francs par habitant à la Réunion, alors qu'en métropole elles atteignent .aisément le double, environ 17 000 francs. Le défi économique est donc bien connu. Le défi de l'envi- ronnement est peut-être pl"
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_085.txt",
+      "valeur": 14000.0,
+      "unite": "jeunes",
+      "contexte": "artements d'outre-mer et la métropole. Un seul exemple permettra de comprendre le 8728 ASSEMBLEE NATIONALE - 1 r\" SEANCE DU 25 NOVEMBRE 1988 caractère prioritaire de cette mesure : à la Réunion, sur 14 000 jeunes qui arrivent chaque année sur le marché du travail, seulement 4 000 trouvent un emploi."
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 13500.0,
+      "unite": "francs",
+      "contexte": "adeloupe, ce qui représente 13 000 francs par habitant ; elle est de 5 200 millions de francs en Martinique, soit 17 000 francs par habitant, et de 6 800 millions de francs à la Réunion, c'est-à-dire 13 500 francs par habitant. Nos départements sont ainsi beaucoup mieux lotis que les pays dont ils s"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 13000.0,
+      "unite": "francs",
+      "contexte": "de. Je veux également vous donner quelques chiffres relatifs à la production intérieure brute des départements d'outre-nier. Celle-ci atteint 3 600 millions de francs en Guadeloupe, ce qui représente 13 000 francs par habitant ; elle est de 5 200 millions de francs en Martinique, soit 17 000 francs "
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_044.txt",
+      "valeur": 10000.0,
+      "unite": "personnes",
+      "contexte": "ession sera- t-elle suffisante pour faire face aux tâches sans cesse accrues de cet organisme ? Si le nombre des migrations contrôlées par le Bumidom reste stabilisé depuis plusieurs années autour de 10 000 personnes, dont 5000 pour la seule île de 'a Réunion, il ne faut pas oublier que le nombre de"
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_087.txt",
+      "valeur": 10000.0,
+      "unite": "francs",
+      "contexte": "apageuse qui dit cyniquement : « Comment transformer la pierre en or7» En effet, grâce à la défiscalisation, la pierre prend la couleur de l'or et l 'on offre sur le marché des appartements à près de 10 000 francs le mètre carré . Le plus préoccupant est que l'on assiste, par le biais de cette défis"
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "valeur": 9692.0,
+      "unite": "francs",
+      "contexte": "e l'assuré et que ces revenus se situent aux environs de 70000 francs ou atteignent 1 million de francs . Ainsi un médecin ayant un revenu de 70000 francs est tenu de payer une cotisation annuelle de 9692 francs, ce qui représente un prélèvement relati- vement considérable. D'autre part, d'a#rès le "
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-08-25.txt",
+      "valeur": 9600.0,
+      "unite": "habitants",
+      "contexte": "des mêmes bases qu 'en métropole: 462 francs/habitant — 377,29 francs/habitant x 476 675 habitants = 40 379 000 francs ; accroissement de population entre 1974 et 1975 (source I . N. S . E . E . : + 9 600 habitants) 462 francs X 9 600 habi- tants = 4 350 000 francs ; majoration de 10 p . 100 pour te"
+    },
+    {
+      "fichier": "6_qst_6-qst-1979-08-11.txt",
+      "valeur": 8000.0,
+      "unite": "personnes",
+      "contexte": "ver largement minimisés et, en définitive, totalement anéantis sI des mesures conservatoires ne sont pas prises rapidement . C 'est, en effet, non seulement l'industrie de transformation, qui emploie 8000 personnes, qui ressentira et supportera les conséquences de ces accords mais aussi, et surtout,"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_039.txt",
+      "valeur": 8000.0,
+      "unite": "francs",
+      "contexte": "seront bientôt enfermés dans leur Be, désespérés, sans travail et sans avenir . Ils ne pourront même plus prendre l'avion . Figurez-vous qu 'actuelle- ment le voyage, selon le tarif V . P. T., coûte 8 000 francs et, pour un pauvre type qui est au chômage, vous voyez ce que repré- sente une telle som"
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_086.txt",
+      "valeur": 8000.0,
+      "unite": "francs",
+      "contexte": "aux prestations sociales, selon une étude de l'I.N.S.E.E. publiée en 1984 et reprise dans l'excellent rap- port de M. Virapoullé, dont je le félicite encore une fois, elles sont de l'ordre de s 900 à 8 000 francs par habitant à la Réunion, alors qu'en métropole elles atteignent .aisément le double, "
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_025.txt",
+      "valeur": 7900.0,
+      "unite": "francs",
+      "contexte": "ix pratiqués par la Compagnie Air France, qui a le monopole de la ligne, sont particulièrement élevés et, pour la majo- rité des cas, absolument hors de proportion avec les revenus de ces personnes : 7 900 francs aller-retour pour la classe économique et 5330 francs pour le 15 - 45 jours . L 'associ"
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_050.txt",
+      "valeur": 7900.0,
+      "unite": "francs",
+      "contexte": "salue au passage voire honnêteté intellectuelle — que l'on ne peut pas établir de moyenne tant les situations sont diverses. Qu'en est-il aujourd'hui ? Vous avez prétendu que le tarif de base fixé à 7 900 francs, aller et retour, n'était pas souvent utilise. Je me permets de vous f,:re remarquer qu'"
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_025.txt",
+      "valeur": 7630.0,
+      "unite": "francs",
+      "contexte": "partements d'outre-mer) et du Casodom (centre d 'action sociale des départements d 'outre-mer), d 'un tarif aller et retour entre Paris et la Réunion de 2970 francs, bien inféieur au tarif de base de 7 630 francs et au tarif excusrsion de 14-45 jours de 5 330 francs auxquels il est fait allusion . P"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 6000.0,
+      "unite": "travailleurs",
+      "contexte": "ciales, ni aux exigences politiques, ni aux exigences économiques. Le conseil régional de la Réunion a unanimement estimé que 8 000 venues en métropole seraient nécessaires, ce chiffre repré- sentant 6 000 travailleurs et 2 000 regroupements familiaux . Or les crédits prévus ne permettront que 5 000"
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_035.txt",
+      "valeur": 6000.0,
+      "unite": "habitants",
+      "contexte": "le point sur les projets en cours. Le problème posé par Saint-Pierre-et-Miquelon est différent puisqu'il s'agit de l'intégration au régime administratif et social de la métropole d'une population de 6000 habitants, installée dans une île éloignée, et nécessairement tributaire de l'attraction économi"
+    },
+    {
+      "fichier": "8_cri_1987-1988-ordinaire1_025.txt",
+      "valeur": 6000.0,
+      "unite": "francs",
+      "contexte": "atteinte intolérable aux valeurs républicaines. La pleine égalité des peuples des D .O.M. doit être garantie par de nouvelles mesures de justice sociale que nous préco- nisons : porter le S .M.I.C. à 6 000 francs par mois et faire qu'aucun salaire ne soit inférieur à ce plancher ; augmenter les sala"
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_058.txt",
+      "valeur": 5900.0,
+      "unite": "habitants",
+      "contexte": "ires des secrétaires de mairie . Non revalorisées depuis le I •-'' ,janvier 1976, elles s 'él èvent annuellement et forfaitairement à 1 742 francs pour un secrétaire de mairie d'une commune de 2000 à 5900 habitants dont l 'indice brut est supérieur à 390. Il en résulte pour un secrétaire de mairie q"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 5800.0,
+      "unite": "habitants",
+      "contexte": "cré- taire d'Etat, que le siatut départemental n'est pas parfaitement adapté, ce qui est exact . Mais vous projetez de pousser l'assimi- lation jusqu'à envisager le découpage de cette collectivité de 5 800 habitants en quatorze cantons ! ' Vous y étendez, d'emblée, le S. M. I. C. au niveau métropoli"
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_025.txt",
+      "valeur": 5330.0,
+      "unite": "francs",
+      "contexte": "pole de la ligne, sont particulièrement élevés et, pour la majo- rité des cas, absolument hors de proportion avec les revenus de ces personnes : 7 900 francs aller-retour pour la classe économique et 5330 francs pour le 15 - 45 jours . L 'association Echanges sans frontières regroupant les habitants"
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_025.txt",
+      "valeur": 5330.0,
+      "unite": "francs",
+      "contexte": "les coûts d'exploitation d 'un Boeing 747 n 'excèdent pas 2 000 francs alors que les voyages programmés par les compagnies de navigation aérienne aboutissent à une réalité qui oscille entre 7 900 et 5 330 francs. Il faut ajouter que la compa- gnie Air France a programmé pour des Mauriciens un voyage"
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_025.txt",
+      "valeur": 5330.0,
+      "unite": "francs",
+      "contexte": "n sociale des départements d 'outre-mer), d 'un tarif aller et retour entre Paris et la Réunion de 2970 francs, bien inféieur au tarif de base de 7 630 francs et au tarif excusrsion de 14-45 jours de 5 330 francs auxquels il est fait allusion . Pour faci- liter l 'utilisation de ce tarif pendant les"
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_050.txt",
+      "valeur": 5330.0,
+      "unite": "francs",
+      "contexte": "s souvent utilise. Je me permets de vous f,:re remarquer qu'il concerne tout de même 10 p . 100 des usagers, selon des renseignements fournis par Air France. Il existe aussi un tarif promotionnel (le 5 330 francs pour un séjour compris entre quinze et quarante-cinq jours. Vous affir- mez qu'à destin"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 5140.0,
+      "unite": "francs",
+      "contexte": "n fonds d'action sociale obligatoire, ce qui sert à pallier les insuffisances du budget de l'Etat en matière d'équipements sociaux. C'est ainsi qu'en 1973 une famille métropolitaine a reçu en moyenne 5 140 francs au titre des allocations familiales alors qu'une famille antillaise ou réunionkaise a t"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_057.txt",
+      "valeur": 5000.0,
+      "unite": "personnes",
+      "contexte": "- sion des élus et plus particulièrement de M . Michel Debré. mais ils trouvent encore difficilement à s'employer à leur sortie de l'école. Les migrations organisées par le Bumidom, quoique dépassant 5 000 personnes chaque année, alors é ue la croissance dt mogra- phique est de l'ordre de 7 000 à 8 "
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_057.txt",
+      "valeur": 5000.0,
+      "unite": "jeunes",
+      "contexte": "lycées et collèges de nombreuses animations ainsi que des missions de perfection- nement de leurs techniques. A titre d'exemple, je peux vous indiquer que l'orchestre de chambre de Grenoble a touché 5 000 jeunes Martiniquais au cours d'un séjour de trois semaines qu'il a effectué dans ce départemezi"
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "valeur": 5000.0,
+      "unite": "habitants",
+      "contexte": "lui demande, afin d 'atténuer les difficultés qui découlent de l 'incompatibilité entre les deux fonctions, que le seuil au-dessus duquel celle-ci est actuelle- ment envisagée soit portée de 1 000 à 5 000 habitants. Saisies et expulsions (attitude des services dé police face à une procédure illégale"
+    },
+    {
+      "fichier": "8_cri_1985-1986-extraordinaire1_015.txt",
+      "valeur": 5000.0,
+      "unite": "personnes",
+      "contexte": "frontières de 1981 à 1986 ont été fermées aux ressortissant des départements d'outre- mer ! M . Michel Debré . Exact ! M. Jean-Paul Virapoullé . Voici quelques chiffres. Nous envoyions de La Réunion 5 000 personnes par an jusqu'en 1981 ; à partir de 1981, 400, puis 200, puis moins 400 le solde migra"
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_058.txt",
+      "valeur": 4800.0,
+      "unite": "francs",
+      "contexte": "f rancs. Ces agents peuvent diffi- cilement se soustraire aux charges liées à leurs fonctions. Il lui demande donc les mesures qu 'il compte prendre pour revaloriser le forfait actuel en le portant à 4800 francs, ce qui reviendrait à payer l 'heure supplémentaire à 20 francs. Assurances maladie-mate"
+    }
+  ],
+  "documents": [
+    {
+      "fichier": "2_cri_1964-1965-ordinaire1_021.txt",
+      "nb_mentions": 114
+    },
+    {
+      "fichier": "3_cri_1967-1968-ordinaire1_037.txt",
+      "nb_mentions": 82
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "nb_mentions": 81
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_050.txt",
+      "nb_mentions": 81
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-08-25.txt",
+      "nb_mentions": 79
+    },
+    {
+      "fichier": "4_cri_1968-1969-ordinaire1_050.txt",
+      "nb_mentions": 76
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_035.txt",
+      "nb_mentions": 73
+    },
+    {
+      "fichier": "4_cri_1972-1973-ordinaire1_045.txt",
+      "nb_mentions": 68
+    },
+    {
+      "fichier": "4_cri_1969-1970-ordinaire1_033.txt",
+      "nb_mentions": 62
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_090.txt",
+      "nb_mentions": 59
+    },
+    {
+      "fichier": "4_cri_1970-1971-ordinaire1_023.txt",
+      "nb_mentions": 58
+    },
+    {
+      "fichier": "4_cri_1971-1972-ordinaire1_024.txt",
+      "nb_mentions": 58
+    },
+    {
+      "fichier": "7_cri_1983-1984-ordinaire1_076.txt",
+      "nb_mentions": 58
+    },
+    {
+      "fichier": "7_cri_1983-1984-ordinaire2_008.txt",
+      "nb_mentions": 57
+    },
+    {
+      "fichier": "5_cri_1974-1975-ordinaire1_046.txt",
+      "nb_mentions": 55
+    },
+    {
+      "fichier": "5_cri_1973-1974-ordinaire1_014.txt",
+      "nb_mentions": 50
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_085.txt",
+      "nb_mentions": 50
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "nb_mentions": 48
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "nb_mentions": 46
+    },
+    {
+      "fichier": "4_cri_1969-1970-ordinaire1_050.txt",
+      "nb_mentions": 45
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire2_064.txt",
+      "nb_mentions": 45
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_086.txt",
+      "nb_mentions": 45
+    },
+    {
+      "fichier": "5_cri_1973-1974-ordinaire1_032.txt",
+      "nb_mentions": 44
+    },
+    {
+      "fichier": "7_cri_1981-1982-ordinaire1_070.txt",
+      "nb_mentions": 41
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_076.txt",
+      "nb_mentions": 40
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "nb_mentions": 40
+    },
+    {
+      "fichier": "2_cri_1966-1967-ordinaire1_021.txt",
+      "nb_mentions": 39
+    },
+    {
+      "fichier": "4_qst_4-qst-1969-08-23.txt",
+      "nb_mentions": 36
+    },
+    {
+      "fichier": "7_cri_1981-1982-extraordinaire4_014.txt",
+      "nb_mentions": 36
+    },
+    {
+      "fichier": "4_cri_1971-1972-ordinaire1_067.txt",
+      "nb_mentions": 35
+    },
+    {
+      "fichier": "8_cri_1987-1988-ordinaire1_025.txt",
+      "nb_mentions": 35
+    },
+    {
+      "fichier": "5_qst_5-qst-1974-04-27.txt",
+      "nb_mentions": 33
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_025.txt",
+      "nb_mentions": 33
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_039.txt",
+      "nb_mentions": 33
+    },
+    {
+      "fichier": "8_tnominative_1986_tnominative_AZ.txt",
+      "nb_mentions": 33
+    },
+    {
+      "fichier": "5_cri_1974-1975-ordinaire1_047.txt",
+      "nb_mentions": 31
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_057.txt",
+      "nb_mentions": 30
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_087.txt",
+      "nb_mentions": 30
+    },
+    {
+      "fichier": "7_cri_1982-1983-ordinaire1_057.txt",
+      "nb_mentions": 29
+    },
+    {
+      "fichier": "2_cri_1964-1965-ordinaire1_022.txt",
+      "nb_mentions": 28
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-09-08.txt",
+      "nb_mentions": 28
+    },
+    {
+      "fichier": "4_qst_4-qst-1972-07-29.txt",
+      "nb_mentions": 27
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_061.txt",
+      "nb_mentions": 27
+    },
+    {
+      "fichier": "5_qst_5-qst-1975-07-19.txt",
+      "nb_mentions": 27
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_032.txt",
+      "nb_mentions": 27
+    },
+    {
+      "fichier": "4_cri_1971-1972-ordinaire2_038.txt",
+      "nb_mentions": 26
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire2_086.txt",
+      "nb_mentions": 25
+    },
+    {
+      "fichier": "9_tanalytique_1990_tmatieres_AV.txt",
+      "nb_mentions": 25
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "nb_mentions": 24
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire2_051.txt",
+      "nb_mentions": 22
+    }
+  ]
+}
