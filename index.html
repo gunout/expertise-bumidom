@@ -207,6 +207,7 @@
   <button data-tab="nlp">🔬 NLP</button>
   <button data-tab="docs">📄 Documents</button>
   <button data-tab="reunion">🏝️ Réunion</button>
+  <button data-tab="antilles">🌴 Antilles</button>
 </div>
 
 <div id="message" class="message">⏳ Chargement…</div>
@@ -393,8 +394,15 @@ Promise.all([
   fetch('reunion/orateurs_reunion.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
   fetch('reunion/dates_reunion.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
   fetch('reunion/mentions_reunion.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('antilles/antilles.json').then(r=>r.ok?r.json():null).catch(()=>null),
+  fetch('antilles/chiffres_antilles.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('antilles/lieux_antilles.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('antilles/orateurs_antilles.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('antilles/dates_antilles.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
+  fetch('antilles/mentions_antilles.csv').then(r=>r.ok?r.text():'').then(parseCSV).catch(()=>[]),
 ]).then(([data, nlp, chrono, cooc, senti, reseau, chronoExp, effectifs, montants,
-          reunionJson, reunionChiffres, reunionLieux, reunionOrateurs, reunionDates, reunionMentions])=>{
+          reunionJson, reunionChiffres, reunionLieux, reunionOrateurs, reunionDates, reunionMentions,
+          antillesJson, antillesChiffres, antillesLieux, antillesOrateurs, antillesDates, antillesMentions])=>{
   if(!data){ throw new Error('resultats_enrichis.json introuvable'); }
   ALL_DOCS = data.results || [];
   DOCS = ALL_DOCS;
@@ -408,6 +416,14 @@ Promise.all([
             orateurs: reunionOrateurs || [],
             dates: reunionDates || [],
             mentions: reunionMentions || []
+          },
+          antilles: {
+            json: antillesJson || {},
+            chiffres: antillesChiffres || [],
+            lieux: antillesLieux || [],
+            orateurs: antillesOrateurs || [],
+            dates: antillesDates || [],
+            mentions: antillesMentions || []
           } };
 
   document.getElementById('message').style.display='none';
@@ -625,6 +641,7 @@ function dessinerOngletActif(){
     if(actif === 'nlp') dessinerNLP();
     if(actif === 'docs') dessinerDocs();
     if(actif === 'reunion') dessinerReunion();
+    if(actif === 'antilles') dessinerAntilles();
   } catch(e) {
     console.error('Erreur dessin:', e);
   }
@@ -1326,6 +1343,95 @@ function dessinerReunion(){
   const container = document.getElementById('r-liste-mentions');
   if(container){
     container.innerHTML = R.mentions.slice(0,100).map(m=>`
+      <div class="doc">
+        <div class="doc-header" style="cursor:default">
+          <span class="badge badge-cri">📄</span>
+          <span class="titre">${esc((m.fichier||'').substring(0,50))}</span>
+        </div>
+        <div style="padding:0 16px 12px 16px">
+          <div class="extrait">${esc(m.contexte||'')}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+// ============================================================
+// ONGLET ANTILLES
+// ============================================================
+function dessinerAntilles(){
+  const A = CSV.antilles || {};
+  if(!A.json || !A.chiffres){ 
+    console.warn('Données Antilles manquantes');
+    return;
+  }
+
+  // Compteurs
+  const cChiffres = document.getElementById('a-c-chiffres');
+  const cLieux = document.getElementById('a-c-lieux');
+  const cOrateurs = document.getElementById('a-c-orateurs');
+  const cDates = document.getElementById('a-c-dates');
+  if(cChiffres) cChiffres.textContent = A.chiffres.length + ' chiffres';
+  if(cLieux) cLieux.textContent = A.lieux.length + ' lieux';
+  if(cOrateurs) cOrateurs.textContent = A.orateurs.length + ' orateurs';
+  if(cDates) cDates.textContent = A.dates.length + ' dates';
+
+  // Graphique chiffres
+  const topC = A.chiffres.filter(c=>num(c.valeur) > 100)
+                        .sort((a,b)=>num(b.valeur)-num(a.valeur)).slice(0,20);
+  safePlot('a-viz-chiffres', [{
+    x: topC.map(c=>num(c.valeur)),
+    y: topC.map(c=>(c.fichier||'').substring(0,25)),
+    type:'bar', orientation:'h', marker:{color:'#000091'},
+    customdata: topC.map(c=>c.unite),
+    hovertemplate:'<b>%{y}</b><br>%{x:,} %{customdata}<extra></extra>'
+  }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:20,b:40,l:200}});
+
+  // Graphique lieux
+  const topL = A.lieux.slice(0,15);
+  safePlot('a-viz-lieux', [{
+    x: topL.map(l=>num(l.mentions)),
+    y: topL.map(l=>l.lieu),
+    type:'bar', orientation:'h', marker:{color:'#E1000F'},
+    hovertemplate:'<b>%{y}</b><br>%{x} mentions<extra></extra>'
+  }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:20,b:40,l:180}});
+
+  // Graphique orateurs
+  const topO = A.orateurs.slice(0,15);
+  safePlot('a-viz-orateurs', [{
+    x: topO.map(o=>num(o.mentions)),
+    y: topO.map(o=>o.orateur),
+    type:'bar', orientation:'h', marker:{color:'#1b7a2e'},
+    hovertemplate:'<b>%{y}</b><br>%{x} mentions<extra></extra>'
+  }], {...LAYOUT, yaxis:{autorange:'reversed'}, margin:{t:20,r:20,b:40,l:180}});
+
+  // Graphique dates
+  const topD = A.dates.slice(0,20);
+  safePlot('a-viz-dates', [{
+    x: topD.map(d=>d.date),
+    y: topD.map(d=>num(d.mentions)),
+    type:'bar', marker:{color:'#1212ff'},
+    hovertemplate:'<b>%{x}</b><br>%{y} mentions<extra></extra>'
+  }], {...LAYOUT, xaxis:{tickangle:-45, tickfont:{size:9}}});
+
+  // Tableau chiffres
+  tabInteractif('a-tab-chiffres', A.chiffres.slice(0,200), [
+    {k:'valeur', l:'Valeur', num:true},
+    {k:'unite', l:'Unité'},
+    {k:'fichier', l:'Fichier'},
+    {k:'contexte', l:'Contexte', ctx:true}
+  ], 'valeur');
+
+  // Tableau lieux
+  tabInteractif('a-tab-lieux', A.lieux, [
+    {k:'lieu', l:'Lieu'},
+    {k:'mentions', l:'Mentions', num:true}
+  ], 'mentions');
+
+  // Liste mentions
+  const container = document.getElementById('a-liste-mentions');
+  if(container){
+    container.innerHTML = A.mentions.slice(0,100).map(m=>`
       <div class="doc">
         <div class="doc-header" style="cursor:default">
           <span class="badge badge-cri">📄</span>

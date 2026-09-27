@@ -1,0 +1,1067 @@
+{
+  "total_documents": 88,
+  "total_mentions": 250,
+  "total_chiffres": 181,
+  "top_orateurs": [
+    [
+      "M. Victor Sablé",
+      101
+    ],
+    [
+      "M. Aimé Césaire",
+      72
+    ],
+    [
+      "M. Ernest Moutoussamy",
+      64
+    ],
+    [
+      "M. Louis Le Pensec",
+      15
+    ]
+  ],
+  "top_lieux": [
+    [
+      "Guadeloupe",
+      992
+    ],
+    [
+      "Guyane",
+      783
+    ],
+    [
+      "Martinique",
+      681
+    ],
+    [
+      "Saint-Pierre",
+      323
+    ],
+    [
+      "Guyanais",
+      177
+    ],
+    [
+      "Guadeloupéen",
+      132
+    ],
+    [
+      "Guadeloupeen",
+      132
+    ],
+    [
+      "Martiniquais",
+      112
+    ],
+    [
+      "Pointe-À-Pitre",
+      110
+    ],
+    [
+      "Basse-Terre",
+      69
+    ],
+    [
+      "Fort-De-France",
+      63
+    ],
+    [
+      "Guyanaise",
+      46
+    ],
+    [
+      "Cayenne",
+      40
+    ],
+    [
+      "Kourou",
+      40
+    ],
+    [
+      "Saint-Martin",
+      36
+    ],
+    [
+      "Martiniquaise",
+      35
+    ],
+    [
+      "Guadeloupéenne",
+      32
+    ],
+    [
+      "Schoelcher",
+      14
+    ],
+    [
+      "Maroni",
+      10
+    ],
+    [
+      "Sainte-Anne",
+      9
+    ],
+    [
+      "Saint-Barthélemy",
+      5
+    ],
+    [
+      "La Trinité",
+      3
+    ],
+    [
+      "La Trinite",
+      3
+    ],
+    [
+      "Saint-Laurent-Du-Maroni",
+      2
+    ],
+    [
+      "Le Robert",
+      1
+    ],
+    [
+      "Fort De France",
+      1
+    ],
+    [
+      "Basse Terre",
+      1
+    ],
+    [
+      "Le François",
+      1
+    ],
+    [
+      "Le Francois",
+      1
+    ]
+  ],
+  "top_dates": [
+    [
+      "7 avril 1967",
+      13
+    ],
+    [
+      "2 avril 1986",
+      13
+    ],
+    [
+      "13 NOVEMBRE 1975",
+      12
+    ],
+    [
+      "19 NOVEMBRE 1976",
+      12
+    ],
+    [
+      "26 OCTOBRE 1971",
+      11
+    ],
+    [
+      "9 mai 1967",
+      10
+    ],
+    [
+      "15 octobre 1960",
+      9
+    ],
+    [
+      "19 mars 1946",
+      8
+    ],
+    [
+      "26 OCTOBRE 1970",
+      8
+    ],
+    [
+      "7 novembre 1958",
+      7
+    ],
+    [
+      "12 juin 1973",
+      7
+    ],
+    [
+      "31 OCTOBRE 1979",
+      7
+    ],
+    [
+      "30 SEPTEMBRE 1982",
+      7
+    ],
+    [
+      "26 NOVEMBRE 1986",
+      7
+    ],
+    [
+      "11 mars 1973",
+      6
+    ],
+    [
+      "13 NOVEMBRE 1974",
+      6
+    ],
+    [
+      "11 JUIN 1980",
+      6
+    ],
+    [
+      "27 NOVEMBRE 1986",
+      6
+    ],
+    [
+      "13 NOVEMBRE 1972",
+      5
+    ],
+    [
+      "11 mai 1981",
+      5
+    ],
+    [
+      "2 mars 1982",
+      5
+    ],
+    [
+      "25 NOVEMBRE 1988",
+      5
+    ],
+    [
+      "21 OCTOBRE 1987",
+      5
+    ],
+    [
+      "17 juin 1986",
+      5
+    ],
+    [
+      "26 avril 1960",
+      4
+    ],
+    [
+      "2 août 1961",
+      4
+    ],
+    [
+      "24 septembre 1967",
+      4
+    ],
+    [
+      "19 novembre 1971",
+      4
+    ],
+    [
+      "26 OCTOBRE 1973",
+      4
+    ],
+    [
+      "25 OCTOBRE 1973",
+      4
+    ]
+  ],
+  "chiffres_cles": [
+    {
+      "fichier": "7_cri_1981-1982-ordinaire1_070.txt",
+      "valeur": 90699000.0,
+      "unite": "francs",
+      "contexte": "le 3218 ASSEMBLEE NATIONALE — 2• SEANCE DU 5 NOVEMBRE 1981 TITRE VI. — SUBVENTIONS D ' INVESTISSEMENT ACCORDÉES PAR L'ETAT e Autorisations de programme : 279 600 000 francs ; e Crédits de paiement : 90 699 000 francs . s Sur le titre IV de l'état B, 11IM. Bertile, Jalton et les membres du groupe soc"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 53258000.0,
+      "unite": "francs",
+      "contexte": "AR L ' ETAT Autorisations de programme : 799 000 francs. » TITRE VI . — SUBVENTIONS D ' INVESTISSEMENT ACCORDÉES PAR L'ETAT s Autorisations de programme : 262 693 000 francs ; e Crédits de paiement : 53 258 000 francs. e MM. Alain Vivien, Frêche, Césaire, Jalton, Houteer, Boulay et les membres du gr"
+    },
+    {
+      "fichier": "7_cri_1983-1984-ordinaire1_076.txt",
+      "valeur": 32125000.0,
+      "unite": "francs",
+      "contexte": "econd degré avaient fait l'objet, en 1983, d'une décision d'annulation de 25 p . 100. Les 47 millions de francs initialement inscrits dans la loi de finances ont été ramenés, en fin d'exer- :•'.ce, à 32 125 000 francs pour la Guadeloupe. L'enseignement primaire a été victime de la même pénurie. A la"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire2_051.txt",
+      "valeur": 8640000.0,
+      "unite": "francs",
+      "contexte": "ndant à l'irrigation du premier périmètre. Le total des crédits d'hydraulique arrêté pour l'année 1977 en autorisations de programme — leur mise en mu ge va donc intervenir dès maintenant — s'élève à 8 640 000 francs dont :3 500 000 francs proviennent du F. 1. D . O. M. Cette œuvre considérable, qui"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire2_035.txt",
+      "valeur": 8420000.0,
+      "unite": "francs",
+      "contexte": "avaux publics supplémentaires, notam- ment en faveur des collectivités locales. Ces crédits, qui étaient de 5 900 000 francs en 1973 pour la Martinique, ont été portés à 7 300 000 francs en 1974 et à 8 420 000 francs en 1975 . Pour 1976, le préfet a déjà reçu une délégation de e-édits de 7 170 000 f"
+    },
+    {
+      "fichier": "7_cri_1981-1982-ordinaire1_070.txt",
+      "valeur": 7750000.0,
+      "unite": "francs",
+      "contexte": "its de paiement : 90 699 000 francs . s Sur le titre IV de l'état B, 11IM. Bertile, Jalton et les membres du groupe socialiste ont présenté un amendement, n\" 71, ainsi rédigé s Réduire les crédits de 7 750 000 francs . a La parole est à M . Bertile. M. Wilfrid Bertile . Ainsi que je l'ai souligné da"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire2_035.txt",
+      "valeur": 7300000.0,
+      "unite": "francs",
+      "contexte": "et permet la réalisation de travaux publics supplémentaires, notam- ment en faveur des collectivités locales. Ces crédits, qui étaient de 5 900 000 francs en 1973 pour la Martinique, ont été portés à 7 300 000 francs en 1974 et à 8 420 000 francs en 1975 . Pour 1976, le préfet a déjà reçu une déléga"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire2_035.txt",
+      "valeur": 7170000.0,
+      "unite": "francs",
+      "contexte": "ts, qui étaient de 5 900 000 francs en 1973 pour la Martinique, ont été portés à 7 300 000 francs en 1974 et à 8 420 000 francs en 1975 . Pour 1976, le préfet a déjà reçu une délégation de e-édits de 7 170 000 francs. En raison des difficultés de la situation actuelle, et pour permettre la rémunérat"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_057.txt",
+      "valeur": 6400000.0,
+      "unite": "francs",
+      "contexte": "rogramme quinquennal d'élevage bovin est, depuis peu . appliqué en Guadeloupe, tandis qu'un autre est à l'étude pour la Martinique. Le F. O. R. M. A. a déjà participé au financement i: concurrence de 6 400 000 francs. Des programmes d'investissement sont, par ailleurs . en cours pour le développemen"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire2_035.txt",
+      "valeur": 5900000.0,
+      "unite": "francs",
+      "contexte": "tendre. Cette aide constitue un salaire et non une allocation et permet la réalisation de travaux publics supplémentaires, notam- ment en faveur des collectivités locales. Ces crédits, qui étaient de 5 900 000 francs en 1973 pour la Martinique, ont été portés à 7 300 000 francs en 1974 et à 8 420 00"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "valeur": 5000110.0,
+      "unite": "francs",
+      "contexte": "nclu :aux rli•,,o'temcnts d 'ou're-nu•r. Dans une prenueur approche . cela parai! tort logi- que. Toutefois, nos predéceseurs n 'avaient pas juge ainsi . Sur les ( plaire année; 1977-19811 5 million, 5000110 francs en moyenne ont i i i• con-acres à la risorptiuu de l'habitat insalubre . l'o :npa- re"
+    },
+    {
+      "fichier": "7_cri_1983-1984-ordinaire1_076.txt",
+      "valeur": 4537460.0,
+      "unite": "francs",
+      "contexte": "nes et sont financés par la délégation générale d'équipement . Malheureusement les trans- ferts financiers aux communes n'ont pas suivi. A cet égard les chiffres sont éloquents : en 1982 ene somme de 4 537 460 francs était inscrite au budget pour les construc tiens du premier degré en Guadeloupe ; e"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire2_051.txt",
+      "valeur": 3500000.0,
+      "unite": "francs",
+      "contexte": "premier périmètre. Le total des crédits d'hydraulique arrêté pour l'année 1977 en autorisations de programme — leur mise en mu ge va donc intervenir dès maintenant — s'élève à 8 640 000 francs dont :3 500 000 francs proviennent du F. 1. D . O. M. Cette œuvre considérable, qui est appelée à développe"
+    },
+    {
+      "fichier": "7_cri_1983-1984-ordinaire1_076.txt",
+      "valeur": 2617600.0,
+      "unite": "francs",
+      "contexte": "t égard les chiffres sont éloquents : en 1982 ene somme de 4 537 460 francs était inscrite au budget pour les construc tiens du premier degré en Guadeloupe ; en 1983 l'inscription n'était plus que de 2 617 600 francs en autorisations de pro . gramme, soit une réduction de près de 50 p . 100, et aucu"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_039.txt",
+      "valeur": 2600000.0,
+      "unite": "francs",
+      "contexte": "de la mer participera à l'extension du port de Larivot pour une dépense d'un montant de 5 millions de francs. En ce qui concerne l'éducation, nous avions en 1981 — budget de gouvernement de droite -- 2 600 000 francs pour l'ensemble des équipements scolaires, premier et second degrés . Nous sommes p"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 2543819.0,
+      "unite": "francs",
+      "contexte": "tatut des Comores et de Saint-Pierre-et- Miquelon entraîne une économie globale de 34349455 francs. Une augmentation de 500 000 francs fait passer la subvention du budget local de Wallis et Futuna de 2 543 819 francs à plus de 3 millions de francs, soit une hausse supérieure à 20 p . 100. Quant à la"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire2_035.txt",
+      "valeur": 1500000.0,
+      "unite": "francs",
+      "contexte": "e-édits de 7 170 000 francs. En raison des difficultés de la situation actuelle, et pour permettre la rémunération des travailleurs qui seraient éventuel- lement licenciés, un crédit exceptionnel de 1 500 000 francs vient de lui être délégué par le ministre du travail, à la demande du secrétaire d'E"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 811750.0,
+      "unite": "francs",
+      "contexte": "outeer, Boulay et les membres du groupe du parti socialiste et des radicaux de gauche et apparentés ont présenté un amendement n\" 271 ainsi rédigé : e Au titre III de l'état B, réduire les crédits de 811 750 francs. La parole est à M. Alain Vivien. M . Alain Vivien. Mes chers collègues, le projet de"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "valeur": 800000.0,
+      "unite": "francs",
+      "contexte": "s 'ajouter l'entretien, l 'amélioration et le renouvelle- ment du parc existant. Or, pour faire face à ces besoins . la Guadeloupe n 'a disposé que de 715 millions de francs en 1982, de 122 millions 800 000 francs e-n 1983 et de 129 millions 600 000 francs en 1984. Ces enveloppes bien faibles, eu ég"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 754000.0,
+      "unite": "habitants",
+      "contexte": "habitants. ce qui exclut toute économie d'autoconsommation. Nous en mourrons.. de ce sous-peuplement. D'autre part, quand on fait la comparaison avec la Guyane anglaise . l'actuelle Guyana, avec ses 754 000 habitants, ou avec la Guyane hollandaise, devenue le Surinam, peuplée de 419 000 habitants. o"
+    },
+    {
+      "fichier": "5_cri_1974-1975-ordinaire1_046.txt",
+      "valeur": 700000.0,
+      "unite": "francs",
+      "contexte": "destinée à la section locale du F. I. D. O. M. — fonds d'investissement des départe- ments d'outre-mer — diminuait de 900 000 francs tandis que celle qui alimente la section centrale s'accroissait de 700 000 francs. Mais, par un amendement n\" 149, le Gouvernement a réduit à néant cette critique en m"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 700000.0,
+      "unite": "francs",
+      "contexte": "e volume des investissements ne s'est pas ralenti . Pour les deux dernières années, les subventions du F . I. D. O. M. se sont élevées à 17 millions 400 000 francs pour la Martinique, à 27 mil- lions 700 000 francs pour la Guadeloupe . Mais la conception qui a prévalu, privilégiant les hôtels de hau"
+    },
+    {
+      "fichier": "7_cri_1982-1983-ordinaire1_057.txt",
+      "valeur": 600000.0,
+      "unite": "francs",
+      "contexte": ". M. Marcel Esdras . Mais je le suis ! M. Henri Emmanuelli, secrétaire d'Etat . ... ou vous ne les _ .rivez pas, et ce n'est pas ma faute. M. Marcel Esdras. En tout cas, il n'est pas fait mention des 600 000 francs dans votre lettre ! 6812 ASSEMBLEE NATIONALE — 3\" M. Henri Emmanuelli, secrétaire d'E"
+    },
+    {
+      "fichier": "7_cri_1982-1983-ordinaire1_057.txt",
+      "valeur": 600000.0,
+      "unite": "francs",
+      "contexte": "e prenne une fois pour toutes position sur ce sujet. Une remarque identique vaut pour M . Jalton auquel je confirme que l'Elat ne renie en rien l'engagement qu'il a pris de parti- ciper, à hauteur de 600 000 francs, au capital de la société d'éco- nomie mixte . Mais je constate, là aussi, que de ter"
+    },
+    {
+      "fichier": "7_cri_1982-1983-ordinaire1_057.txt",
+      "valeur": 600000.0,
+      "unite": "francs",
+      "contexte": "de cette situation . Je n'ai pas changé d'avis : je suis toujours prêt à acquiescer au choix du conseil général de la Martinique, lorsque je saurai enfin ce qu'il est . Je suis toujours prêt à verser 600 000 francs au capital de la société d'économie mixte de l'usine de Beauport lorsque l'on me dira"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "valeur": 600000.0,
+      "unite": "francs",
+      "contexte": "le renouvelle- ment du parc existant. Or, pour faire face à ces besoins . la Guadeloupe n 'a disposé que de 715 millions de francs en 1982, de 122 millions 800 000 francs e-n 1983 et de 129 millions 600 000 francs en 1984. Ces enveloppes bien faibles, eu égard aux besoins, n'ont permis de réaliser q"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 500000.0,
+      "unite": "francs",
+      "contexte": "étail de ce chapitre figure à la page 23 du «bleu budgétaire. Le changement de statut des Comores et de Saint-Pierre-et- Miquelon entraîne une économie globale de 34349455 francs. Une augmentation de 500 000 francs fait passer la subvention du budget local de Wallis et Futuna de 2 543 819 francs à p"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "valeur": 500000.0,
+      "unite": "francs",
+      "contexte": "t i i i• con-acres à la risorptiuu de l'habitat insalubre . l'o :npa- re•z aiee la nnr.c'na des qu,i!re années 19811954 : tubs tic•rotu crises une augmentation de 230 p . 10(1, soit d, . 18 initiions 500 000 francs. Par exemple, à l 'occa.iun du dernier comité interministériel des t ;l,es . pri•si;l"
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_090.txt",
+      "valeur": 500000.0,
+      "unite": "Antillais",
+      "contexte": "sident . Vous serait-il possible de conclure, mon- sieur le député 7 M . Michel Debré . . . . il est plus faible pour les originaires d'outre-mer en métropole que dans leur propre département. Si les 500 000 Antillais et le 120 000 Réunionnais qui sont en métropole étaient restés chez eux, comme vou"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire2_067.txt",
+      "valeur": 450000.0,
+      "unite": "personnes",
+      "contexte": "ts sta- tistiques dont nous disposons ne brillent pas par leur exactitude. Je souhaite que l'Institut national de la statistique et des études économiques fasse un effort sérieux dans ce domaine. Ces 450000 personnes, tout en étant remarquablement inté- grées dans l'ensemble français auquel elles ap"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 432834.0,
+      "unite": "francs",
+      "contexte": "ploitations agricoles dans les départements d'outremer. Enfin, la commission de la production, à l'initiative de Didier Julia, a adopté un amendement réduisant le montant des mesures nouvelles — soit 432 834 francs — la dotation du chapitre 31-01, relatif aux rémunérations principales de la directio"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 419000.0,
+      "unite": "habitants",
+      "contexte": "e ce sous-peuplement. D'autre part, quand on fait la comparaison avec la Guyane anglaise . l'actuelle Guyana, avec ses 754 000 habitants, ou avec la Guyane hollandaise, devenue le Surinam, peuplée de 419 000 habitants. on comprend la nécessité d'un peuplement pour le développement économique de la G"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 400000.0,
+      "unite": "francs",
+      "contexte": "maine du tourisme, et malgré la crise économique, le volume des investissements ne s'est pas ralenti . Pour les deux dernières années, les subventions du F . I. D. O. M. se sont élevées à 17 millions 400 000 francs pour la Martinique, à 27 mil- lions 700 000 francs pour la Guadeloupe . Mais la conce"
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_086.txt",
+      "valeur": 328000.0,
+      "unite": "habitants",
+      "contexte": "qui s'imaginaient que• la Nouvelle-Calédonie connaissait un problème foncier avec 19 000 ou 20 000 kilomètres carrés pour 140 000 habitants 1 La Guadeloupe, c'est 1 780 kilomètres carrés pour plus de 328 000 habitants ! On . savait, messieurs, que vous ne saviez pas grand-chose 1 Mais de là à ne mêm"
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_086.txt",
+      "valeur": 327076.0,
+      "unite": "habitants",
+      "contexte": "des jeunes en métropole. • 8770 ASSEMBLEE NATIONALE - 2• SEANCE DU 25 NOVEMBRE 1986 M . Frédéric Jalton . Il a eu raison 1 M . Jean Maran. En 1984, alors que la population de la Martinique était de 327 076 habitants, il y a eu 5 715 nais- sances et 2 072 décès, soit un solde positif de 3 643 per- so"
+    },
+    {
+      "fichier": "7_cri_1981-1982-ordinaire1_070.txt",
+      "valeur": 318000.0,
+      "unite": "habitants",
+      "contexte": "élevé et aux conditions d'exploitation du transport aérien. Cette détérioration de l'économie locale a eu pour consé- quence une situation dramatique de l'emploi. En Guadeloupe, sur une population de 318 000 habitants, comptant 110 C00 actifs, on dénombre plus de 25 p . 100 de chômeurs. Avec ses 27 "
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire2_064.txt",
+      "valeur": 313405.0,
+      "unite": "Guadeloupéens",
+      "contexte": "rd. Cela explique le cloute de nos popu- lations. doute qui, malheureusement mais avec raison, ee trans- forme quelquefois en mécontentement. Comment expliquer, par exemple, que sur une population de 313 405 Guadeloupéens, 12 559 représentant 12 p . 100 de la population active et 20 p . 100 rte la p"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 143000.0,
+      "unite": "francs",
+      "contexte": "de bateaux ; le département, de son côté, prendra des mesures d'incitation pour l'hôtellerie . Quant à la prime d'intempéries, réclamée par M. Gabriel, elle vient d'être accordée et son mon- tant est 143 000 francs. Interpêches a déjà bénéficié d'aides importantes de l'Etat et je suis tout particuli"
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_086.txt",
+      "valeur": 140000.0,
+      "unite": "habitants",
+      "contexte": ". M. Alain Chénard . Camarades ? Pas pour vous ! M. Jean-Claude Martinet. ... qui s'imaginaient que• la Nouvelle-Calédonie connaissait un problème foncier avec 19 000 ou 20 000 kilomètres carrés pour 140 000 habitants 1 La Guadeloupe, c'est 1 780 kilomètres carrés pour plus de 328 000 habitants ! On"
+    },
+    {
+      "fichier": "5_cri_1974-1975-ordinaire1_047.txt",
+      "valeur": 121000.0,
+      "unite": "personnes",
+      "contexte": "1965, contre 9,4 p. 100 en 1970. Tout' cela se traduit par un intolérable gâchis des forces productives humaines. Le chômage est devenu une plaie béante. En Guadeloupe, d'après l'I. N. S. E. E., sur 121 000 personnes aptes au travail, 30 000 sont au chômage complet, soit 24,8 p. 100, et 47 000 en ét"
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_035.txt",
+      "valeur": 120000.0,
+      "unite": "jeunes",
+      "contexte": "mélioration à la situation de l'enseignement. Pourtant, le retard du système éducatif est patent, avec 13 000 enfants scola- risés en classes maternelles ou enfantines pour une population scolaire de 120000 jeunes . Il manque une centaine d'écoles maternelles de quatre à cinq classes chacune pour pe"
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_035.txt",
+      "valeur": 100000.0,
+      "unite": "habitants",
+      "contexte": "ances de moins. Et il faut aussi tenir compte de l'émigration, dont je m'étonne qu'on ait pu faire récemment l'éloge dans un grand journal du soir. A cette cadence, en l'an 2000, la Marti- nique aura 100 000 habitants de moins qu'aujourd 'hui. Bravo, avez-vous dit tout à l'heure... M. Olivier Stirn,"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_039.txt",
+      "valeur": 100000.0,
+      "unite": "jeunes",
+      "contexte": "productives, et notamment de la canne à sucre, accentuation de la dépendance, about« d'investissement, chute vertigineuse du taux de couverture des exportations par les importations, expatriation de 100 000 jeunes ... Bref, ceux qui, comme moi, ont applaudi à la victoire de là gauche en mal-juin 198"
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_086.txt",
+      "valeur": 81000.0,
+      "unite": "habitants",
+      "contexte": "e Hatti, du Brésil, du Surinam, de Guyana ou de -Sainte-Lucie l N'oublions pas non plus que la Guyane est un territoire vide, de 90 000 kilomètres carrés : un sixième de la France métropolitaine pour 81 000 habitants, dont les . deux tiers vivent à Cayenne. Quand 1 500 Laotiens Muongs fuyant l'ex- t"
+    },
+    {
+      "fichier": "7_cri_1981-1982-extraordinaire4_014.txt",
+      "valeur": 76000.0,
+      "unite": "habitants",
+      "contexte": "en évidence la spécificité de la Guyane, qui ne peut être comparée ni aux départements métropolitains, ni aux autres départements insulaires : super- ficie de 90 000 kilomètres carrés, population de 76 000 habitants, double isolement par rapport à la métropole, distante de 9 000 kilomètres, et par r"
+    },
+    {
+      "fichier": "7_cri_1981-1982-extraordinaire4_014.txt",
+      "valeur": 75000.0,
+      "unite": "habitants",
+      "contexte": "talisation a aussi été concrétisée par l'arrivée massive des- étrangers dans notre région sans que les pouvoirs publics en place n'aient prie des mesures pour éviter le génocide par substitution. Sur 75 000 habitants, oui trouve 20 000 étrangers dont 15 000 Haï- tiens. A ce rythme d'entrée, dans deu"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "valeur": 72000.0,
+      "unite": "personnes",
+      "contexte": "août, à la suite de tremblements de terre nombreux et angoissants, le préfet, après avis des scientifiques, organisait l'évacuation totale de la zone en déclenchant l'alerte n\" 2 du plan Orsec. Alors 72 000 personnes quittaient maisons, terres, biens, ani- maux, travail pour sauvegarder leur vie. Le"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire2_051.txt",
+      "valeur": 70000.0,
+      "unite": "francs",
+      "contexte": "minore systématiquement le coût des navires P .C .S. — 135 millions ds francs l'unité au lieu de 220 millions ; des conteneurs Conair — 25000 francs au lieu de 45000 francs pour « un vingt pieds s et 70 000 francs pour a un quarante pieds s ; des centres de regroupement et d'em- potage des bananes a"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire2_051.txt",
+      "valeur": 70000.0,
+      "unite": "francs",
+      "contexte": "Dans le scénario avec e conteneurisation » sur quinze Ans, on doit en effet compter un minimum de 2,2 jeux de conte- neurs par navire, soit 16 000 conteneurs en 1985 dont un tiers de quarante pieds à 70 000 francs et deux tiers de vingt pieds à 45000 francs pour un total de plus de 850 millions de f"
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_035.txt",
+      "valeur": 60000.0,
+      "unite": "personnes",
+      "contexte": ". Après les éruptions de la Soufrière et les événements qui en ont découlé, il s'agit là d'un coup dur porté à la région basse-ter.'enne. On a estime que cette mesure frap- pera, à des degrés divers, 60 000 personnes à la Guadeloupe. Ici encore, l'avis des technologues et la recherche par les compag"
+    },
+    {
+      "fichier": "7_cri_1982-1983-ordinaire1_057.txt",
+      "valeur": 60000.0,
+      "unite": "Guyanais",
+      "contexte": "t s'établissent à moins de 95 millions de francs, et ce pour 55 000 Mahorais. A titre de comparaison, j'indique que les 6 000 habitants de Saint-Picrre- et-Miquelon reçoivent 62 p. 100 de plus et les 60 000 Guyanais neuf fois plus — ce qui ne signifie nullement, je l'indique à M. Pen, que je trouve "
+    },
+    {
+      "fichier": "8_cri_1985-1986-extraordinaire1_015.txt",
+      "valeur": 60000.0,
+      "unite": "habitants",
+      "contexte": "nh massacre à coup de gaz toxiques. Ce sont les socialistes de Guyane qui ont refusé leur entrée, alors que ces Méos, en Guyane, sont les seuls qui travaillent ! Je vous rappelle que la Guyane compte 60 000 habitants, pour une surface équivalant à celle de huit départements français. C 'est un pays "
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_035.txt",
+      "valeur": 54500.0,
+      "unite": "personnes",
+      "contexte": "ollègues Ibéné et Césaire viennent d'en fournir des exemples éloquents. Le chômage sévit de plus en plus, bien que les forces vives soient dirigées vers la métropole. Ainsi, la Martinique a vu partir 54500 personnes en dix ans, soit 17 p. 100 de la popula- tion du pays, ce qui, ramené à la populatio"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 50000.0,
+      "unite": "habitants",
+      "contexte": "es, les richesses potentielles, minerais, forêts, agriculture, pêches, sont considérables en Guyane. Mais ce département ,, dont la superficie représente le sixième de la France, et qui ne compte que 50 000 habitants environ, a été scandaleusement maintenu en état de sous- développement par le colon"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 50000.0,
+      "unite": "habitants",
+      "contexte": "ent . Mais, en l'état actuel des choses, on s'en tient à ce dernier aspect : le peuplement est évidemment indispensable en Guyane, si l'on considère que les 90 000 kilo- mètres carrés ne comptent que 50 000 habitants. ce qui exclut toute économie d'autoconsommation. Nous en mourrons.. de ce sous-peu"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 50000.0,
+      "unite": "habitants",
+      "contexte": "nomique de la Guyane française. Vous avez parlé, monsieur le secrétaire d'Etat, de la création de 10 000 emplois en cinq ans . Eeidemment, pareille déclaration a produit un choc sur une population de 50 000 habitants ! Mais la présentation des faits a été telle que les efforts accom- plis en faveur "
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 50000.0,
+      "unite": "habitants",
+      "contexte": "on, car il faut que vous sachiez qu'avant que ies Français ne s'y rendent, cette ile était inhabitée. Et si l'on appliquait votre politique en Nouvelle-Calédonie elle ne compte- rait actuellement que 50 000 habitants. Or, que je sache, la popu- lation métropolitaine qui s'y est rendue il y a quatre-"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_061.txt",
+      "valeur": 50000.0,
+      "unite": "habitants",
+      "contexte": "tités territoriales sont toutes trois carac- térisées par l'importance numérique relativement faible de leur population . - Je vous rappelle, mes chers collègues, que la Guyane et Mayotte ont environ 50 000 habitants . Quant aux Saint-Pierrais et à leurs voisins immédiats, leur nombre ne dépasse pas"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire2_051.txt",
+      "valeur": 45000.0,
+      "unite": "francs",
+      "contexte": "oncurrence. L'étude du C. E. R. L.1. C. minore systématiquement le coût des navires P .C .S. — 135 millions ds francs l'unité au lieu de 220 millions ; des conteneurs Conair — 25000 francs au lieu de 45000 francs pour « un vingt pieds s et 70 000 francs pour a un quarante pieds s ; des centres de re"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire2_051.txt",
+      "valeur": 45000.0,
+      "unite": "francs",
+      "contexte": "r quinze Ans, on doit en effet compter un minimum de 2,2 jeux de conte- neurs par navire, soit 16 000 conteneurs en 1985 dont un tiers de quarante pieds à 70 000 francs et deux tiers de vingt pieds à 45000 francs pour un total de plus de 850 millions de francs. L'investissement en conteneurs est don"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 40000.0,
+      "unite": "personnes",
+      "contexte": "du Gou- vernement. Concernant la pêche et l'aquaculture, des mesures doivent être prises pour encourager la fonction de marin-pêcheur, qui fait vivre actuellement dans les Antilles françaises près de 40 000 personnes. D s'agit essentiellement : de permettre la création d'une flotte moderne de pêche "
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_057.txt",
+      "valeur": 30000.0,
+      "unite": "personnes",
+      "contexte": "ilités . En effet, le plan gouvernemental pré- 8252 ASSEMBLEE NATIONALE — 1\" SEANCE DU 13 NOVEMBRE 1975 voit . e•alement la création de 10 000 emplois en cinq ans, ce qui suppose la venue d 'environ 30000 personnes. Le nombre des candidats, comme on le voit, dépasse dès maintenant large- ment ce chi"
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_048.txt",
+      "valeur": 30000.0,
+      "unite": "francs",
+      "contexte": "ndes réitérées des maires. Ainsi, cette année, les communes d'Abymes, de Petit-Canal, et de Port-Lou's, à la Guadeloupe, pour ne citer que ces trois-là, n'ont rien reçu . En revanche, le préfet a mis 30000 francs à la disposition du maire de Saint-François, commune de 6 000 habitants, et 5 000 franc"
+    },
+    {
+      "fichier": "7_cri_1983-1984-ordinaire1_076.txt",
+      "valeur": 30000.0,
+      "unite": "habitants",
+      "contexte": "toussamy appelait votre attention, monsieur le secrétaire d'Etat, sur les difficultés auxquelles est confrontée l'usine sucrière de Beauport, seule source d'activité dans une région où vivent plus de 30000 habitants. I; soulignait l'importance primordiale de cette indus- trie et de la culture de la "
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_086.txt",
+      "valeur": 30000.0,
+      "unite": "jeunes",
+      "contexte": "a plupart, vous les connaissez. Je me bornerai à rappeler les faits les plus mar- quants. Dans les départements d'outre-mer insulaires, un millier d'emplois a été créé chaque année, alors que plus de 30 000 jeunes arrivent simultanément sur le marché de l'em- ploi. De 1980 à 1985, les demandes d'emp"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire2_051.txt",
+      "valeur": 25000.0,
+      "unite": "francs",
+      "contexte": "onditions actuelles de concurrence. L'étude du C. E. R. L.1. C. minore systématiquement le coût des navires P .C .S. — 135 millions ds francs l'unité au lieu de 220 millions ; des conteneurs Conair — 25000 francs au lieu de 45000 francs pour « un vingt pieds s et 70 000 francs pour a un quarante pie"
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_035.txt",
+      "valeur": 23000.0,
+      "unite": "places",
+      "contexte": "ait qu'il n'existe que trois groupes d'aide psycho-pédagogique pour 100 000 élèves. Quant au premier cycle du second degré, les collèges existants à la rentrée de 1977 n'ont offert qu'une capacité de 23 000 places. Les six noyaux de C. E. S. prévus pour le mois de février 1978 n'ont encore aucun cré"
+    },
+    {
+      "fichier": "7_cri_1981-1982-extraordinaire4_014.txt",
+      "valeur": 21000.0,
+      "unite": "personnes",
+      "contexte": "Malgré ces avantages, la Guyane souffre d'un sous-déve- loppement chronique qui se traduit par l'existence persistante et l'accroissement du chômage . C'est ainsi que, pour une popu- lation active de 21000 personnes, on peut estimer eue le taux de chômage se situe entre 20 et 30 p. 100. La moitié de"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 17000.0,
+      "unite": "francs",
+      "contexte": "e brute des départements d'outre-nier. Celle-ci atteint 3 600 millions de francs en Guadeloupe, ce qui représente 13 000 francs par habitant ; elle est de 5 200 millions de francs en Martinique, soit 17 000 francs par habitant, et de 6 800 millions de francs à la Réunion, c'est-à-dire 13 500 francs "
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 16000.0,
+      "unite": "francs",
+      "contexte": "exécution. Nous avons la volonté de susciter l'implantation d'unités de production artisanale ou de petites industries et de compléter l'effort du Gouvernement qui vient de créer une prime de 8 000 à 16 000 francs. Mais comment augmenter les ressources de la région ? La suppression, proposée en métr"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 16000.0,
+      "unite": "francs",
+      "contexte": "pressément demandés, notamment pour l'agriculture, et, en particulier, pour la banane : consolidation des dettes antérieures, indemnisation immédiate de 8 030 francs l'hectare, prêt complémentaire de 16 000 francs par hectare, maintien des aides du F . O . R. M. A. Je dois souligner, en outre, la si"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 13500.0,
+      "unite": "francs",
+      "contexte": "adeloupe, ce qui représente 13 000 francs par habitant ; elle est de 5 200 millions de francs en Martinique, soit 17 000 francs par habitant, et de 6 800 millions de francs à la Réunion, c'est-à-dire 13 500 francs par habitant. Nos départements sont ainsi beaucoup mieux lotis que les pays dont ils s"
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_048.txt",
+      "valeur": 13000.0,
+      "unite": "habitants",
+      "contexte": "n'ont rien reçu . En revanche, le préfet a mis 30000 francs à la disposition du maire de Saint-François, commune de 6 000 habitants, et 5 000 francs à celle du maire de Saint-Anne, qui compte plus de 13 000 habitants. Ainsi, plus il y a de chô- meurs, moins on reçoit de fonds pour les faire travaill"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 13000.0,
+      "unite": "francs",
+      "contexte": "de. Je veux également vous donner quelques chiffres relatifs à la production intérieure brute des départements d'outre-nier. Celle-ci atteint 3 600 millions de francs en Guadeloupe, ce qui représente 13 000 francs par habitant ; elle est de 5 200 millions de francs en Martinique, soit 17 000 francs "
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 10000.0,
+      "unite": "Antillais",
+      "contexte": "éels de l'économie des Antilles ! Vous avez ensuite formulé deux critiques à l'encontre du plan de développement de la Guyane. En premier lieu, vous affirmez que jamais la Guyane ne pourra accueillir 10 000 Antillais ou Français de métropole . C'est vrai- ment là faire du racisme à rebours ! Je ne v"
+    },
+    {
+      "fichier": "8_cri_1987-1988-ordinaire1_025.txt",
+      "valeur": 10000.0,
+      "unite": "francs",
+      "contexte": "ont considérables. C'est à juste titre que vous vous êtes donné les moyens de les combler grâce à une dotation spéciale au sein de la loi de programme qui engage dEtat pour 750 millions, soit environ 10 000 francs par habi- tant, d'ici à 1992 . Il était de première importance de tenir les engagement"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 8030.0,
+      "unite": "francs",
+      "contexte": "équences de ce sinistre et les ajus- tements expressément demandés, notamment pour l'agriculture, et, en particulier, pour la banane : consolidation des dettes antérieures, indemnisation immédiate de 8 030 francs l'hectare, prêt complémentaire de 16 000 francs par hectare, maintien des aides du F . "
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 8000.0,
+      "unite": "francs",
+      "contexte": "prêts ont été accordés représentant 9 millions de francs, mais d'autres sont attribués jour après jour et, en Guadeloupe, 297 dossiers ont été déposés, le chiffre moyen de l'aide à l'hectare étant de 8 000 francs ; Plages artificielles : 6,6 millions de francs ont été délégués ; Allocations aux trav"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 6000.0,
+      "unite": "travailleurs",
+      "contexte": "ciales, ni aux exigences politiques, ni aux exigences économiques. Le conseil régional de la Réunion a unanimement estimé que 8 000 venues en métropole seraient nécessaires, ce chiffre repré- sentant 6 000 travailleurs et 2 000 regroupements familiaux . Or les crédits prévus ne permettront que 5 000"
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_035.txt",
+      "valeur": 6000.0,
+      "unite": "habitants",
+      "contexte": "le point sur les projets en cours. Le problème posé par Saint-Pierre-et-Miquelon est différent puisqu'il s'agit de l'intégration au régime administratif et social de la métropole d'une population de 6000 habitants, installée dans une île éloignée, et nécessairement tributaire de l'attraction économi"
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_048.txt",
+      "valeur": 6000.0,
+      "unite": "habitants",
+      "contexte": "de Petit-Canal, et de Port-Lou's, à la Guadeloupe, pour ne citer que ces trois-là, n'ont rien reçu . En revanche, le préfet a mis 30000 francs à la disposition du maire de Saint-François, commune de 6 000 habitants, et 5 000 francs à celle du maire de Saint-Anne, qui compte plus de 13 000 habitants."
+    },
+    {
+      "fichier": "7_cri_1981-1982-ordinaire1_070.txt",
+      "valeur": 6000.0,
+      "unite": "jeunes",
+      "contexte": "e chômage quatre fois plus élevé qu'en métropole. M. Jacques Brunhes. C'est le fruit de votre politique ! M. Marcel Esdras. Si l'on veut résorber le chômage existant et répondre à l'arrivée d'environ 6 000 jeunes sur le marché de l'emploi, il faudrait chaque année, en l'absence de migration, créer 4"
+    },
+    {
+      "fichier": "7_cri_1982-1983-ordinaire1_057.txt",
+      "valeur": 6000.0,
+      "unite": "habitants",
+      "contexte": "s de francs répartis —=—'les prévisions pour Mayotte sont les seules en baisse et s'établissent à moins de 95 millions de francs, et ce pour 55 000 Mahorais. A titre de comparaison, j'indique que les 6 000 habitants de Saint-Picrre- et-Miquelon reçoivent 62 p. 100 de plus et les 60 000 Guyanais neuf"
+    },
+    {
+      "fichier": "8_cri_1987-1988-ordinaire1_025.txt",
+      "valeur": 6000.0,
+      "unite": "francs",
+      "contexte": "atteinte intolérable aux valeurs républicaines. La pleine égalité des peuples des D .O.M. doit être garantie par de nouvelles mesures de justice sociale que nous préco- nisons : porter le S .M.I.C. à 6 000 francs par mois et faire qu'aucun salaire ne soit inférieur à ce plancher ; augmenter les sala"
+    },
+    {
+      "fichier": "8_cri_1987-1988-ordinaire1_025.txt",
+      "valeur": 6000.0,
+      "unite": "francs",
+      "contexte": "atisfaites a progressé ; une mère de famille guadeloupéenne de trois enfants continue à percevoir 507 francs en moins par mois par rapport à une mère métropolitaine ; un citoyen de l'outre-mer reçoit 6 000 francs de moins qu'un Français de métropole de la part du budget de i 'Etat. Nos compatriotes "
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "valeur": 5800.0,
+      "unite": "habitants",
+      "contexte": "cré- taire d'Etat, que le siatut départemental n'est pas parfaitement adapté, ce qui est exact . Mais vous projetez de pousser l'assimi- lation jusqu'à envisager le découpage de cette collectivité de 5 800 habitants en quatorze cantons ! ' Vous y étendez, d'emblée, le S. M. I. C. au niveau métropoli"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 5140.0,
+      "unite": "francs",
+      "contexte": "n fonds d'action sociale obligatoire, ce qui sert à pallier les insuffisances du budget de l'Etat en matière d'équipements sociaux. C'est ainsi qu'en 1973 une famille métropolitaine a reçu en moyenne 5 140 francs au titre des allocations familiales alors qu'une famille antillaise ou réunionkaise a t"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_057.txt",
+      "valeur": 5000.0,
+      "unite": "personnes",
+      "contexte": "- sion des élus et plus particulièrement de M . Michel Debré. mais ils trouvent encore difficilement à s'employer à leur sortie de l'école. Les migrations organisées par le Bumidom, quoique dépassant 5 000 personnes chaque année, alors é ue la croissance dt mogra- phique est de l'ordre de 7 000 à 8 "
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_057.txt",
+      "valeur": 5000.0,
+      "unite": "jeunes",
+      "contexte": "lycées et collèges de nombreuses animations ainsi que des missions de perfection- nement de leurs techniques. A titre d'exemple, je peux vous indiquer que l'orchestre de chambre de Grenoble a touché 5 000 jeunes Martiniquais au cours d'un séjour de trois semaines qu'il a effectué dans ce départemezi"
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_048.txt",
+      "valeur": 5000.0,
+      "unite": "francs",
+      "contexte": "de Port-Lou's, à la Guadeloupe, pour ne citer que ces trois-là, n'ont rien reçu . En revanche, le préfet a mis 30000 francs à la disposition du maire de Saint-François, commune de 6 000 habitants, et 5 000 francs à celle du maire de Saint-Anne, qui compte plus de 13 000 habitants. Ainsi, plus il y a"
+    },
+    {
+      "fichier": "6_qst_6-qst-1980-02-18.txt",
+      "valeur": 4500.0,
+      "unite": "F",
+      "contexte": "tuation drama- tique des ouvriers agricoles des Antilles et, en particulier, ceux de la culture de la banane après le cyclone . L'indemnisation des exploitants agricoles, et notamment le versement de 4 500 F par hectare de banane pour reconstituer leurs plantations, impliquait le maintien de l 'empl"
+    },
+    {
+      "fichier": "5_cri_1974-1975-ordinaire1_047.txt",
+      "valeur": 4000.0,
+      "unite": "francs",
+      "contexte": "xé par l'ar- ticle 266 quater du code des douanes est porté à 80 F par hectolitre pour l'essence et le supercarburant dans les départe . ments de la Guadeloupe, de la Guyane et de la Martinique, et à 4 000 francs C.F.A. dans le département de la Réunion . a Personne ne demande la parole ? ... Je met"
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire2_024.txt",
+      "valeur": 3500.0,
+      "unite": "francs",
+      "contexte": "n commer- çant garantie contre le risque maladie par le régime d 'assurance des non salariés non-agricoles, âgés de 83 ans qui perçoit un avan- tage vieillesse de reversion se situant aux environs de 3 500 francs par an, et se trouve totalement exonérée des cotisations maladie de ce régime. L 'intér"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire2_064.txt",
+      "valeur": 2990.0,
+      "unite": "francs",
+      "contexte": "posé à l'aumônerie réu- nionnaise l'aller et retour Paris—la Réunion pour 2 950 francs, ou que le club Antilles-Afrique a obtenu des places pour les Antilles à 2 600 francs au lieu du tarif normal de 2 990 francs. Or il ne s 'agit pas de vols charters mais de vols réguliers. Par conséquent, il y a p"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire2_064.txt",
+      "valeur": 2950.0,
+      "unite": "francs",
+      "contexte": "autre des prix intéressants. Je tiens à votre disposition des documents prouvant que le bureau Télex Air France de Dijon a proposé à l'aumônerie réu- nionnaise l'aller et retour Paris—la Réunion pour 2 950 francs, ou que le club Antilles-Afrique a obtenu des places pour les Antilles à 2 600 francs a"
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire2_064.txt",
+      "valeur": 2600.0,
+      "unite": "francs",
+      "contexte": "e bureau Télex Air France de Dijon a proposé à l'aumônerie réu- nionnaise l'aller et retour Paris—la Réunion pour 2 950 francs, ou que le club Antilles-Afrique a obtenu des places pour les Antilles à 2 600 francs au lieu du tarif normal de 2 990 francs. Or il ne s 'agit pas de vols charters mais de "
+    },
+    {
+      "fichier": "5_qst_5-qst-1977-07-09.txt",
+      "valeur": 2500.0,
+      "unite": "personnes",
+      "contexte": "86, rue Regnault, Paris (10') . La société Serète est une société d 'ingénierie à vocations multiples (industrielle et non industrielle) constituée d 'un effectif de 950 personnes en France (près de 2 500 personnes au niveau international du groupe, dont 1000 ingénieurs) . Le chiffre 9 Juillet 1977 "
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "valeur": 2500.0,
+      "unite": "logements",
+      "contexte": "fonder un ménage a entraine un accrois- sement des besoins . qui restera en phase de forte augmentation pendant encore SU moins dix ans. Au total . les besoins annuels di' la Guadeloupe s 'élèvent à 2 500 logements nouveaux soit 1 200 pour résorber l 'habitat insalubre . clans une hypothe ;e de réso"
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "valeur": 2500.0,
+      "unite": "logements",
+      "contexte": "d'un habitat précaire à haut degré d'insalubrité, touchant environ 8(100 familles en milieu u rbain et plus de 311x1(1 à 4 ive) familles en milieu rur al. Les besoins annuels de la Guadeloupe sont de 2500 logements ri'pnlis en 1 200 au titre de la reso'pti,t de l'habitat insalubre pour une hypothèse"
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "valeur": 1716.0,
+      "unite": "francs",
+      "contexte": "re d'équipements sociaux. C'est ainsi qu'en 1973 une famille métropolitaine a reçu en moyenne 5 140 francs au titre des allocations familiales alors qu'une famille antillaise ou réunionkaise a touché 1 716 francs. Sur le plan sanitaire, la situation est médiocre et se carat térise par une mortalité "
+    }
+  ],
+  "documents": [
+    {
+      "fichier": "2_cri_1964-1965-ordinaire1_021.txt",
+      "nb_mentions": 309
+    },
+    {
+      "fichier": "4_cri_1972-1973-ordinaire1_045.txt",
+      "nb_mentions": 223
+    },
+    {
+      "fichier": "3_cri_1967-1968-ordinaire1_037.txt",
+      "nb_mentions": 216
+    },
+    {
+      "fichier": "4_cri_1968-1969-ordinaire1_050.txt",
+      "nb_mentions": 216
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire1_045.txt",
+      "nb_mentions": 203
+    },
+    {
+      "fichier": "4_cri_1970-1971-ordinaire1_023.txt",
+      "nb_mentions": 200
+    },
+    {
+      "fichier": "4_cri_1971-1972-ordinaire1_024.txt",
+      "nb_mentions": 177
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_058.txt",
+      "nb_mentions": 168
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_062.txt",
+      "nb_mentions": 164
+    },
+    {
+      "fichier": "2_cri_1966-1967-ordinaire1_021.txt",
+      "nb_mentions": 158
+    },
+    {
+      "fichier": "5_cri_1973-1974-ordinaire1_032.txt",
+      "nb_mentions": 155
+    },
+    {
+      "fichier": "5_cri_1974-1975-ordinaire1_047.txt",
+      "nb_mentions": 145
+    },
+    {
+      "fichier": "7_cri_1981-1982-extraordinaire4_014.txt",
+      "nb_mentions": 136
+    },
+    {
+      "fichier": "5_cri_1977-1978-ordinaire1_035.txt",
+      "nb_mentions": 123
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire1_057.txt",
+      "nb_mentions": 103
+    },
+    {
+      "fichier": "4_cri_1969-1970-ordinaire1_050.txt",
+      "nb_mentions": 100
+    },
+    {
+      "fichier": "7_cri_1982-1983-ordinaire1_057.txt",
+      "nb_mentions": 87
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_086.txt",
+      "nb_mentions": 86
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire2_064.txt",
+      "nb_mentions": 82
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_090.txt",
+      "nb_mentions": 81
+    },
+    {
+      "fichier": "7_cri_1983-1984-ordinaire1_076.txt",
+      "nb_mentions": 77
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_085.txt",
+      "nb_mentions": 76
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_039.txt",
+      "nb_mentions": 71
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire2_051.txt",
+      "nb_mentions": 70
+    },
+    {
+      "fichier": "6_cri_1979-1980-ordinaire2_067.txt",
+      "nb_mentions": 67
+    },
+    {
+      "fichier": "7_cri_1981-1982-ordinaire1_070.txt",
+      "nb_mentions": 66
+    },
+    {
+      "fichier": "8_cri_1987-1988-ordinaire1_025.txt",
+      "nb_mentions": 64
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_087.txt",
+      "nb_mentions": 62
+    },
+    {
+      "fichier": "5_cri_1974-1975-ordinaire1_046.txt",
+      "nb_mentions": 55
+    },
+    {
+      "fichier": "8_cri_1986-1987-ordinaire1_065.txt",
+      "nb_mentions": 44
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire1_061.txt",
+      "nb_mentions": 40
+    },
+    {
+      "fichier": "4_cri_1969-1970-ordinaire1_033.txt",
+      "nb_mentions": 37
+    },
+    {
+      "fichier": "6_cri_1978-1979-ordinaire1_056.txt",
+      "nb_mentions": 31
+    },
+    {
+      "fichier": "4_cri_1970-1971-ordinaire2_007.txt",
+      "nb_mentions": 27
+    },
+    {
+      "fichier": "4_cri_1971-1972-ordinaire2_038.txt",
+      "nb_mentions": 25
+    },
+    {
+      "fichier": "4_tnominative_1968-1973_tnominative_IO.txt",
+      "nb_mentions": 24
+    },
+    {
+      "fichier": "7_cri_1984-1985-ordinaire1_080.txt",
+      "nb_mentions": 23
+    },
+    {
+      "fichier": "8_tnominative_1986_tnominative_AZ.txt",
+      "nb_mentions": 23
+    },
+    {
+      "fichier": "2_cri_1964-1965-ordinaire1_022.txt",
+      "nb_mentions": 20
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire2_035.txt",
+      "nb_mentions": 20
+    },
+    {
+      "fichier": "4_qst_4-qst-1972-07-29.txt",
+      "nb_mentions": 18
+    },
+    {
+      "fichier": "8_cri_1985-1986-extraordinaire1_015.txt",
+      "nb_mentions": 17
+    },
+    {
+      "fichier": "2_qst_2-qst-1964-09-12.txt",
+      "nb_mentions": 16
+    },
+    {
+      "fichier": "3_tanalytique_1967-1968_tmatieres_AZ.txt",
+      "nb_mentions": 15
+    },
+    {
+      "fichier": "5_cri_1973-1974-ordinaire1_088.txt",
+      "nb_mentions": 15
+    },
+    {
+      "fichier": "9_tanalytique_1990_tmatieres_AV.txt",
+      "nb_mentions": 15
+    },
+    {
+      "fichier": "7_qst_7-qst-1981-10-19.txt",
+      "nb_mentions": 14
+    },
+    {
+      "fichier": "5_cri_1975-1976-ordinaire2_086.txt",
+      "nb_mentions": 13
+    },
+    {
+      "fichier": "5_cri_1976-1977-ordinaire2_024.txt",
+      "nb_mentions": 12
+    },
+    {
+      "fichier": "5_qst_5-qst-1974-01-19.txt",
+      "nb_mentions": 11
+    }
+  ]
+}
